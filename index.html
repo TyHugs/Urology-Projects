@@ -264,7 +264,7 @@ body::before {
 /* ===== TABLE ===== */
 .table-container { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); box-shadow: var(--sh-md); overflow: hidden; }
 .table-scroll { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 1300px; }
+table { width: 100%; border-collapse: collapse; min-width: 1400px; }
 
 thead th {
   padding: 0.6rem 0.8rem; text-align: left;
@@ -273,15 +273,43 @@ thead th {
   background: var(--bg-warm); border-bottom: 1px solid var(--border-strong);
   position: sticky; top: 0; z-index: 2; white-space: nowrap;
   cursor: pointer; user-select: none; transition: color var(--t) var(--ease);
+  overflow: visible; min-width: 50px;
 }
 thead th:hover { color: var(--text-2); }
-thead th:last-child { cursor: default; }
+thead th:last-child { cursor: default; min-width: 32px; }
 thead th .sort-arrow {
   display: inline-block; margin-left: 0.3rem; font-size: 0.55rem;
   opacity: 0; transition: opacity var(--t) var(--ease); vertical-align: middle;
 }
 thead th.sorted .sort-arrow { opacity: 1; }
 thead th.sorted { color: var(--gold); }
+
+/* Column resize handle */
+thead th .col-resize {
+  position: absolute; top: 0; right: 0; width: 5px; height: 100%;
+  cursor: col-resize; z-index: 3;
+}
+thead th .col-resize::after {
+  content: ''; position: absolute; top: 25%; right: 1px; width: 1px; height: 50%;
+  background: transparent; transition: background 0.15s;
+}
+thead th:hover .col-resize::after { background: var(--border-strong); }
+thead th .col-resize:active::after { background: var(--gold); }
+
+/* Est. Time pill */
+.time-pill {
+  appearance: none; -webkit-appearance: none;
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem; border-radius: var(--r-full);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.68rem; font-weight: 600;
+  border: 1px solid transparent; cursor: pointer; transition: all var(--t) var(--ease);
+  background-color: rgba(184,134,58,0.06); color: var(--gold);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='none' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%237E8B96' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: calc(100% - 0.35rem) center;
+  min-width: 85px;
+}
+.time-pill:hover { border-color: rgba(0,0,0,0.06); }
+.time-pill:focus { outline: none; border-color: var(--gold-ring); box-shadow: 0 0 0 2px var(--gold-glow); }
+.time-pill[data-value=""] { background-color: var(--bg-stripe); color: var(--text-3); }
 
 tbody tr { border-bottom: 1px solid var(--border); transition: background var(--t) var(--ease); }
 tbody tr:nth-child(even) { background: var(--bg-stripe); }
@@ -529,21 +557,22 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
     <div class="table-scroll">
       <table>
         <thead><tr>
-          <th style="width:58px" onclick="sortBy('ID')">ID<span class="sort-arrow"></span></th>
-          <th style="width:185px" onclick="sortBy('Project')">Project<span class="sort-arrow"></span></th>
-          <th style="width:200px" onclick="sortBy('Description')">Description<span class="sort-arrow"></span></th>
-          <th style="width:110px" onclick="sortBy('Category')">Category<span class="sort-arrow"></span></th>
-          <th style="width:120px" onclick="sortBy('Owner')">Owner<span class="sort-arrow"></span></th>
-          <th style="width:120px" onclick="sortBy('Key Stakeholder')">Stakeholder<span class="sort-arrow"></span></th>
-          <th style="width:98px" onclick="sortBy('Priority')">Priority<span class="sort-arrow"></span></th>
-          <th style="width:112px" onclick="sortBy('Status')">Status<span class="sort-arrow"></span></th>
-          <th style="width:98px" onclick="sortBy('Start Date')">Start<span class="sort-arrow"></span></th>
-          <th style="width:98px" onclick="sortBy('Due Date')">Due<span class="sort-arrow"></span></th>
-          <th style="width:160px" onclick="sortBy('Notes')">Notes<span class="sort-arrow"></span></th>
+          <th style="width:58px" onclick="sortBy('ID')">ID<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:185px" onclick="sortBy('Project')">Project<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:190px" onclick="sortBy('Description')">Description<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:105px" onclick="sortBy('Category')">Category<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:110px" onclick="sortBy('Owner')">Owner<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:110px" onclick="sortBy('Key Stakeholder')">Stakeholder<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:95px" onclick="sortBy('Priority')">Priority<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:108px" onclick="sortBy('Status')">Status<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:88px" onclick="sortBy('Est. Time')">Est. Time<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:95px" onclick="sortBy('Start Date')">Start<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:95px" onclick="sortBy('Due Date')">Due<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
+          <th style="width:155px" onclick="sortBy('Notes')">Notes<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
           <th style="width:32px"></th>
         </tr></thead>
         <tbody id="projectsBody">
-          <tr><td colspan="12"><div class="empty-state">
+          <tr><td colspan="13"><div class="empty-state">
             <div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7E8B96" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
             <p>Loading projects...</p>
             <span class="hint">Connecting to Google Sheets</span>
@@ -583,7 +612,10 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
         <select id="newPriority"><option value="Medium">Medium</option><option value="Critical">Critical</option><option value="High">High</option><option value="Low">Low</option></select>
       </div>
     </div>
-    <div class="modal-row">
+    <div class="modal-row-3">
+      <div class="modal-field"><label>Est. Time</label>
+        <select id="newEstTime"><option value="">—</option><option>1 hour</option><option>2 hours</option><option>4 hours</option><option>8 hours</option><option>Multi-day</option></select>
+      </div>
       <div class="modal-field"><label>Start Date</label><input type="date" id="newStartDate" /></div>
       <div class="modal-field"><label>Due Date</label><input type="date" id="newDueDate" /></div>
     </div>
@@ -607,10 +639,12 @@ const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mr
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Blocked','On Hold'];
 const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
 const CATEGORY_OPTIONS = ['Finance','Analytics','Operations','Faculty','Education','Research','Strategy','Digital','Administrative','BizIQ'];
+const TIME_OPTIONS = ['1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting
 const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
 const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, Blocked:4, 'On Hold':5, Complete:6};
+const TIME_RANK = {'1 hour':1, '2 hours':2, '4 hours':4, '8 hours':8, 'Multi-day':16};
 
 function sortBy(col) {
   if (sortCol === col) {
@@ -626,7 +660,7 @@ function sortBy(col) {
     if (arrow) arrow.textContent = '';
   });
   const ths = document.querySelectorAll('thead th');
-  const colNames = ['ID','Project','Description','Category','Owner','Key Stakeholder','Priority','Status','Start Date','Due Date','Notes'];
+  const colNames = ['ID','Project','Description','Category','Owner','Key Stakeholder','Priority','Status','Est. Time','Start Date','Due Date','Notes'];
   const idx = colNames.indexOf(col);
   if (idx >= 0 && ths[idx]) {
     ths[idx].classList.add('sorted');
@@ -642,17 +676,21 @@ function sortProjects(list) {
     let va = a[sortCol] || '';
     let vb = b[sortCol] || '';
 
-    // Smart ranking for Priority
     if (sortCol === 'Priority') {
       va = PRIORITY_RANK[va] !== undefined ? PRIORITY_RANK[va] : 99;
       vb = PRIORITY_RANK[vb] !== undefined ? PRIORITY_RANK[vb] : 99;
       return sortDir === 'asc' ? va - vb : vb - va;
     }
 
-    // Smart ranking for Status
     if (sortCol === 'Status') {
       va = STATUS_RANK[va] !== undefined ? STATUS_RANK[va] : 99;
       vb = STATUS_RANK[vb] !== undefined ? STATUS_RANK[vb] : 99;
+      return sortDir === 'asc' ? va - vb : vb - va;
+    }
+
+    if (sortCol === 'Est. Time') {
+      va = TIME_RANK[va] !== undefined ? TIME_RANK[va] : 99;
+      vb = TIME_RANK[vb] !== undefined ? TIME_RANK[vb] : 99;
       return sortDir === 'asc' ? va - vb : vb - va;
     }
 
@@ -725,6 +763,7 @@ async function addProject() {
     'Owner':document.getElementById('newOwner').value.trim(),
     'Key Stakeholder':document.getElementById('newStakeholder').value.trim(),
     'Priority':document.getElementById('newPriority').value,
+    'Est. Time':document.getElementById('newEstTime').value,
     'Start Date':document.getElementById('newStartDate').value,
     'Due Date':document.getElementById('newDueDate').value,
   };
@@ -762,7 +801,7 @@ function renderTable() {
   document.getElementById('clearBtn').classList.toggle('has-filters', activeCount > 0);
 
   if(filtered.length === 0){
-    tbody.innerHTML = `<tr><td colspan="12"><div class="empty-state"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7E8B96" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg></div><p>No projects match</p><span class="hint">Try adjusting your filters</span></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13"><div class="empty-state"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7E8B96" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg></div><p>No projects match</p><span class="hint">Try adjusting your filters</span></div></td></tr>`;
     return;
   }
 
@@ -776,6 +815,7 @@ function renderTable() {
       <td><span class="editable" contenteditable="true" data-row="${p._row}" data-col="Key Stakeholder" onblur="onEdit(this)">${esc(p['Key Stakeholder']||'')}</span></td>
       <td><select class="pill-select" data-type="priority" data-value="${esc(p['Priority']||'')}" data-row="${p._row}" data-col="Priority" onchange="onDrop(this)">${PRIORITY_OPTIONS.map(o=>`<option${p['Priority']===o?' selected':''}>${o}</option>`).join('')}</select></td>
       <td><select class="pill-select" data-type="status" data-value="${esc(p['Status']||'')}" data-row="${p._row}" data-col="Status" onchange="onDrop(this)">${STATUS_OPTIONS.map(o=>`<option${p['Status']===o?' selected':''}>${o}</option>`).join('')}</select></td>
+      <td><select class="time-pill" data-value="${esc(p['Est. Time']||'')}" data-row="${p._row}" data-col="Est. Time" onchange="onDrop(this)"><option value="">—</option>${TIME_OPTIONS.map(o=>`<option${p['Est. Time']===o?' selected':''}>${o}</option>`).join('')}</select></td>
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
       <td><input type="date" class="date-input" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)"/></td>
       <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
@@ -926,13 +966,32 @@ function updateSyncTime(){
 function openAddModal(){document.getElementById('addModal').classList.add('active');}
 function closeAddModal(){
   document.getElementById('addModal').classList.remove('active');
-  ['newProject','newDescription','newCategory','newOwner','newStakeholder','newPriority','newStartDate','newDueDate'].forEach(id=>{const el=document.getElementById(id);if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';});
+  ['newProject','newDescription','newCategory','newOwner','newStakeholder','newPriority','newEstTime','newStartDate','newDueDate'].forEach(id=>{const el=document.getElementById(id);if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';});
 }
 function closeModal(e){if(e.target===e.currentTarget)closeAddModal();}
 
 function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 function showToast(m,type='success'){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className=`toast ${type}`;t.textContent=m;c.appendChild(t);requestAnimationFrame(()=>t.classList.add('visible'));setTimeout(()=>{t.classList.remove('visible');setTimeout(()=>t.remove(),350);},2200);}
 function showLoading(a){document.getElementById('loadingBar').className=a?'loading-bar active':'loading-bar';}
+
+// Column resize
+function startResize(e){
+  e.stopPropagation();
+  const th=e.target.parentElement;
+  const startX=e.pageX;
+  const startW=th.offsetWidth;
+  document.body.style.cursor='col-resize';
+  document.body.style.userSelect='none';
+  function onMove(ev){th.style.width=Math.max(50,startW+ev.pageX-startX)+'px';}
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    document.body.style.cursor='';
+    document.body.style.userSelect='';
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
 </script>
 </body>
 </html>
