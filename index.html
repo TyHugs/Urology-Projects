@@ -269,7 +269,16 @@ thead th {
   text-transform: uppercase; letter-spacing: 0.08em;
   background: var(--bg-warm); border-bottom: 1px solid var(--border-strong);
   position: sticky; top: 0; z-index: 2; white-space: nowrap;
+  cursor: pointer; user-select: none; transition: color var(--t) var(--ease);
 }
+thead th:hover { color: var(--text-2); }
+thead th:last-child { cursor: default; }
+thead th .sort-arrow {
+  display: inline-block; margin-left: 0.3rem; font-size: 0.55rem;
+  opacity: 0; transition: opacity var(--t) var(--ease); vertical-align: middle;
+}
+thead th.sorted .sort-arrow { opacity: 1; }
+thead th.sorted { color: var(--gold); }
 
 tbody tr { border-bottom: 1px solid var(--border); transition: background var(--t) var(--ease); }
 tbody tr:nth-child(even) { background: var(--bg-stripe); }
@@ -469,7 +478,7 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
         <option value="">Category</option>
         <option>Finance</option><option>Analytics</option><option>Operations</option>
         <option>Faculty</option><option>Education</option><option>Research</option>
-        <option>Strategy</option><option>Digital</option><option>Administrative</option>
+        <option>Strategy</option><option>Digital</option><option>Administrative</option><option>BizIQ</option>
       </select>
       <select class="filter-select" id="filterOwner" onchange="applyFilters()"><option value="">Owner</option></select>
       <select class="filter-select" id="filterStakeholder" onchange="applyFilters()"><option value="">Stakeholder</option></select>
@@ -503,17 +512,17 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
     <div class="table-scroll">
       <table>
         <thead><tr>
-          <th style="width:58px">ID</th>
-          <th style="width:185px">Project</th>
-          <th style="width:200px">Description</th>
-          <th style="width:110px">Category</th>
-          <th style="width:120px">Owner</th>
-          <th style="width:120px">Stakeholder</th>
-          <th style="width:98px">Priority</th>
-          <th style="width:112px">Status</th>
-          <th style="width:98px">Start</th>
-          <th style="width:98px">Due</th>
-          <th style="width:160px">Notes</th>
+          <th style="width:58px" onclick="sortBy('ID')">ID<span class="sort-arrow"></span></th>
+          <th style="width:185px" onclick="sortBy('Project')">Project<span class="sort-arrow"></span></th>
+          <th style="width:200px" onclick="sortBy('Description')">Description<span class="sort-arrow"></span></th>
+          <th style="width:110px" onclick="sortBy('Category')">Category<span class="sort-arrow"></span></th>
+          <th style="width:120px" onclick="sortBy('Owner')">Owner<span class="sort-arrow"></span></th>
+          <th style="width:120px" onclick="sortBy('Key Stakeholder')">Stakeholder<span class="sort-arrow"></span></th>
+          <th style="width:98px" onclick="sortBy('Priority')">Priority<span class="sort-arrow"></span></th>
+          <th style="width:112px" onclick="sortBy('Status')">Status<span class="sort-arrow"></span></th>
+          <th style="width:98px" onclick="sortBy('Start Date')">Start<span class="sort-arrow"></span></th>
+          <th style="width:98px" onclick="sortBy('Due Date')">Due<span class="sort-arrow"></span></th>
+          <th style="width:160px" onclick="sortBy('Notes')">Notes<span class="sort-arrow"></span></th>
           <th style="width:32px"></th>
         </tr></thead>
         <tbody id="projectsBody">
@@ -547,7 +556,7 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
     </div>
     <div class="modal-row">
       <div class="modal-field"><label>Category</label>
-        <select id="newCategory"><option value="">Select...</option><option>Finance</option><option>Analytics</option><option>Operations</option><option>Faculty</option><option>Education</option><option>Research</option><option>Strategy</option><option>Digital</option><option>Administrative</option></select>
+        <select id="newCategory"><option value="">Select...</option><option>Finance</option><option>Analytics</option><option>Operations</option><option>Faculty</option><option>Education</option><option>Research</option><option>Strategy</option><option>Digital</option><option>Administrative</option><option>BizIQ</option></select>
       </div>
       <div class="modal-field"><label>Owner</label><input type="text" id="newOwner" placeholder="e.g., Tyler Hughes" /></div>
     </div>
@@ -573,11 +582,78 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
 <script>
 let projects = [];
 let lastSyncTime = null;
+let sortCol = null;
+let sortDir = 'asc';
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Blocked','On Hold'];
 const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
-const CATEGORY_OPTIONS = ['Finance','Analytics','Operations','Faculty','Education','Research','Strategy','Digital','Administrative'];
+const CATEGORY_OPTIONS = ['Finance','Analytics','Operations','Faculty','Education','Research','Strategy','Digital','Administrative','BizIQ'];
+
+// Priority and Status rank maps for smart sorting
+const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
+const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, Blocked:4, 'On Hold':5, Complete:6};
+
+function sortBy(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = 'asc';
+  }
+  // Update header UI
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = '';
+  });
+  const ths = document.querySelectorAll('thead th');
+  const colNames = ['ID','Project','Description','Category','Owner','Key Stakeholder','Priority','Status','Start Date','Due Date','Notes'];
+  const idx = colNames.indexOf(col);
+  if (idx >= 0 && ths[idx]) {
+    ths[idx].classList.add('sorted');
+    ths[idx].querySelector('.sort-arrow').textContent = sortDir === 'asc' ? '▲' : '▼';
+  }
+  renderTable();
+}
+
+function sortProjects(list) {
+  if (!sortCol) return list;
+  const sorted = [...list];
+  sorted.sort((a, b) => {
+    let va = a[sortCol] || '';
+    let vb = b[sortCol] || '';
+
+    // Smart ranking for Priority
+    if (sortCol === 'Priority') {
+      va = PRIORITY_RANK[va] !== undefined ? PRIORITY_RANK[va] : 99;
+      vb = PRIORITY_RANK[vb] !== undefined ? PRIORITY_RANK[vb] : 99;
+      return sortDir === 'asc' ? va - vb : vb - va;
+    }
+
+    // Smart ranking for Status
+    if (sortCol === 'Status') {
+      va = STATUS_RANK[va] !== undefined ? STATUS_RANK[va] : 99;
+      vb = STATUS_RANK[vb] !== undefined ? STATUS_RANK[vb] : 99;
+      return sortDir === 'asc' ? va - vb : vb - va;
+    }
+
+    // Date columns
+    if (sortCol === 'Start Date' || sortCol === 'Due Date') {
+      va = va ? new Date(String(va).slice(0,10)) : new Date('9999-12-31');
+      vb = vb ? new Date(String(vb).slice(0,10)) : new Date('9999-12-31');
+      return sortDir === 'asc' ? va - vb : vb - va;
+    }
+
+    // Default string sort
+    va = String(va).toLowerCase();
+    vb = String(vb).toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return sorted;
+}
 
 (function(){ loadProjects(); })();
 
@@ -656,7 +732,7 @@ async function deleteProject(row, name) {
 
 function renderTable() {
   const tbody = document.getElementById('projectsBody');
-  const filtered = getFilteredProjects();
+  const filtered = sortProjects(getFilteredProjects());
 
   document.getElementById('resultCount').textContent = filtered.length;
   document.getElementById('totalCount').textContent = projects.length;
