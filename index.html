@@ -191,7 +191,7 @@ body::before {
 .btn-delete:hover { color: var(--p-crit); background: var(--p-crit-bg); }
 
 /* ===== STATS ===== */
-.stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.55rem; margin-bottom: 1rem; }
+.stats-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.55rem; margin-bottom: 1rem; }
 
 .stat {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
@@ -204,13 +204,16 @@ body::before {
 
 .stat:nth-child(1) { border-left-color: var(--gold); }
 .stat:nth-child(2) { border-left-color: var(--s-prog); }
-.stat:nth-child(3) { border-left-color: var(--s-done); }
-.stat:nth-child(4) { border-left-color: var(--s-block); }
-.stat:nth-child(5) { border-left-color: var(--p-crit); }
+.stat:nth-child(3) { border-left-color: var(--s-rev); }
+.stat:nth-child(4) { border-left-color: var(--p-crit); }
+.stat:nth-child(5) { border-left-color: var(--s-block); }
+.stat:nth-child(6) { border-left-color: var(--s-done); }
 
 .stat-label { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
 .stat-num { font-family: 'Fraunces', serif; font-size: 1.65rem; font-weight: 600; letter-spacing: -0.02em; color: var(--text); line-height: 1; }
 .stat:nth-child(1) .stat-num { color: var(--gold); }
+.stat-sub { font-size: 0.62rem; color: var(--text-3); margin-top: 0.2rem; font-weight: 500; }
+.stat-warn { color: var(--p-crit); font-weight: 600; }
 
 /* ===== TOOLBAR ===== */
 .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
@@ -291,6 +294,11 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
 .cell-id { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 0.68rem; color: var(--text-3); font-weight: 500; }
 .cell-project { font-weight: 600; color: var(--text); max-width: 200px; }
 .cell-desc { color: var(--text-2); font-size: 0.76rem; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Notes cells expand when editing */
+.cell-notes { color: var(--text-2); font-size: 0.76rem; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: all var(--t) var(--ease); }
+.cell-notes:focus { white-space: normal; overflow: visible; max-width: none; min-width: 280px; position: relative; z-index: 5; background: #fff; border-radius: var(--r-sm); padding: 0.4rem 0.5rem; box-shadow: var(--sh-lg); border-color: var(--gold-ring); }
+.cell-notes:focus { outline: none; }
 
 /* Editable */
 .editable {
@@ -444,22 +452,31 @@ td { padding: 0.5rem 0.8rem; font-size: 0.8rem; vertical-align: middle; }
     <div class="stat" onclick="statFilter('total')" id="statCard0">
       <div class="stat-label">Total Projects</div>
       <div class="stat-num" id="statTotal">&mdash;</div>
+      <div class="stat-sub" id="statOwners"></div>
     </div>
     <div class="stat" onclick="statFilter('In Progress')" id="statCard1">
       <div class="stat-label">In Progress</div>
       <div class="stat-num" id="statProgress">&mdash;</div>
+      <div class="stat-sub" id="statProgressSub"></div>
     </div>
-    <div class="stat" onclick="statFilter('Complete')" id="statCard2">
-      <div class="stat-label">Complete</div>
-      <div class="stat-num" id="statComplete">&mdash;</div>
+    <div class="stat" onclick="statFilter('dueThisWeek')" id="statCard2">
+      <div class="stat-label">Due This Week</div>
+      <div class="stat-num" id="statDueWeek">&mdash;</div>
+      <div class="stat-sub" id="statDueWeekSub"></div>
     </div>
-    <div class="stat" onclick="statFilter('Blocked')" id="statCard3">
+    <div class="stat" onclick="statFilter('overdue')" id="statCard3">
+      <div class="stat-label">Overdue</div>
+      <div class="stat-num" id="statOverdue">&mdash;</div>
+      <div class="stat-sub" id="statOverdueSub"></div>
+    </div>
+    <div class="stat" onclick="statFilter('Blocked')" id="statCard4">
       <div class="stat-label">Blocked</div>
       <div class="stat-num" id="statBlocked">&mdash;</div>
     </div>
-    <div class="stat" onclick="statFilter('Critical')" id="statCard4">
-      <div class="stat-label">Critical</div>
-      <div class="stat-num" id="statCritical">&mdash;</div>
+    <div class="stat" onclick="statFilter('total')" id="statCard5">
+      <div class="stat-label">Complete</div>
+      <div class="stat-num" id="statPct">&mdash;</div>
+      <div class="stat-sub" id="statPctSub"></div>
     </div>
   </div>
 
@@ -584,6 +601,7 @@ let projects = [];
 let lastSyncTime = null;
 let sortCol = null;
 let sortDir = 'asc';
+window._customFilter = null;
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Blocked','On Hold'];
@@ -760,7 +778,7 @@ function renderTable() {
       <td><select class="pill-select" data-type="status" data-value="${esc(p['Status']||'')}" data-row="${p._row}" data-col="Status" onchange="onDrop(this)">${STATUS_OPTIONS.map(o=>`<option${p['Status']===o?' selected':''}>${o}</option>`).join('')}</select></td>
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
       <td><input type="date" class="date-input" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)"/></td>
-      <td><span class="cell-desc editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
+      <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
       <td><button class="btn-delete" onclick="deleteProject(${p._row},'${esc(p['Project']||'')}')" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
     </tr>
   `).join('');
@@ -772,12 +790,14 @@ function onDate(el){updateCell(parseInt(el.dataset.row),el.dataset.col,el.value)
 
 // ===== FILTERING =====
 function applyFilters(){
+  window._customFilter = null;
   document.querySelectorAll('.filter-select').forEach(el=>el.classList.toggle('active-filter',el.value!==''));
   document.querySelectorAll('.stat').forEach(s=>s.classList.remove('clickable-active'));
   renderTable();
 }
 
 function clearFilters(){
+  window._customFilter = null;
   document.getElementById('filterStatus').value='';
   document.getElementById('filterPriority').value='';
   document.getElementById('filterCategory').value='';
@@ -792,14 +812,25 @@ function clearFilters(){
 function statFilter(type){
   clearFilters();
   if(type==='total') return;
+  if(type==='dueThisWeek'){
+    // Custom filter — handled in getFilteredProjects won't work via dropdown,
+    // so we set a global flag
+    window._customFilter = 'dueThisWeek';
+    renderTable();
+    document.getElementById('statCard2').classList.add('clickable-active');
+    return;
+  }
+  if(type==='overdue'){
+    window._customFilter = 'overdue';
+    renderTable();
+    document.getElementById('statCard3').classList.add('clickable-active');
+    return;
+  }
   if(['In Progress','Complete','Blocked'].includes(type)){
     document.getElementById('filterStatus').value=type;
-  } else if(type==='Critical'){
-    document.getElementById('filterPriority').value=type;
   }
   applyFilters();
-  // Highlight the clicked stat
-  const idx = type==='In Progress'?1:type==='Complete'?2:type==='Blocked'?3:type==='Critical'?4:0;
+  const idx = type==='In Progress'?1:type==='Blocked'?4:0;
   document.getElementById(`statCard${idx}`).classList.add('clickable-active');
 }
 
@@ -807,6 +838,7 @@ function countActiveFilters(){
   let c=0;
   ['filterStatus','filterPriority','filterCategory','filterOwner','filterStakeholder'].forEach(id=>{if(document.getElementById(id).value)c++;});
   if(document.getElementById('searchInput').value.trim())c++;
+  if(window._customFilter) c++;
   return c;
 }
 
@@ -817,7 +849,23 @@ function getFilteredProjects(){
   const o=document.getElementById('filterOwner').value;
   const sk=document.getElementById('filterStakeholder').value;
   const q=document.getElementById('searchInput').value.toLowerCase();
+  const today = new Date(); today.setHours(0,0,0,0);
+
   return projects.filter(p=>{
+    // Custom stat filters
+    if(window._customFilter === 'dueThisWeek'){
+      const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+      if(!due) return false;
+      const endOfWeek = new Date(today); endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+      if(due < today || due > endOfWeek) return false;
+      if(p['Status']==='Complete') return false;
+    }
+    if(window._customFilter === 'overdue'){
+      const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+      if(!due || due >= today) return false;
+      if(p['Status']==='Complete') return false;
+    }
+
     if(s&&p['Status']!==s)return false;
     if(pr&&p['Priority']!==pr)return false;
     if(c&&p['Category']!==c)return false;
@@ -829,11 +877,43 @@ function getFilteredProjects(){
 }
 
 function updateStats(){
-  document.getElementById('statTotal').textContent=projects.length;
-  document.getElementById('statProgress').textContent=projects.filter(p=>p['Status']==='In Progress').length;
-  document.getElementById('statComplete').textContent=projects.filter(p=>p['Status']==='Complete').length;
-  document.getElementById('statBlocked').textContent=projects.filter(p=>p['Status']==='Blocked').length;
-  document.getElementById('statCritical').textContent=projects.filter(p=>p['Priority']==='Critical').length;
+  const total = projects.length;
+  const inProg = projects.filter(p=>p['Status']==='In Progress').length;
+  const complete = projects.filter(p=>p['Status']==='Complete').length;
+  const blocked = projects.filter(p=>p['Status']==='Blocked').length;
+  const owners = [...new Set(projects.map(p=>p['Owner']).filter(Boolean))].length;
+
+  // Due this week
+  const today = new Date(); today.setHours(0,0,0,0);
+  const endOfWeek = new Date(today); endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+  const dueThisWeek = projects.filter(p=>{
+    if(p['Status']==='Complete') return false;
+    const d = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    return d && d >= today && d <= endOfWeek;
+  });
+
+  // Overdue
+  const overdue = projects.filter(p=>{
+    if(p['Status']==='Complete') return false;
+    const d = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    return d && d < today;
+  });
+
+  // Completion rate
+  const pct = total > 0 ? Math.round((complete / total) * 100) : 0;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statOwners').textContent = `${owners} owner${owners!==1?'s':''}`;
+  document.getElementById('statProgress').textContent = inProg;
+  document.getElementById('statProgressSub').textContent = total > 0 ? `${Math.round((inProg/total)*100)}% of portfolio` : '';
+  document.getElementById('statDueWeek').textContent = dueThisWeek.length;
+  document.getElementById('statDueWeekSub').textContent = dueThisWeek.length > 0 ? `${dueThisWeek.filter(p=>p['Priority']==='Critical'||p['Priority']==='High').length} high priority` : 'Clear';
+  document.getElementById('statOverdue').textContent = overdue.length;
+  const oSub = document.getElementById('statOverdueSub');
+  if(overdue.length > 0) { oSub.innerHTML = `<span class="stat-warn">Needs attention</span>`; } else { oSub.textContent = 'On track'; }
+  document.getElementById('statBlocked').textContent = blocked;
+  document.getElementById('statPct').textContent = `${pct}%`;
+  document.getElementById('statPctSub').textContent = `${complete} of ${total}`;
 }
 
 function updateSyncTime(){
