@@ -374,6 +374,9 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 }
 .date-input:hover { border-color: var(--border-strong); background: var(--bg); }
 .date-input:focus { outline: none; border-color: var(--gold-ring); box-shadow: 0 0 0 2px var(--gold-glow); }
+.date-input.date-overdue { color: var(--p-crit); font-weight: 600; background: var(--p-crit-bg); border-color: rgba(176,72,64,0.18); }
+.date-input.date-due-soon { color: var(--p-high); font-weight: 600; background: var(--p-high-bg); border-color: rgba(176,108,46,0.18); }
+.date-input.date-complete { color: var(--s-done); }
 
 /* ===== TOAST ===== */
 .toast-container { position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -430,6 +433,333 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .footer { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0 0.5rem; font-size: 0.74rem; color: var(--text-3); }
 .footer-left { font-weight: 500; }
 .footer-right { display: flex; align-items: center; gap: 0.35rem; }
+
+/* ===== KEY PROJECTS SPOTLIGHT ===== */
+.spotlight { margin-bottom: 1rem; }
+.spotlight-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+.spotlight-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.spotlight-title svg { color: var(--gold); }
+.spotlight-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem; font-weight: 700; color: var(--gold);
+  background: var(--gold-badge); border: 1px solid var(--gold-ring);
+  padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+}
+.spotlight-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.6rem;
+}
+.spotlight-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 3px solid var(--gold); border-radius: var(--r);
+  padding: 0.85rem 1rem; box-shadow: var(--sh-sm);
+  transition: all var(--t) var(--ease); position: relative;
+}
+.spotlight-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.spotlight-card-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.spotlight-card-name {
+  font-weight: 600; font-size: 0.9rem; color: var(--text);
+  line-height: 1.3; flex: 1; margin-right: 0.5rem;
+}
+.spotlight-card-unpin {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.2rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+  flex-shrink: 0; opacity: 0;
+}
+.spotlight-card:hover .spotlight-card-unpin { opacity: 1; }
+.spotlight-card-unpin:hover { color: var(--p-crit); background: var(--p-crit-bg); }
+.spotlight-card-meta {
+  display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+.pill-inline {
+  font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.45rem;
+  border-radius: var(--r-full); display: inline-block; white-space: nowrap;
+}
+.spotlight-card-detail {
+  font-size: 0.76rem; color: var(--text-3); display: flex;
+  align-items: center; gap: 0.75rem;
+}
+.spotlight-card-detail span { display: flex; align-items: center; gap: 0.2rem; }
+.spotlight-empty {
+  text-align: center; padding: 1.25rem 1.5rem; color: var(--text-3);
+  font-size: 0.82rem; background: var(--bg-card); border: 1px dashed var(--border-strong);
+  border-radius: var(--r); font-weight: 500;
+}
+.spotlight-empty svg { vertical-align: -2px; margin-right: 0.25rem; color: var(--gold-light); }
+
+/* ===== DETAIL PANEL ===== */
+.detail-overlay {
+  position: fixed; inset: 0; background: rgba(28,33,39,0.18); backdrop-filter: blur(3px);
+  z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.detail-overlay.active { opacity: 1; pointer-events: all; }
+
+.detail-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 92vw;
+  background: var(--bg-card); border-left: 1px solid var(--border);
+  box-shadow: -8px 0 32px rgba(28,33,39,0.08);
+  z-index: 91; transform: translateX(100%); transition: transform 0.3s var(--ease-out);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.detail-overlay.active + .detail-panel,
+.detail-panel.active { transform: translateX(0); }
+
+.detail-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border);
+  background: var(--bg-warm); flex-shrink: 0;
+}
+.detail-panel-header h3 {
+  font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 400;
+  color: var(--text); margin: 0;
+}
+.detail-panel-close {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.3rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+}
+.detail-panel-close:hover { color: var(--text); background: var(--border); }
+
+.detail-panel-body {
+  flex: 1; overflow-y: auto; padding: 1.25rem 1.4rem;
+}
+
+.detail-field { margin-bottom: 1rem; }
+.detail-field-label {
+  font-size: 0.65rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem;
+}
+.detail-field-value {
+  font-size: 0.88rem; color: var(--text); line-height: 1.5;
+}
+.detail-field-value.empty { color: var(--text-3); font-style: italic; }
+
+.detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.detail-pills { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.detail-pill {
+  font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.55rem;
+  border-radius: var(--r-full); display: inline-block;
+}
+.detail-notes-box {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 0.65rem 0.8rem;
+  font-size: 0.86rem; color: var(--text-2); line-height: 1.55;
+  min-height: 60px; white-space: pre-wrap;
+}
+
+/* ===== CHANGELOG ===== */
+.changelog { margin-bottom: 1rem; }
+.changelog-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem; cursor: pointer; user-select: none;
+}
+.changelog-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.changelog-title svg { color: var(--s-rev); }
+.changelog-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem; font-weight: 700; color: var(--s-rev);
+  background: var(--s-rev-bg); border: 1px solid rgba(160,124,40,0.18);
+  padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+}
+.changelog-toggle {
+  font-size: 0.7rem; color: var(--text-3); font-weight: 500;
+  display: flex; align-items: center; gap: 0.25rem;
+}
+.changelog-header:hover .changelog-toggle { color: var(--text-2); }
+.changelog-body {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh-sm); overflow: hidden;
+  transition: max-height 0.3s var(--ease), opacity 0.2s ease, padding 0.3s ease;
+}
+.changelog-body.collapsed { max-height: 0; opacity: 0; padding: 0; border-color: transparent; box-shadow: none; }
+.changelog-item {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.55rem 1rem; border-bottom: 1px solid var(--border);
+  font-size: 0.8rem; transition: background var(--t) var(--ease);
+}
+.changelog-item:last-child { border-bottom: none; }
+.changelog-item:hover { background: var(--bg-stripe); }
+.changelog-icon {
+  width: 22px; height: 22px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem;
+}
+.changelog-icon.updated { background: var(--s-prog-bg); color: var(--s-prog); }
+.changelog-icon.completed { background: var(--s-done-bg); color: var(--s-done); }
+.changelog-icon.created { background: var(--gold-badge); color: var(--gold); }
+.changelog-icon.blocked { background: var(--s-block-bg); color: var(--s-block); }
+.changelog-text { flex: 1; line-height: 1.4; }
+.changelog-text strong { font-weight: 600; color: var(--text); }
+.changelog-time { font-size: 0.68rem; color: var(--text-3); white-space: nowrap; margin-top: 0.15rem; }
+.changelog-empty {
+  text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.82rem; font-weight: 500;
+}
+
+/* ===== WORKLOAD BAR ===== */
+.workload { margin-bottom: 1rem; }
+.workload-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem; cursor: pointer; user-select: none;
+}
+.workload-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.workload-title svg { color: var(--s-prog); }
+.workload-toggle {
+  font-size: 0.7rem; color: var(--text-3); font-weight: 500;
+  display: flex; align-items: center; gap: 0.25rem; transition: color var(--t) var(--ease);
+}
+.workload-header:hover .workload-toggle { color: var(--text-2); }
+.workload-grid {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.85rem 1rem;
+  box-shadow: var(--sh-sm); overflow: hidden;
+  transition: max-height 0.3s var(--ease), opacity 0.2s ease, padding 0.3s ease;
+}
+.workload-grid.collapsed { max-height: 0; opacity: 0; padding: 0 1rem; border-color: transparent; box-shadow: none; }
+.workload-row {
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.workload-name {
+  font-size: 0.78rem; font-weight: 600; color: var(--text);
+  min-width: 120px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex-shrink: 0;
+}
+.workload-bar-track {
+  flex: 1; height: 20px; background: var(--bg); border-radius: var(--r-xs);
+  overflow: hidden; position: relative;
+}
+.workload-bar-fill {
+  height: 100%; border-radius: var(--r-xs); transition: width 0.4s var(--ease-out);
+  display: flex; align-items: center; padding-left: 0.4rem;
+  font-size: 0.65rem; font-weight: 700; color: #fff; min-width: 22px;
+}
+.workload-bar-fill.low { background: var(--s-done); }
+.workload-bar-fill.med { background: var(--s-prog); }
+.workload-bar-fill.high { background: var(--p-high); }
+.workload-bar-fill.overloaded { background: var(--p-crit); }
+
+/* Star toggle in table */
+.star-toggle {
+  background: none; border: none; cursor: pointer; padding: 0.15rem;
+  color: var(--border-strong); transition: all var(--t) var(--ease);
+  display: inline-flex; align-items: center; vertical-align: middle;
+  margin-right: 0.3rem;
+}
+.star-toggle:hover { color: var(--gold-light); }
+.star-toggle.active { color: var(--gold); }
+
+/* ===== KANBAN BOARD ===== */
+.view-toggle {
+  display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  overflow: hidden; box-shadow: var(--sh-xs);
+}
+.view-toggle-btn {
+  background: var(--bg-card); border: none; padding: 0.35rem 0.6rem;
+  cursor: pointer; color: var(--text-3); transition: all var(--t) var(--ease);
+  display: flex; align-items: center; font-size: 0;
+}
+.view-toggle-btn:first-child { border-right: 1px solid var(--border-strong); }
+.view-toggle-btn:hover { background: var(--bg-warm); color: var(--text-2); }
+.view-toggle-btn.active { background: var(--gold-badge); color: var(--gold); border-color: var(--gold-ring); }
+
+.kanban { display: none; margin-top: 0.4rem; }
+.kanban.active { display: flex; }
+.kanban {
+  gap: 0.55rem; align-items: flex-start;
+  overflow-x: auto; padding-bottom: 0.5rem;
+}
+.kanban-col {
+  flex: 1; min-width: 200px; max-width: 280px;
+  background: var(--bg-warm); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column;
+}
+.kanban-col-header {
+  padding: 0.55rem 0.7rem; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); background: var(--bg-card);
+}
+.kanban-col-title {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; display: flex; align-items: center; gap: 0.35rem;
+}
+.kanban-col-title .dot {
+  width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+}
+.kanban-col-count {
+  font-size: 0.62rem; font-weight: 700; color: var(--text-3);
+  background: var(--bg); padding: 0.08rem 0.35rem; border-radius: var(--r-full);
+}
+.kanban-cards { padding: 0.45rem; display: flex; flex-direction: column; gap: 0.35rem; max-height: 60vh; overflow-y: auto; }
+.kanban-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 0.6rem 0.7rem;
+  box-shadow: var(--sh-xs); cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+.kanban-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.kanban-card-title { font-weight: 600; font-size: 0.82rem; color: var(--text); margin-bottom: 0.25rem; line-height: 1.3; }
+.kanban-card-meta {
+  display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap;
+  font-size: 0.68rem; color: var(--text-3);
+}
+.kanban-card-meta .k-pill {
+  font-size: 0.62rem; font-weight: 600; padding: 0.1rem 0.35rem;
+  border-radius: var(--r-full); display: inline-block;
+}
+.kanban-card-owner {
+  font-size: 0.7rem; color: var(--text-3); margin-top: 0.3rem;
+  display: flex; align-items: center; gap: 0.2rem;
+}
+.kanban-empty {
+  text-align: center; padding: 1rem 0.5rem; color: var(--text-3);
+  font-size: 0.74rem; font-style: italic;
+}
+
+/* ===== PRINT / PDF ===== */
+@media print {
+  body { background: #fff !important; }
+  body::before, .loading-bar, .toast-container, .detail-overlay, .detail-panel,
+  .modal-overlay, .btn-delete, .star-toggle, .toolbar-right, .filter-sep,
+  .btn-icon, .col-resize, .workload-header svg:last-child, .changelog-toggle { display: none !important; }
+
+  .app { padding: 0.5rem !important; max-width: 100% !important; }
+  .site-header { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .stats-row { break-inside: avoid; }
+  .stat { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .spotlight-card, .changelog-item, .workload-row { break-inside: avoid; }
+
+  .table-container { box-shadow: none !important; border: 1px solid #ddd !important; overflow: visible !important; }
+  .table-scroll { overflow: visible !important; }
+  table { min-width: unset !important; font-size: 0.7rem !important; }
+  td, thead th { padding: 0.3rem 0.4rem !important; }
+  .pill-select, .time-pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; border: none !important; }
+  .date-input { border: none !important; background: transparent !important; }
+  .date-input.date-overdue, .date-input.date-due-soon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .editable { border: none !important; padding: 0 !important; }
+
+  .footer { font-size: 0.6rem !important; }
+  .workload-grid.collapsed, .changelog-body.collapsed { display: none !important; }
+  .kanban { flex-wrap: wrap !important; }
+  .kanban-col { min-width: 150px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .kanban-card .k-pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .view-toggle { display: none !important; }
+
+  /* Ensure all pill colors print */
+  .pill-inline, .detail-pill, .spotlight-card-meta span { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
@@ -508,6 +838,47 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
   </div>
 
+  <!-- KEY PROJECTS SPOTLIGHT -->
+  <div class="spotlight anim a1" id="spotlightSection">
+    <div class="spotlight-header">
+      <div class="spotlight-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Key Projects
+        <span class="spotlight-count" id="spotlightCount">0</span>
+      </div>
+    </div>
+    <div id="spotlightGrid" class="spotlight-grid"></div>
+  </div>
+
+  <!-- OWNER WORKLOAD -->
+  <div class="workload anim a1" id="workloadSection">
+    <div class="workload-header" onclick="toggleWorkload()">
+      <div class="workload-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Team Workload
+      </div>
+      <div class="workload-toggle" id="workloadToggleLabel">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="workloadChevron" style="transition:transform .2s ease"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div id="workloadGrid" class="workload-grid"></div>
+  </div>
+
+  <!-- WEEKLY CHANGELOG -->
+  <div class="changelog anim a1" id="changelogSection">
+    <div class="changelog-header" onclick="toggleChangelog()">
+      <div class="changelog-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        This Week's Activity
+        <span class="changelog-count" id="changelogCount">0</span>
+      </div>
+      <div class="changelog-toggle">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="changelogChevron" style="transition:transform .2s ease"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div id="changelogBody" class="changelog-body"></div>
+  </div>
+
   <div class="toolbar anim a2">
     <div class="toolbar-left">
       <select class="filter-select" id="filterStatus" onchange="applyFilters()">
@@ -533,6 +904,14 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </button>
     </div>
     <div class="toolbar-right">
+      <div class="view-toggle">
+        <button class="view-toggle-btn active" id="viewTable" onclick="setView('table')" title="Table view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+        </button>
+        <button class="view-toggle-btn" id="viewKanban" onclick="setView('kanban')" title="Board view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="10" rx="1"/><rect x="16" y="4" width="4" height="13" rx="1"/></svg>
+        </button>
+      </div>
       <div class="search-wrap">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
         <input type="text" class="search-input" placeholder="Search..." oninput="applyFilters()" id="searchInput" />
@@ -540,6 +919,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <button class="btn btn-secondary" onclick="loadProjects()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         Refresh
+      </button>
+      <button class="btn btn-secondary" onclick="exportPDF()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Export
       </button>
       <button class="btn btn-primary" onclick="openAddModal()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -581,6 +964,9 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </table>
     </div>
   </div>
+
+  <!-- KANBAN BOARD -->
+  <div class="kanban anim a4" id="kanbanBoard"></div>
 
   <div class="footer">
     <div class="footer-left">Michigan Medicine &middot; Department of Urology</div>
@@ -628,6 +1014,18 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- DETAIL PANEL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-panel-header">
+    <h3 id="detailTitle">Project Details</h3>
+    <button class="detail-panel-close" onclick="closeDetail()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="detail-panel-body" id="detailBody"></div>
+</div>
+
 <script>
 let projects = [];
 let lastSyncTime = null;
@@ -645,6 +1043,249 @@ const TIME_OPTIONS = ['1 hour','2 hours','4 hours','8 hours','Multi-day'];
 const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
 const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, Blocked:4, 'On Hold':5, Complete:6};
 const TIME_RANK = {'1 hour':1, '2 hours':2, '4 hours':4, '8 hours':8, 'Multi-day':16};
+
+// ===== KEY PROJECTS (localStorage) =====
+function getKeyProjectIds() {
+  try { return JSON.parse(localStorage.getItem('uro_keyProjects') || '[]'); } catch { return []; }
+}
+
+function toggleKeyProject(id) {
+  let keys = getKeyProjectIds();
+  if (keys.includes(id)) { keys = keys.filter(k => k !== id); }
+  else { keys.push(id); }
+  localStorage.setItem('uro_keyProjects', JSON.stringify(keys));
+  renderTable();
+  renderSpotlight();
+}
+
+function renderSpotlight() {
+  const keys = getKeyProjectIds();
+  const keyProjects = keys.map(id => projects.find(p => p['ID'] === id)).filter(Boolean);
+  const grid = document.getElementById('spotlightGrid');
+  document.getElementById('spotlightCount').textContent = keyProjects.length;
+
+  if (keyProjects.length === 0) {
+    grid.innerHTML = `<div class="spotlight-empty"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Star projects in the table below to feature them here</div>`;
+    return;
+  }
+
+  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Blocked':['s-block-bg','s-block'],'On Hold':['s-hold-bg','s-hold']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+
+  grid.innerHTML = keyProjects.map(p => {
+    const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
+    const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
+    const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '\u2014';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const dueDate = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    const isOverdue = dueDate && dueDate < today && p['Status'] !== 'Complete';
+    const dueStyle = isOverdue ? 'color:var(--p-crit);font-weight:600' : '';
+
+    return `<div class="spotlight-card">
+      <div class="spotlight-card-top">
+        <div class="spotlight-card-name">${esc(p['Project']||'')}</div>
+        <button class="spotlight-card-unpin" onclick="toggleKeyProject('${esc(p['ID']||'')}')" title="Remove from key projects">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="spotlight-card-meta">
+        <span class="pill-inline" style="background:var(--${sc[0]});color:var(--${sc[1]})">${esc(p['Status']||'')}</span>
+        <span class="pill-inline" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'')}</span>
+      </div>
+      <div class="spotlight-card-detail">
+        <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${esc(p['Owner']||'\u2014')}</span>
+        <span style="${dueStyle}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${isOverdue?'Overdue \u2013 ':' Due '}${due}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== CHANGELOG =====
+function getLastMonday() {
+  const d = new Date(); d.setHours(0,0,0,0);
+  const day = d.getDay();
+  const diff = day === 0 ? 6 : day - 1; // Monday = 0 offset
+  d.setDate(d.getDate() - diff);
+  return d;
+}
+
+function renderChangelog() {
+  const since = getLastMonday();
+  const body = document.getElementById('changelogBody');
+
+  // Find projects updated since last Monday
+  const recent = projects.filter(p => {
+    if (!p['Last Updated']) return false;
+    const updated = new Date(p['Last Updated']);
+    return updated >= since;
+  }).sort((a, b) => new Date(b['Last Updated']) - new Date(a['Last Updated']));
+
+  document.getElementById('changelogCount').textContent = recent.length;
+
+  if (recent.length === 0) {
+    body.innerHTML = '<div class="changelog-empty">No changes since Monday</div>';
+    return;
+  }
+
+  body.innerHTML = recent.map(p => {
+    const status = p['Status'] || '';
+    let iconClass = 'updated';
+    let iconSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
+
+    if (status === 'Complete') {
+      iconClass = 'completed';
+      iconSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    } else if (status === 'Blocked') {
+      iconClass = 'blocked';
+      iconSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    }
+
+    const updatedAt = new Date(p['Last Updated']);
+    const timeStr = updatedAt.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+
+    return `<div class="changelog-item" onclick="openDetail('${esc(p['ID']||'')}')">
+      <div class="changelog-icon ${iconClass}">${iconSvg}</div>
+      <div class="changelog-text"><strong>${esc(p['Project']||'')}</strong> — ${esc(status)}${p['Owner'] ? ' ('+esc(p['Owner'])+')' : ''}</div>
+      <div class="changelog-time">${timeStr}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleChangelog() {
+  const body = document.getElementById('changelogBody');
+  const chevron = document.getElementById('changelogChevron');
+  body.classList.toggle('collapsed');
+  chevron.style.transform = body.classList.contains('collapsed') ? 'rotate(-90deg)' : '';
+}
+
+// ===== WORKLOAD BAR =====
+function renderWorkload() {
+  const active = projects.filter(p => p['Status'] !== 'Complete');
+  const ownerMap = {};
+  active.forEach(p => {
+    const o = p['Owner'] || 'Unassigned';
+    ownerMap[o] = (ownerMap[o] || 0) + 1;
+  });
+  const entries = Object.entries(ownerMap).sort((a,b) => b[1] - a[1]);
+  const max = entries.length > 0 ? entries[0][1] : 1;
+  const grid = document.getElementById('workloadGrid');
+
+  if (entries.length === 0) {
+    grid.innerHTML = '<div style="font-size:0.82rem;color:var(--text-3);text-align:center;padding:0.5rem">No active projects</div>';
+    return;
+  }
+
+  grid.innerHTML = entries.map(([name, count]) => {
+    const pct = Math.max(8, Math.round((count / max) * 100));
+    const lvl = count <= 2 ? 'low' : count <= 4 ? 'med' : count <= 6 ? 'high' : 'overloaded';
+    return `<div class="workload-row">
+      <span class="workload-name" title="${esc(name)}">${esc(name)}</span>
+      <div class="workload-bar-track">
+        <div class="workload-bar-fill ${lvl}" style="width:${pct}%">${count}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWorkload() {
+  const grid = document.getElementById('workloadGrid');
+  const chevron = document.getElementById('workloadChevron');
+  grid.classList.toggle('collapsed');
+  chevron.style.transform = grid.classList.contains('collapsed') ? 'rotate(-90deg)' : '';
+}
+
+// ===== DETAIL PANEL =====
+function openDetail(id) {
+  const p = projects.find(x => x['ID'] === id);
+  if (!p) return;
+
+  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Blocked':['s-block-bg','s-block'],'On Hold':['s-hold-bg','s-hold']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
+  const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
+
+  const fmtDate = d => d ? new Date(String(d).slice(0,10)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) : null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dueDate = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+  const isOverdue = dueDate && dueDate < today && p['Status'] !== 'Complete';
+  const isDueSoon = dueDate && !isOverdue && dueDate <= new Date(today.getTime() + 3*86400000) && p['Status'] !== 'Complete';
+
+  document.getElementById('detailTitle').textContent = p['Project'] || 'Project Details';
+
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-field">
+      <div class="detail-pills">
+        <span class="detail-pill" style="background:var(--${sc[0]});color:var(--${sc[1]})">${esc(p['Status']||'—')}</span>
+        <span class="detail-pill" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
+        ${p['Category']?`<span class="detail-pill" style="background:rgba(61,108,180,0.06);color:var(--s-prog)">${esc(p['Category'])}</span>`:''}
+        ${p['Est. Time']?`<span class="detail-pill" style="background:var(--gold-badge);color:var(--gold)">${esc(p['Est. Time'])}</span>`:''}
+      </div>
+    </div>
+
+    <div class="detail-field">
+      <div class="detail-field-label">Description</div>
+      <div class="detail-field-value${p['Description']?'':' empty'}">${esc(p['Description']||'No description')}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-field">
+        <div class="detail-field-label">Owner</div>
+        <div class="detail-field-value${p['Owner']?'':' empty'}">${esc(p['Owner']||'Unassigned')}</div>
+      </div>
+      <div class="detail-field">
+        <div class="detail-field-label">Key Stakeholder</div>
+        <div class="detail-field-value${p['Key Stakeholder']?'':' empty'}">${esc(p['Key Stakeholder']||'None')}</div>
+      </div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-field">
+        <div class="detail-field-label">Start Date</div>
+        <div class="detail-field-value${p['Start Date']?'':' empty'}">${fmtDate(p['Start Date'])||'Not set'}</div>
+      </div>
+      <div class="detail-field">
+        <div class="detail-field-label">Due Date</div>
+        <div class="detail-field-value" style="${isOverdue?'color:var(--p-crit);font-weight:600':isDueSoon?'color:var(--p-high);font-weight:600':''}">${fmtDate(p['Due Date'])||'<span class="empty">Not set</span>'}${isOverdue?' — Overdue':isDueSoon?' — Due soon':''}</div>
+      </div>
+    </div>
+
+    <div class="detail-field">
+      <div class="detail-field-label">Notes</div>
+      <div class="detail-notes-box">${esc(p['Notes']||'No notes yet.')}</div>
+    </div>
+
+    <div class="detail-row" style="margin-top:0.5rem">
+      <div class="detail-field">
+        <div class="detail-field-label">Project ID</div>
+        <div class="detail-field-value" style="font-family:monospace;color:var(--text-3)">${esc(p['ID']||'')}</div>
+      </div>
+      <div class="detail-field">
+        <div class="detail-field-label">Last Updated</div>
+        <div class="detail-field-value${p['Last Updated']?'':' empty'}">${p['Last Updated'] ? new Date(p['Last Updated']).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Unknown'}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('detailOverlay').classList.add('active');
+  document.getElementById('detailPanel').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('active');
+  document.getElementById('detailPanel').classList.remove('active');
+}
+
+// Prevent row-click when interacting with editable cells, selects, inputs, or buttons
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.editable, .pill-select, .time-pill, .date-input, .btn-delete, .star-toggle')) {
+    e.stopPropagation();
+  }
+}, true);
+
+// Close detail panel on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDetail();
+});
 
 function sortBy(col) {
   if (sortCol === col) {
@@ -724,6 +1365,9 @@ async function loadProjects() {
     buildDynamicFilters();
     renderTable();
     updateStats();
+    renderSpotlight();
+    renderWorkload();
+    renderChangelog();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
   showLoading(false);
@@ -805,9 +1449,17 @@ function renderTable() {
     return;
   }
 
-  tbody.innerHTML = filtered.map(p=>`
-    <tr>
-      <td><span class="cell-id">${esc(p['ID']||'')}</span></td>
+  const keyIds = getKeyProjectIds();
+  const _today = new Date(); _today.setHours(0,0,0,0);
+  const _soon = new Date(_today); _soon.setDate(_today.getDate() + 3);
+  tbody.innerHTML = filtered.map(p=>{
+    const isKey = keyIds.includes(p['ID']);
+    const _dv = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    const _done = p['Status'] === 'Complete';
+    const dueCls = _done ? 'date-complete' : (_dv && _dv < _today) ? 'date-overdue' : (_dv && _dv <= _soon) ? 'date-due-soon' : '';
+    return `
+    <tr onclick="openDetail('${esc(p['ID']||'')}')" style="cursor:pointer">
+      <td><button class="star-toggle${isKey?' active':''}" onclick="event.stopPropagation();toggleKeyProject('${esc(p['ID']||'')}')" title="${isKey?'Remove from':'Add to'} key projects"><svg width="12" height="12" viewBox="0 0 24 24" ${isKey?'fill="currentColor" stroke="currentColor"':'fill="none" stroke="currentColor"'} stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button><span class="cell-id">${esc(p['ID']||'')}</span></td>
       <td><span class="cell-project editable" contenteditable="true" data-row="${p._row}" data-col="Project" onblur="onEdit(this)">${esc(p['Project']||'')}</span></td>
       <td><span class="cell-desc editable" contenteditable="true" data-row="${p._row}" data-col="Description" onblur="onEdit(this)">${esc(p['Description']||'')}</span></td>
       <td><select class="pill-select" data-type="category" data-value="${esc(p['Category']||'')}" data-row="${p._row}" data-col="Category" onchange="onDrop(this)"><option value="">\u2014</option>${CATEGORY_OPTIONS.map(o=>`<option${p['Category']===o?' selected':''}>${o}</option>`).join('')}</select></td>
@@ -817,11 +1469,11 @@ function renderTable() {
       <td><select class="pill-select" data-type="status" data-value="${esc(p['Status']||'')}" data-row="${p._row}" data-col="Status" onchange="onDrop(this)">${STATUS_OPTIONS.map(o=>`<option${p['Status']===o?' selected':''}>${o}</option>`).join('')}</select></td>
       <td><select class="time-pill" data-value="${esc(p['Est. Time']||'')}" data-row="${p._row}" data-col="Est. Time" onchange="onDrop(this)"><option value="">—</option>${TIME_OPTIONS.map(o=>`<option${p['Est. Time']===o?' selected':''}>${o}</option>`).join('')}</select></td>
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
-      <td><input type="date" class="date-input" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)"/></td>
+      <td><input type="date" class="date-input${dueCls?' '+dueCls:''}" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)" title="${dueCls==='date-overdue'?'Overdue':dueCls==='date-due-soon'?'Due within 3 days':''}"/></td>
       <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
       <td><button class="btn-delete" onclick="deleteProject(${p._row},'${esc(p['Project']||'')}')" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
     </tr>
-  `).join('');
+  `;}).join('');
 }
 
 function onDrop(el){el.setAttribute('data-value',el.value);updateCell(parseInt(el.dataset.row),el.dataset.col,el.value);}
@@ -834,6 +1486,7 @@ function applyFilters(){
   document.querySelectorAll('.filter-select').forEach(el=>el.classList.toggle('active-filter',el.value!==''));
   document.querySelectorAll('.stat').forEach(s=>s.classList.remove('clickable-active'));
   renderTable();
+  if (currentView === 'kanban') renderKanban();
 }
 
 function clearFilters(){
@@ -847,6 +1500,7 @@ function clearFilters(){
   document.querySelectorAll('.filter-select').forEach(el=>el.classList.remove('active-filter'));
   document.querySelectorAll('.stat').forEach(s=>s.classList.remove('clickable-active'));
   renderTable();
+  if (currentView === 'kanban') renderKanban();
 }
 
 function statFilter(type){
@@ -973,6 +1627,87 @@ function closeModal(e){if(e.target===e.currentTarget)closeAddModal();}
 function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 function showToast(m,type='success'){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className=`toast ${type}`;t.textContent=m;c.appendChild(t);requestAnimationFrame(()=>t.classList.add('visible'));setTimeout(()=>{t.classList.remove('visible');setTimeout(()=>t.remove(),350);},2200);}
 function showLoading(a){document.getElementById('loadingBar').className=a?'loading-bar active':'loading-bar';}
+
+// ===== VIEW TOGGLE (TABLE / KANBAN) =====
+let currentView = 'table';
+
+function setView(view) {
+  currentView = view;
+  document.getElementById('viewTable').classList.toggle('active', view === 'table');
+  document.getElementById('viewKanban').classList.toggle('active', view === 'kanban');
+
+  const tableEl = document.querySelector('.table-container');
+  const kanbanEl = document.getElementById('kanbanBoard');
+  const resultsBar = document.querySelector('.results-bar');
+
+  if (view === 'table') {
+    tableEl.style.display = '';
+    kanbanEl.classList.remove('active');
+    resultsBar.style.display = '';
+  } else {
+    tableEl.style.display = 'none';
+    kanbanEl.classList.add('active');
+    resultsBar.style.display = 'none';
+    renderKanban();
+  }
+}
+
+function renderKanban() {
+  const board = document.getElementById('kanbanBoard');
+  const filtered = getFilteredProjects();
+
+  const STATUS_COLORS = {
+    'Not Started':['s-nostart-bg','s-nostart','var(--s-nostart)'],
+    'Planning':['s-plan-bg','s-plan','var(--s-plan)'],
+    'In Progress':['s-prog-bg','s-prog','var(--s-prog)'],
+    'In Review':['s-rev-bg','s-rev','var(--s-rev)'],
+    'Complete':['s-done-bg','s-done','var(--s-done)'],
+    'Blocked':['s-block-bg','s-block','var(--s-block)'],
+    'On Hold':['s-hold-bg','s-hold','var(--s-hold)']
+  };
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+
+  const columns = ['Not Started','Planning','In Progress','In Review','Blocked','Complete'];
+
+  board.innerHTML = columns.map(status => {
+    const items = filtered.filter(p => (p['Status'] || 'Not Started') === status);
+    const sc = STATUS_COLORS[status] || ['s-nostart-bg','s-nostart','var(--s-nostart)'];
+
+    return `<div class="kanban-col">
+      <div class="kanban-col-header">
+        <div class="kanban-col-title" style="color:${sc[2]}">
+          <span class="dot" style="background:${sc[2]}"></span>
+          ${status}
+        </div>
+        <span class="kanban-col-count">${items.length}</span>
+      </div>
+      <div class="kanban-cards">
+        ${items.length === 0 ? '<div class="kanban-empty">No projects</div>' : items.map(p => {
+          const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
+          const today = new Date(); today.setHours(0,0,0,0);
+          const dueDate = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+          const isOverdue = dueDate && dueDate < today && status !== 'Complete';
+          const dueStr = dueDate ? dueDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+
+          return `<div class="kanban-card" onclick="openDetail('${esc(p['ID']||'')}')">
+            <div class="kanban-card-title">${esc(p['Project']||'')}</div>
+            <div class="kanban-card-meta">
+              <span class="k-pill" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
+              ${dueStr ? `<span style="${isOverdue?'color:var(--p-crit);font-weight:600':''}">Due ${dueStr}</span>` : ''}
+            </div>
+            ${p['Owner'] ? `<div class="kanban-card-owner"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${esc(p['Owner'])}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== EXPORT PDF =====
+function exportPDF() {
+  showToast('Preparing export...');
+  setTimeout(() => window.print(), 300);
+}
 
 // Column resize
 function startResize(e){
