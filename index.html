@@ -3231,7 +3231,7 @@ function renderTable() {
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
       <td><input type="date" class="date-input${dueCls?' '+dueCls:''}" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)" title="${dueCls==='date-overdue'?'Overdue':dueCls==='date-due-soon'?'Due within 3 days':''}"/></td>
       <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
-      <td><button class="btn-delete" onclick="deleteProject(${p._row},'${esc(p['Project']||'')}')" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
+      <td><button class="btn-delete" onclick="event.stopPropagation();deleteProject(${p._row},'${esc(p['Project']||'')}')" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
     </tr>
   `;}).join('');
 }
