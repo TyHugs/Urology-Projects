@@ -1241,6 +1241,38 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   font-size: 0.52rem; font-weight: 700; color: var(--gold);
 }
 
+
+/* Provider detail cards row */
+.prov-detail-cards {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; margin-top: 0.3rem;
+}
+.prov-detail-chip {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+  border-radius: var(--r); background: var(--bg-card);
+  border: 1px solid var(--border); box-shadow: var(--sh-sm);
+}
+.prov-detail-chip .chip-label {
+  font-size: 0.56rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.prov-detail-chip .chip-value { color: var(--text); }
+.prov-detail-chip.chip-risk-high { border-left: 3px solid var(--p-crit); }
+.prov-detail-chip.chip-risk-med { border-left: 3px solid var(--s-rev); }
+.prov-detail-chip.chip-risk-low { border-left: 3px solid var(--s-done); }
+.prov-detail-chip.chip-consistency { border-left: 3px solid var(--gold); }
+.prov-detail-chip.chip-balance { border-left: 3px solid var(--s-plan); }
+
+/* Month summary strip above calendar */
+.month-summary-strip {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;
+  padding: 0.4rem 0.65rem; background: var(--bg-warm);
+  border-radius: var(--r); font-size: 0.7rem; color: var(--text-2);
+  align-items: center;
+}
+.month-summary-strip strong { color: var(--text); font-weight: 600; }
+.month-summary-strip .mss-sep { width: 1px; height: 12px; background: var(--border-strong); }
+
 /* Legend */
 .sched-legend {
   display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
@@ -1320,6 +1352,29 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .risk-badge.risk-med .risk-badge-dot { background: var(--s-rev); }
 .risk-badge.risk-high .risk-badge-dot { background: var(--p-crit); }
 
+
+/* Activity chip accessibility icons */
+.sched-activity-chip.act-or::before { content: '\2694 '; font-size: 0.6rem; }
+.sched-activity-chip.act-clinic::before { content: '\2695 '; font-size: 0.6rem; }
+.sched-activity-chip.act-inpatient::before { content: '\2302 '; font-size: 0.6rem; }
+.sched-activity-chip.act-ed::before { content: '\26A1 '; font-size: 0.6rem; }
+.sched-activity-chip.act-mpu::before { content: '\2605 '; font-size: 0.6rem; }
+.sched-activity-chip.act-ir::before { content: '\2316 '; font-size: 0.6rem; }
+.sched-activity-chip.act-other::before { content: '\2022 '; font-size: 0.6rem; }
+.sched-activity-chip.act-projected::before { content: '\2026 '; font-size: 0.6rem; }
+
+/* Risk badge a11y icons */
+.risk-badge.risk-low::before { content: '\2713 '; }
+.risk-badge.risk-med::before { content: '\25B2 '; }
+.risk-badge.risk-high::before { content: '\26A0 '; }
+
+/* Anomaly chip: add warning triangle besides glow */
+.sched-activity-chip.has-anomaly::after {
+  content: '\26A0'; position: absolute; top: -6px; right: -4px;
+  font-size: 0.55rem; color: var(--p-crit); font-weight: 700;
+}
+.sched-activity-chip { position: relative; }
+
 /* Anomaly day markers */
 .sched-activity-chip.has-anomaly {
   box-shadow: 0 0 0 2px var(--p-crit), 0 0 8px rgba(176,72,64,0.3);
@@ -1352,16 +1407,27 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   display: flex; align-items: center; gap: 0.3rem;
 }
 
-/* Department summary bar */
+/* Department summary cards */
 .dept-summary-bar {
-  display: flex; gap: 0.5rem; margin-bottom: 0.65rem;
-  padding: 0.6rem 0.8rem; background: var(--bg-card);
-  border: 1px solid var(--border); border-radius: var(--r);
-  box-shadow: var(--sh-sm); font-size: 0.74rem; color: var(--text-2);
-  flex-wrap: wrap; align-items: center;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.55rem; margin-bottom: 0.8rem;
 }
-.dept-summary-bar strong { color: var(--text); font-weight: 600; }
-.dept-summary-bar .dept-sep { width: 1px; height: 16px; background: var(--border-strong); }
+.dept-stat-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.6rem 0.8rem; box-shadow: var(--sh-sm); text-align: center;
+}
+.dept-stat-label {
+  font-size: 0.6rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.1rem;
+}
+.dept-stat-value {
+  font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600;
+  color: var(--text); line-height: 1.1;
+}
+.dept-stat-sub {
+  font-size: 0.64rem; color: var(--text-3); margin-top: 0.1rem; font-weight: 500;
+}
+.dept-stat-value.flagged { color: var(--p-high); }
 
 /* Balance recommendation */
 .balance-rec {
@@ -1980,7 +2046,16 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 
 
-  <!-- Department Summary Bar -->
+  <!-- Section Header -->
+  <div style="margin-top:1.25rem;margin-bottom:0.3rem">
+    <div style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:400;color:var(--text);display:flex;align-items:center;gap:0.5rem">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Provider Schedules &amp; Analytics
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-3);margin-top:0.15rem">Department-level RVU performance and individual provider scheduling data</div>
+  </div>
+
+  <!-- Department Summary Cards -->
   <div class="dept-summary-bar" id="deptSummaryBar" style="display:none"></div>
 
   <!-- Data Freshness Banner -->
@@ -1990,7 +2065,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   </div>
 
   <!-- Filters row -->
-  <div class="sched-top-bar" style="margin-top:1.25rem">
+  <div class="sched-top-bar">
     <div class="sched-filter-group">
       <span class="sched-filter-label">Division</span>
       <select class="sched-select" id="schedDivFilter" onchange="onSchedFilterChange()">
@@ -2015,6 +2090,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div id="schedProvHeader" style="display:none">
     <div class="sched-provider-name" id="schedProvName"></div>
     <div class="sched-prov-summary" id="schedProvSummary"></div>
+    <div class="prov-detail-cards" id="schedProvDetail"></div>
   </div>
 
   <!-- Month nav -->
@@ -2037,6 +2113,9 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <span>Hover any day for 12-month analytics</span>
     </div>
   </div>
+
+  <!-- Month summary -->
+  <div id="schedMonthSummary" class="month-summary-strip" style="display:none"></div>
 
   <!-- Calendar grid -->
   <div id="schedGrid" class="cal-grid"></div>
@@ -3164,8 +3243,10 @@ function renderDeliveryMetrics() {
   // On-time rate (completed before or on due date)
   var active = dp.filter(function(p) { return p['Status'] !== 'Complete'; });
   var onTime = completed.filter(function(p) {
-    if (!p['Due Date']) return true; // no deadline = on time
-    return true; // completed = met deadline
+    if (!p['Due Date'] || !p['Last Updated']) return true;
+    var due = new Date(String(p['Due Date']).slice(0,10));
+    var done = new Date(String(p['Last Updated']).slice(0,10));
+    return done <= due;
   }).length;
   var onTimeRate = completed.length > 0 ? Math.round((onTime / completed.length) * 100) : 100;
 
@@ -3194,6 +3275,9 @@ function renderDeliveryMetrics() {
 
 // ===== COMPLIANCE SCORECARD =====
 function renderComplianceScorecard() {
+  // Remove any previously inserted compliance card
+  var oldCard = document.querySelector('.compliance-card');
+  if (oldCard) oldCard.remove();
   if (recurringHistory.length === 0 && recurringItems.length === 0) return;
   var container = document.getElementById('recTieredCards');
   var total = recurringHistory.length;
@@ -3244,7 +3328,7 @@ function checkRvuFreshness() {
   var now = new Date();
   var daysSince = Math.floor((now - gen) / 86400000);
   if (daysSince > 7) {
-    textEl.textContent = 'RVU analytics data is ' + daysSince + ' days old (generated ' + _rvuData.generated + '). Consider refreshing provider_analytics.json.';
+    textEl.textContent = 'Analytics data was last updated ' + daysSince + ' days ago (' + _rvuData.generated + '). Some metrics may not reflect recent activity.';
     banner.classList.add('visible');
   } else {
     banner.classList.remove('visible');
@@ -3258,16 +3342,20 @@ function renderDeptSummary() {
   if (!_rvuData || !_rvuData.department) { bar.style.display = 'none'; return; }
   var dept = _rvuData.department;
   bar.style.display = '';
+  var flagCount = (dept.concern_list && dept.concern_list.length) || 0;
   bar.innerHTML =
-    '<span>3-Mo RVUs: <strong>' + (dept.total_rvu_3mo || 0).toLocaleString() + '</strong></span>' +
-    '<span class="dept-sep"></span>' +
-    '<span>12-Mo RVUs: <strong>' + (dept.total_rvu_12mo || 0).toLocaleString() + '</strong></span>' +
-    '<span class="dept-sep"></span>' +
-    '<span>Avg RVU/Provider-Day: <strong>' + (dept.avg_rvu_per_provider_day || 0).toFixed(1) + '</strong></span>' +
-    '<span class="dept-sep"></span>' +
-    '<span>Active Providers: <strong>' + (_rvuData.providers || []).length + '</strong></span>' +
-    (dept.concern_list && dept.concern_list.length > 0 ?
-      '<span class="dept-sep"></span><span style="color:var(--p-high);font-weight:600">' + dept.concern_list.length + ' providers flagged</span>' : '');
+    '<div class="dept-stat-card"><div class="dept-stat-label">3-Month RVUs</div>' +
+    '<div class="dept-stat-value">' + (dept.total_rvu_3mo || 0).toLocaleString() + '</div></div>' +
+    '<div class="dept-stat-card"><div class="dept-stat-label">12-Month RVUs</div>' +
+    '<div class="dept-stat-value">' + (dept.total_rvu_12mo || 0).toLocaleString() + '</div></div>' +
+    '<div class="dept-stat-card"><div class="dept-stat-label">Avg RVU / Provider-Day</div>' +
+    '<div class="dept-stat-value">' + (dept.avg_rvu_per_provider_day || 0).toFixed(1) + '</div></div>' +
+    '<div class="dept-stat-card"><div class="dept-stat-label">Active Providers</div>' +
+    '<div class="dept-stat-value">' + (_rvuData.providers || []).length + '</div></div>' +
+    (flagCount > 0 ?
+      '<div class="dept-stat-card"><div class="dept-stat-label">Flagged Providers</div>' +
+      '<div class="dept-stat-value flagged">' + flagCount + '</div>' +
+      '<div class="dept-stat-sub">Need attention</div></div>' : '');
 }
 
 // ===== RISK BADGE for provider dropdown/header =====
@@ -3298,6 +3386,7 @@ function renderScheduleCalendar() {
   if (!_rvuData) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--text-3);font-size:0.88rem">Loading provider analytics data...</div>';
     provHeader.style.display = 'none';
+    document.getElementById('schedMonthSummary').style.display = 'none';
     return;
   }
 
@@ -3305,6 +3394,7 @@ function renderScheduleCalendar() {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--text-3);font-size:0.88rem">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-4px;margin-right:0.4rem;color:var(--gold)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' +
       'Select a provider above to view their schedule and RVU analytics</div>';
+    document.getElementById('schedMonthSummary').style.display = 'none';
     provHeader.style.display = 'none';
     return;
   }
@@ -3337,24 +3427,36 @@ function renderScheduleCalendar() {
     '<span>Active Days (3mo): <strong>' + totalDays3 + '</strong></span>' +
     (typicalDays ? '<span style="font-size:0.7rem">Typical: ' + typicalDays + '</span>' : '');
 
-  // Add consistency badge
-  var cons = getProviderConsistency(prov);
+  // Render provider detail chips (risk, consistency, balance)
+  var detailEl = document.getElementById('schedProvDetail');
+  var detailHtml = '';
+  var provRisk = _rvuData.risk && _rvuData.risk[_selectedProv];
+  if (provRisk) {
+    var score = provRisk.burnout_score || 0;
+    var rCls = score >= 60 ? 'chip-risk-high' : score >= 30 ? 'chip-risk-med' : 'chip-risk-low';
+    var rLabel = score >= 60 ? 'High Risk' : score >= 30 ? 'Monitor' : 'Healthy';
+    detailHtml += '<div class="prov-detail-chip ' + rCls + '">' +
+      '<span class="chip-label">Risk</span>' +
+      '<span class="chip-value">' + rLabel + ' (' + score + ')</span></div>';
+    if (provRisk.peer_percentile !== undefined) {
+      detailHtml += '<div class="prov-detail-chip">' +
+        '<span class="chip-label">Peer Rank</span>' +
+        '<span class="chip-value">' + Math.round(provRisk.peer_percentile) + 'th percentile</span></div>';
+    }
+  }
+  var cons = getProviderConsistency(_selectedProv);
   if (cons) {
-    document.getElementById('schedProvSummary').innerHTML +=
-      ' <span class="consistency-badge ' + cons.cls + '">' + cons.label + ' (CV: ' + cons.cv + '%)</span>';
+    detailHtml += '<div class="prov-detail-chip chip-consistency">' +
+      '<span class="chip-label">Consistency</span>' +
+      '<span class="chip-value">' + cons.label + ' (CV: ' + cons.cv + '%)</span></div>';
   }
-
-  // Add risk badge
-  var riskHtml = getProvRiskBadge(prov);
-  if (riskHtml) {
-    document.getElementById('schedProvName').innerHTML += riskHtml;
+  var bal = _rvuData.balance && _rvuData.balance[_selectedProv];
+  if (bal && bal.balance_recommendation) {
+    detailHtml += '<div class="prov-detail-chip chip-balance">' +
+      '<span class="chip-label">Balance</span>' +
+      '<span class="chip-value">' + esc(bal.balance_recommendation) + '</span></div>';
   }
-
-  // Add balance recommendation
-  var balHtml = getBalanceRec(prov);
-  if (balHtml) {
-    document.getElementById('schedProvSummary').innerHTML += balHtml;
-  }
+  detailEl.innerHTML = detailHtml;
 
   // Build calendar
   var firstDay = new Date(schedYear, schedMonth, 1);
@@ -3426,6 +3528,41 @@ function renderScheduleCalendar() {
   var endDow = lastDay.getDay();
   for (var j = 1; j <= 6 - endDow; j++) {
     html += '<div class="cal-day outside"><div class="cal-day-num">' + j + '</div></div>';
+  }
+
+
+  // Month summary strip
+  var msSummary = document.getElementById('schedMonthSummary');
+  if (actual) {
+    // We've been counting — tally up this month's actuals
+    // (computed below after the loop)
+  }
+  var _monthTotalRvu = 0, _monthTotalDays = 0, _monthActivities = {};
+  var _monthActuals = _rvuData.actuals[prov] || {};
+  for (var _mKey in _monthActuals) {
+    if (_mKey.startsWith(schedYear + '-' + String(schedMonth+1).padStart(2,'0'))) {
+      _monthTotalRvu += _monthActuals[_mKey].r || 0;
+      _monthTotalDays++;
+      var _act = _monthActuals[_mKey].a || 'Other';
+      _monthActivities[_act] = (_monthActivities[_act] || 0) + 1;
+    }
+  }
+  var _avgRvuDay = _monthTotalDays > 0 ? (_monthTotalRvu / _monthTotalDays).toFixed(1) : '0';
+  var _actBreakdown = Object.entries(_monthActivities).sort(function(a,b){ return b[1]-a[1]; })
+    .map(function(e){ return '<strong>' + e[1] + '</strong> ' + e[0]; }).join('<span class="mss-sep"></span>');
+
+  if (_monthTotalDays > 0) {
+    msSummary.style.display = '';
+    msSummary.innerHTML =
+      '<span>This Month: <strong>' + _monthTotalRvu.toFixed(0) + ' RVU</strong></span>' +
+      '<span class="mss-sep"></span>' +
+      '<span><strong>' + _monthTotalDays + '</strong> active days</span>' +
+      '<span class="mss-sep"></span>' +
+      '<span>Avg: <strong>' + _avgRvuDay + '</strong> RVU/day</span>' +
+      '<span class="mss-sep"></span>' +
+      _actBreakdown;
+  } else {
+    msSummary.style.display = 'none';
   }
 
   grid.innerHTML = html;
