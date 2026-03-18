@@ -1155,14 +1155,13 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .cal-legend-item { display: flex; align-items: center; gap: 0.25rem; }
 .cal-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
-/* ===== PROVIDER SCHEDULES ===== */
+/* ===== PROVIDER SCHEDULES (RVU Analytics) ===== */
 .schedules-view { display: none; }
 .schedules-view.active { display: block; }
 .sched-header {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 0.8rem;
 }
-.sched-nav { display: flex; align-items: center; gap: 0.6rem; }
 
 /* Provider filter pills */
 .sched-providers {
@@ -1178,22 +1177,25 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .sched-prov-pill:hover { border-color: var(--gold-ring); }
 .sched-prov-pill.active { color: #fff; border-color: transparent; }
 
-/* Assignment type colors */
-.sched-assign { font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.3rem; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.35; margin-bottom: 1px; display: block; }
+/* Activity type colors */
+.sched-assign { font-size: 0.56rem; font-weight: 600; padding: 0.08rem 0.3rem; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; margin-bottom: 1px; display: block; cursor: default; }
 .sched-assign.assign-or { background: var(--s-prog-bg); color: var(--s-prog); }
 .sched-assign.assign-clinic { background: var(--s-done-bg); color: var(--s-done); }
-.sched-assign.assign-admin { background: var(--bg-warm); color: var(--text-2); }
-.sched-assign.assign-research { background: var(--s-plan-bg); color: var(--s-plan); }
-.sched-assign.assign-call { background: var(--s-rev-bg); color: var(--s-rev); }
-.sched-assign.assign-off { background: var(--bg); color: var(--text-3); font-style: italic; }
-.sched-assign.assign-other { background: var(--gold-badge); color: var(--gold); }
+.sched-assign.assign-inpatient { background: var(--s-rev-bg); color: var(--s-rev); }
+.sched-assign.assign-ed { background: var(--p-crit-bg); color: var(--p-crit); }
+.sched-assign.assign-mpu { background: var(--gold-badge); color: var(--gold); }
+.sched-assign.assign-ir { background: var(--s-plan-bg); color: var(--s-plan); }
+.sched-assign.assign-other { background: var(--bg-warm); color: var(--text-2); }
+.sched-assign.assign-projected {
+  border: 1px dashed var(--border-strong); background: transparent;
+  color: var(--text-3); font-style: italic;
+}
 
 .sched-prov-tag {
-  font-size: 0.5rem; font-weight: 700; display: inline-block;
+  font-size: 0.48rem; font-weight: 700; display: inline-block;
   max-width: 100%; overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap; opacity: 0.7;
 }
-
 .sched-day-entries { display: flex; flex-direction: column; gap: 1px; }
 
 .sched-legend {
@@ -1202,6 +1204,60 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 }
 .sched-legend-item { display: flex; align-items: center; gap: 0.2rem; }
 .sched-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* RVU Tooltip */
+.rvu-tooltip {
+  position: fixed; z-index: 200; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.85rem 1rem; box-shadow: var(--sh-lg);
+  max-width: 380px; min-width: 280px; pointer-events: none;
+  font-size: 0.74rem; line-height: 1.45;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.rvu-tooltip.visible { opacity: 1; }
+.rvu-tooltip-header {
+  font-weight: 700; font-size: 0.82rem; color: var(--text);
+  border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.rvu-tooltip-period {
+  margin-bottom: 0.55rem;
+}
+.rvu-tooltip-period-label {
+  font-weight: 700; font-size: 0.68rem; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem;
+}
+.rvu-tooltip-stat {
+  display: flex; justify-content: space-between; padding: 0.08rem 0;
+}
+.rvu-tooltip-stat-label { color: var(--text-3); }
+.rvu-tooltip-stat-value { font-weight: 600; color: var(--text); }
+.rvu-tooltip-loc {
+  font-size: 0.66rem; color: var(--text-3); margin-top: 0.15rem;
+}
+.rvu-tooltip-loc span { color: var(--text-2); font-weight: 500; }
+.rvu-tooltip-trend {
+  display: flex; align-items: flex-end; gap: 2px; height: 28px; margin-top: 0.3rem;
+}
+.rvu-tooltip-bar {
+  flex: 1; background: var(--gold); border-radius: 1px 1px 0 0; min-width: 4px;
+  transition: height 0.2s ease;
+}
+.rvu-tooltip-trend-label {
+  font-size: 0.56rem; color: var(--text-3); text-align: center; margin-top: 0.15rem;
+}
+.rvu-tooltip-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 0.4rem;
+}
+.rvu-tooltip-tab {
+  padding: 0.2rem 0.5rem; font-size: 0.64rem; font-weight: 600; color: var(--text-3);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all var(--t) var(--ease);
+}
+.rvu-tooltip-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.sched-entry-wrap { position: relative; }
+.sched-projected-note {
+  font-size: 0.5rem; color: var(--text-3); text-align: center;
+  margin-top: 0.25rem; font-style: italic;
+}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:960px){
@@ -1617,7 +1673,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div id="calDayDetail"></div>
 </div>
 
-<!-- ===== SCHEDULES VIEW ===== -->
+<!-- ===== SCHEDULES VIEW (RVU Analytics) ===== -->
 <div class="app schedules-view" id="schedulesView">
   <div class="sched-header" style="margin-top:1.25rem">
     <div class="cal-nav">
@@ -1630,73 +1686,29 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </button>
       <button class="cal-today-btn" onclick="schedToday()">Today</button>
     </div>
-    <button class="btn btn-primary" onclick="openSchedModal()">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add Entry
-    </button>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.72rem;color:var(--text-3)">
+      <span style="display:flex;align-items:center;gap:0.2rem">
+        <span style="width:8px;height:8px;border:1.5px dashed var(--border-strong);border-radius:2px;display:inline-block"></span> Projected
+      </span>
+      <span>|</span>
+      <span>Hover for analytics</span>
+    </div>
   </div>
   <div id="schedProviders" class="sched-providers"></div>
   <div id="schedGrid" class="cal-grid"></div>
   <div class="sched-legend">
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-prog)"></span> OR</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-done)"></span> Clinic</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Admin</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> Research</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-rev)"></span> Call</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> Other</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-rev)"></span> Inpatient</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--p-crit)"></span> ED</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> MPU</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> IR</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Other</span>
   </div>
-  <div id="schedDayDetail"></div>
 </div>
 
-<!-- SCHEDULE ADD/EDIT MODAL -->
-<div class="modal-overlay" id="schedModalOverlay" onclick="closeSchedModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2 id="schedModalTitle">Add Schedule Entry</h2>
-    <div class="modal-row">
-      <div class="modal-field">
-        <label>Provider</label>
-        <input type="text" id="schedProvider" placeholder="e.g., Dr. Smith" list="schedProviderList"/>
-        <datalist id="schedProviderList"></datalist>
-      </div>
-      <div class="modal-field">
-        <label>Date</label>
-        <input type="date" id="schedDate"/>
-      </div>
-    </div>
-    <div class="modal-row">
-      <div class="modal-field">
-        <label>Assignment</label>
-        <select id="schedAssignment">
-          <option>OR</option>
-          <option>Clinic</option>
-          <option>Admin</option>
-          <option>Research</option>
-          <option>Call</option>
-          <option>Off</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Location</label>
-        <input type="text" id="schedLocation" placeholder="e.g., UH, BCSC, Brighton"/>
-      </div>
-    </div>
-    <div class="modal-row">
-      <div class="modal-field">
-        <label>Time (optional)</label>
-        <input type="text" id="schedTime" placeholder="e.g., 7:30 AM - 3:30 PM"/>
-      </div>
-      <div class="modal-field">
-        <label>Notes</label>
-        <input type="text" id="schedNotes" placeholder="Additional details..."/>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeSchedModal()">Cancel</button>
-      <button class="btn btn-primary" id="schedSaveBtn" onclick="saveSchedEntry()">Add Entry</button>
-    </div>
-  </div>
-</div>
+<!-- RVU Tooltip (positioned via JS) -->
+<div class="rvu-tooltip" id="rvuTooltip"></div>
 
 <!-- CALENDAR ADD/EDIT MODAL -->
 <div class="modal-overlay" id="calModalOverlay" onclick="closeCalModal()">
@@ -2150,7 +2162,10 @@ function setPage(page) {
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
   document.getElementById('schedulesView').classList.toggle('active', page === 'schedules');
   if (page === 'calendar') renderCalendar();
-  if (page === 'schedules') renderScheduleCalendar();
+  if (page === 'schedules') {
+    if (!_rvuData) loadRvuData().then(function() { renderScheduleCalendar(); });
+    else renderScheduleCalendar();
+  }
 }
 
 // ===== CALENDAR =====
@@ -2564,16 +2579,17 @@ async function cycleGoalStatus(row, id, current) {
   showLoading(false);
 }
 
-// ===== PROVIDER SCHEDULES =====
+// ===== PROVIDER SCHEDULES (RVU Analytics) =====
 let scheduleEntries = [];
+let _rvuData = null; // loaded from provider_analytics.json
 let schedYear, schedMonth;
-let _schedEditRow = null;
-let schedFilterProviders = new Set(); // empty = show all
+let schedFilterProviders = new Set();
 
-// Provider color palette for pills
 const PROVIDER_COLORS = [
   '#1A2740','#B8863A','#3D6CB4','#387A5C','#695DA0',
-  '#A07C28','#B04840','#2E7D6A','#7C5295','#4A7C3F'
+  '#A07C28','#B04840','#2E7D6A','#7C5295','#4A7C3F',
+  '#2D6A88','#8B6D3F','#5B4FA0','#3A7A4C','#A05040',
+  '#4A6B8A','#7B5C2A','#6B4F8A','#2E8A6A','#8A4A5C'
 ];
 let _providerColorMap = {};
 
@@ -2605,222 +2621,255 @@ function schedToday() {
   renderScheduleCalendar();
 }
 
-function getAssignClass(assignment) {
-  const a = (assignment || '').toLowerCase();
-  if (a.includes('or') && !a.includes('other')) return 'assign-or';
-  if (a.includes('clinic')) return 'assign-clinic';
-  if (a.includes('admin')) return 'assign-admin';
-  if (a.includes('research')) return 'assign-research';
-  if (a.includes('call')) return 'assign-call';
-  if (a.includes('off')) return 'assign-off';
+function getAssignClass(activity) {
+  const a = (activity || '').toLowerCase().trim();
+  if (a === 'or' || a.startsWith('or/')) return 'assign-or';
+  if (a === 'clinic') return 'assign-clinic';
+  if (a === 'inpatient') return 'assign-inpatient';
+  if (a === 'ed') return 'assign-ed';
+  if (a === 'mpu') return 'assign-mpu';
+  if (a === 'ir') return 'assign-ir';
   return 'assign-other';
 }
 
 function toggleSchedProvider(name) {
-  if (schedFilterProviders.has(name)) {
-    schedFilterProviders.delete(name);
-  } else {
-    schedFilterProviders.add(name);
-  }
+  if (schedFilterProviders.has(name)) schedFilterProviders.delete(name);
+  else schedFilterProviders.add(name);
   renderScheduleCalendar();
 }
 
+// Load RVU analytics JSON
+async function loadRvuData() {
+  try {
+    const base = window.location.href.includes('github.io')
+      ? window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1)
+      : './';
+    const res = await fetch(base + 'provider_analytics.json?v=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    _rvuData = await res.json();
+    console.log('RVU data loaded: ' + (_rvuData.providers || []).length + ' providers');
+  } catch(e) {
+    console.warn('Could not load provider_analytics.json:', e.message);
+    _rvuData = null;
+  }
+}
+
 function renderScheduleProviders() {
-  const providers = [...new Set(scheduleEntries.map(s => s['Provider']).filter(Boolean))].sort();
+  if (!_rvuData) return;
   const container = document.getElementById('schedProviders');
-  const datalist = document.getElementById('schedProviderList');
-
-  // Provider filter pills
+  const providers = _rvuData.providers || [];
   const showAll = schedFilterProviders.size === 0;
-  container.innerHTML = `<button class="sched-prov-pill${showAll?' active':''}" style="${showAll?'background:var(--navy);color:#fff':''}" onclick="schedFilterProviders.clear();renderScheduleCalendar()">All</button>` +
-    providers.map(p => {
-      const active = schedFilterProviders.has(p);
-      const color = getProviderColor(p);
-      return `<button class="sched-prov-pill${active?' active':''}" style="${active?'background:'+color+';border-color:'+color:''}" onclick="toggleSchedProvider('${esc(p)}')">${esc(p)}</button>`;
-    }).join('');
 
-  // Datalist for autocomplete
-  datalist.innerHTML = providers.map(p => `<option value="${esc(p)}"/>`).join('');
+  container.innerHTML =
+    '<button class="sched-prov-pill' + (showAll ? ' active' : '') + '" style="' + (showAll ? 'background:var(--navy);color:#fff' : '') + '" onclick="schedFilterProviders.clear();renderScheduleCalendar()">All (' + providers.length + ')</button>' +
+    providers.map(function(p) {
+      var active = schedFilterProviders.has(p);
+      var color = getProviderColor(p);
+      return '<button class="sched-prov-pill' + (active ? ' active' : '') + '" style="' + (active ? 'background:' + color + ';border-color:' + color : '') + '" onclick="toggleSchedProvider(\'' + esc(p) + '\')">' + esc(p) + '</button>';
+    }).join('');
 }
 
 function renderScheduleCalendar() {
-  const grid = document.getElementById('schedGrid');
-  const label = document.getElementById('schedMonthLabel');
-  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  label.textContent = `${monthNames[schedMonth]} ${schedYear}`;
+  if (!_rvuData) {
+    document.getElementById('schedGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-3)">Loading provider data...</div>';
+    return;
+  }
+
+  var grid = document.getElementById('schedGrid');
+  var label = document.getElementById('schedMonthLabel');
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent = monthNames[schedMonth] + ' ' + schedYear;
 
   renderScheduleProviders();
 
-  const firstDay = new Date(schedYear, schedMonth, 1);
-  const lastDay = new Date(schedYear, schedMonth + 1, 0);
-  const startDow = firstDay.getDay();
-  const daysInMonth = lastDay.getDate();
-  const today = new Date(); today.setHours(0,0,0,0);
+  var firstDay = new Date(schedYear, schedMonth, 1);
+  var lastDay = new Date(schedYear, schedMonth + 1, 0);
+  var startDow = firstDay.getDay();
+  var daysInMonth = lastDay.getDate();
+  var today = new Date(); today.setHours(0,0,0,0);
+  var todayStr = today.toISOString().slice(0,10);
 
-  // Filter entries by provider selection
-  const filtered = schedFilterProviders.size === 0
-    ? scheduleEntries
-    : scheduleEntries.filter(s => schedFilterProviders.has(s['Provider']));
+  // Determine which providers to show
+  var provList = schedFilterProviders.size > 0
+    ? _rvuData.providers.filter(function(p) { return schedFilterProviders.has(p); })
+    : _rvuData.providers;
+  var maxShow = schedFilterProviders.size > 0 ? 8 : 4;
 
-  let html = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div class="cal-dow">${d}</div>`).join('');
+  var dowNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var html = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(d) { return '<div class="cal-dow">' + d + '</div>'; }).join('');
 
-  // Leading
-  const prevMonth = new Date(schedYear, schedMonth, 0);
-  for (let i = startDow - 1; i >= 0; i--) {
-    html += `<div class="cal-day outside"><div class="cal-day-num">${prevMonth.getDate() - i}</div></div>`;
+  // Leading empty cells
+  var prevMonth = new Date(schedYear, schedMonth, 0);
+  for (var i = startDow - 1; i >= 0; i--) {
+    html += '<div class="cal-day outside"><div class="cal-day-num">' + (prevMonth.getDate() - i) + '</div></div>';
   }
 
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${schedYear}-${String(schedMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = today.getFullYear() === schedYear && today.getMonth() === schedMonth && today.getDate() === d;
-    const dayEntries = filtered.filter(s => String(s['Date']).slice(0,10) === dateStr)
-      .sort((a,b) => (a['Provider']||'').localeCompare(b['Provider']||''));
-    const maxShow = 4;
+  for (var d = 1; d <= daysInMonth; d++) {
+    var dateStr = schedYear + '-' + String(schedMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    var isToday = todayStr === dateStr;
+    var isFuture = dateStr > todayStr;
+    var dow = new Date(schedYear, schedMonth, d).getDay();
+    var dowName = dowNames[dow];
 
-    let entriesHtml = dayEntries.slice(0, maxShow).map(s => {
-      const cls = getAssignClass(s['Assignment']);
-      const provColor = getProviderColor(s['Provider']);
-      return `<div class="sched-assign ${cls}" title="${esc(s['Provider']||'')}: ${esc(s['Assignment']||'')} ${esc(s['Location']||'')}">
-        <span class="sched-prov-tag" style="color:${provColor}">${esc((s['Provider']||'').split(' ').pop())}</span> ${esc(s['Assignment']||'')}${s['Location']?' · '+esc(s['Location']):''}
-      </div>`;
-    }).join('');
-
-    if (dayEntries.length > maxShow) {
-      entriesHtml += `<div class="cal-event-more">+${dayEntries.length - maxShow} more</div>`;
+    // Weekend - skip provider data
+    if (dow === 0 || dow === 6) {
+      html += '<div class="cal-day' + (isToday ? ' today' : '') + '"><div class="cal-day-num">' + d + '</div></div>';
+      continue;
     }
 
-    html += `<div class="cal-day${isToday?' today':''}" onclick="selectSchedDay('${dateStr}')">
-      <div class="cal-day-num">${d}</div>
-      <div class="sched-day-entries">${entriesHtml}</div>
-    </div>`;
+    // Collect entries for this day
+    var entries = [];
+    provList.forEach(function(prov) {
+      var actual = _rvuData.actuals[prov] && _rvuData.actuals[prov][dateStr];
+      if (actual) {
+        entries.push({ prov: prov, activity: actual.a, location: actual.l, rvus: actual.r, projected: false });
+      } else if (isFuture && _rvuData.patterns[prov] && _rvuData.patterns[prov][dowName]) {
+        var pat = _rvuData.patterns[prov][dowName];
+        if (pat.c >= 0.3) {
+          entries.push({ prov: prov, activity: pat.a, location: pat.l, rvus: pat.avg_rvu, projected: true, confidence: pat.c });
+        }
+      }
+    });
+
+    var entriesHtml = entries.slice(0, maxShow).map(function(e) {
+      var cls = getAssignClass(e.activity) + (e.projected ? ' assign-projected' : '');
+      var provColor = getProviderColor(e.prov);
+      var rTag = e.rvus > 0 ? ' (' + e.rvus.toFixed(0) + ')' : '';
+      return '<div class="sched-assign ' + cls + '" data-prov="' + esc(e.prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
+        '<span class="sched-prov-tag" style="color:' + provColor + '">' + esc(e.prov) + '</span> ' +
+        esc(e.activity || '') + rTag +
+      '</div>';
+    }).join('');
+
+    if (entries.length > maxShow) {
+      entriesHtml += '<div class="cal-event-more">+' + (entries.length - maxShow) + ' more</div>';
+    }
+
+    html += '<div class="cal-day' + (isToday ? ' today' : '') + '">' +
+      '<div class="cal-day-num">' + d + '</div>' +
+      '<div class="sched-day-entries">' + entriesHtml + '</div>' +
+    '</div>';
   }
 
-  // Trailing
-  const endDow = lastDay.getDay();
-  for (let i = 1; i <= 6 - endDow; i++) {
-    html += `<div class="cal-day outside"><div class="cal-day-num">${i}</div></div>`;
+  // Trailing empty cells
+  var endDow = lastDay.getDay();
+  for (var j = 1; j <= 6 - endDow; j++) {
+    html += '<div class="cal-day outside"><div class="cal-day-num">' + j + '</div></div>';
   }
 
   grid.innerHTML = html;
 }
 
-function selectSchedDay(dateStr) {
-  const detail = document.getElementById('schedDayDetail');
-  const filtered = schedFilterProviders.size === 0
-    ? scheduleEntries
-    : scheduleEntries.filter(s => schedFilterProviders.has(s['Provider']));
-  const dayEntries = filtered.filter(s => String(s['Date']).slice(0,10) === dateStr)
-    .sort((a,b) => (a['Provider']||'').localeCompare(b['Provider']||''));
-  const dayLabel = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+// ===== RVU TOOLTIP =====
+var _tooltipTimer = null;
 
-  detail.innerHTML = `<div class="cal-day-detail">
-    <div class="cal-day-detail-header">
-      <div class="cal-day-detail-title">${dayLabel}</div>
-      <button class="btn btn-primary" style="font-size:0.72rem;padding:0.25rem 0.6rem" onclick="openSchedModal('${dateStr}')">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add
-      </button>
-    </div>
-    ${dayEntries.length === 0 ? '<div style="text-align:center;padding:0.8rem;color:var(--text-3);font-size:0.82rem">No assignments scheduled</div>' :
-    dayEntries.map(s => {
-      const cls = getAssignClass(s['Assignment']);
-      const dotMap = {'assign-or':'var(--s-prog)','assign-clinic':'var(--s-done)','assign-admin':'var(--text-3)','assign-research':'var(--s-plan)','assign-call':'var(--s-rev)','assign-off':'var(--border-strong)','assign-other':'var(--gold)'};
-      return `<div class="cal-detail-item">
-        <div class="cal-detail-dot" style="background:${dotMap[cls]||'var(--text-3)'}"></div>
-        <div class="cal-detail-content">
-          <strong>${esc(s['Provider']||'')}</strong> — ${esc(s['Assignment']||'')}
-          <div class="cal-detail-meta">${[s['Location'],s['Time'],s['Notes']].filter(Boolean).map(v=>esc(v)).join(' · ') || 'No additional details'}</div>
-        </div>
-        <div class="cal-detail-actions">
-          <button class="rec-card-btn" onclick="editSchedEntry(${s._row})" title="Edit"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-          <button class="rec-card-btn delete-btn" onclick="deleteSchedEntry(${s._row},'${esc(s['Provider']||'')}')" title="Delete"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>`;
-}
+function showRvuTooltip(evt, el) {
+  if (!_rvuData) return;
+  clearTimeout(_tooltipTimer);
 
-// --- Schedule Modal ---
-function openSchedModal(dateStr) {
-  _schedEditRow = null;
-  document.getElementById('schedModalTitle').textContent = 'Add Schedule Entry';
-  document.getElementById('schedSaveBtn').textContent = 'Add Entry';
-  document.getElementById('schedProvider').value = '';
-  document.getElementById('schedDate').value = dateStr || '';
-  document.getElementById('schedAssignment').value = 'OR';
-  document.getElementById('schedLocation').value = '';
-  document.getElementById('schedTime').value = '';
-  document.getElementById('schedNotes').value = '';
-  document.getElementById('schedModalOverlay').classList.add('active');
-}
+  var prov = el.getAttribute('data-prov');
+  var dateStr = el.getAttribute('data-date');
+  var dowName = el.getAttribute('data-dow');
+  var tooltip = document.getElementById('rvuTooltip');
 
-function editSchedEntry(row) {
-  const entry = scheduleEntries.find(s => s._row === row);
-  if (!entry) return;
-  _schedEditRow = row;
-  document.getElementById('schedModalTitle').textContent = 'Edit Schedule Entry';
-  document.getElementById('schedSaveBtn').textContent = 'Save Changes';
-  document.getElementById('schedProvider').value = entry['Provider'] || '';
-  document.getElementById('schedDate').value = entry['Date'] ? String(entry['Date']).slice(0,10) : '';
-  document.getElementById('schedAssignment').value = entry['Assignment'] || 'OR';
-  document.getElementById('schedLocation').value = entry['Location'] || '';
-  document.getElementById('schedTime').value = entry['Time'] || '';
-  document.getElementById('schedNotes').value = entry['Notes'] || '';
-  document.getElementById('schedModalOverlay').classList.add('active');
-}
+  // Get actual data for this day
+  var actual = _rvuData.actuals[prov] && _rvuData.actuals[prov][dateStr];
+  var analytics = _rvuData.analytics[prov] && _rvuData.analytics[prov][dowName];
 
-function closeSchedModal() {
-  document.getElementById('schedModalOverlay').classList.remove('active');
-  _schedEditRow = null;
-}
+  if (!actual && !analytics) {
+    tooltip.classList.remove('visible');
+    return;
+  }
 
-async function saveSchedEntry() {
-  const provider = document.getElementById('schedProvider').value.trim();
-  const date = document.getElementById('schedDate').value;
-  if (!provider) { showToast('Provider is required', 'error'); return; }
-  if (!date) { showToast('Date is required', 'error'); return; }
+  var html = '<div class="rvu-tooltip-header">' +
+    '<span style="width:10px;height:10px;border-radius:50%;background:' + getProviderColor(prov) + ';display:inline-block"></span> ' +
+    esc(prov) + ' &mdash; ' + dowName +
+  '</div>';
 
-  const fields = {
-    'Provider': provider,
-    'Date': date,
-    'Assignment': document.getElementById('schedAssignment').value,
-    'Location': document.getElementById('schedLocation').value.trim(),
-    'Time': document.getElementById('schedTime').value.trim(),
-    'Notes': document.getElementById('schedNotes').value.trim(),
-  };
+  // Day actual
+  if (actual) {
+    html += '<div class="rvu-tooltip-period">' +
+      '<div class="rvu-tooltip-period-label">This Day (' + dateStr + ')</div>' +
+      '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Activity</span><span class="rvu-tooltip-stat-value">' + esc(actual.a) + '</span></div>' +
+      '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Location</span><span class="rvu-tooltip-stat-value">' + esc(actual.l) + '</span></div>' +
+      '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">RVUs</span><span class="rvu-tooltip-stat-value">' + actual.r.toFixed(1) + '</span></div>' +
+      '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Encounters</span><span class="rvu-tooltip-stat-value">' + actual.n + '</span></div>';
 
-  showLoading(true);
-  try {
-    if (_schedEditRow) {
-      for (const [col, val] of Object.entries(fields)) {
-        await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
-          body: JSON.stringify({action:'sched_update', row:_schedEditRow, column:col, value:val})});
-      }
-      showToast('Entry updated');
-    } else {
-      const payload = { action: 'sched_add', ...fields };
-      const res = await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload)});
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      showToast('Entry added');
+    // Show activity breakdown if multiple
+    if (actual.ad && Object.keys(actual.ad).length > 1) {
+      html += '<div class="rvu-tooltip-loc" style="margin-top:0.3rem"><strong>By type:</strong> ' +
+        Object.entries(actual.ad).map(function(e) { return e[0] + ' (' + e[1] + ')'; }).join(', ') + '</div>';
     }
-    closeSchedModal();
-    await loadProjects();
-    if (activePage === 'schedules') renderScheduleCalendar();
-  } catch(e) { showToast('Failed to save entry', 'error'); }
-  showLoading(false);
+    html += '</div>';
+  }
+
+  // Multi-period analytics
+  if (analytics) {
+    var periods = [['1mo','Last Month'],['3mo','Last 3 Months'],['6mo','Last 6 Months'],['12mo','Last 12 Months']];
+    periods.forEach(function(pair) {
+      var key = pair[0], lbl = pair[1];
+      var p = analytics[key];
+      if (!p) return;
+
+      html += '<div class="rvu-tooltip-period">' +
+        '<div class="rvu-tooltip-period-label">' + lbl + ' (' + p.days + ' ' + dowName + 's)</div>' +
+        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Avg RVUs/' + dowName.slice(0,3) + '</span><span class="rvu-tooltip-stat-value">' + p.avg_rvus_per_day.toFixed(1) + '</span></div>' +
+        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Avg Encounters/' + dowName.slice(0,3) + '</span><span class="rvu-tooltip-stat-value">' + p.avg_enc_per_day.toFixed(1) + '</span></div>' +
+        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Total RVUs</span><span class="rvu-tooltip-stat-value">' + p.total_rvus.toFixed(0) + '</span></div>';
+
+      // Top locations
+      if (p.by_location) {
+        var topLocs = Object.entries(p.by_location).sort(function(a,b) { return b[1].rvus - a[1].rvus; }).slice(0,3);
+        if (topLocs.length > 0) {
+          html += '<div class="rvu-tooltip-loc"><span>Top locations:</span> ' +
+            topLocs.map(function(e) { return e[0] + ' (' + e[1].days + 'd, ' + e[1].rvus.toFixed(0) + ' RVU)'; }).join(', ') + '</div>';
+        }
+      }
+
+      // Activity breakdown
+      if (p.by_activity) {
+        var acts = Object.entries(p.by_activity).sort(function(a,b) { return b[1].rvus - a[1].rvus; });
+        if (acts.length > 0) {
+          html += '<div class="rvu-tooltip-loc"><span>Activities:</span> ' +
+            acts.map(function(e) { return e[0] + ' (' + e[1].days + 'd, ' + e[1].rvus.toFixed(0) + ' RVU)'; }).join(', ') + '</div>';
+        }
+      }
+
+      // RVU trend bars
+      if (p.trend && Object.keys(p.trend).length > 1) {
+        var trendEntries = Object.entries(p.trend).sort(function(a,b) { return a[0].localeCompare(b[0]); });
+        var maxRvu = Math.max.apply(null, trendEntries.map(function(e) { return e[1].rvus; }));
+        html += '<div class="rvu-tooltip-trend">' +
+          trendEntries.map(function(e) {
+            var h = maxRvu > 0 ? Math.max(2, Math.round((e[1].rvus / maxRvu) * 26)) : 2;
+            return '<div class="rvu-tooltip-bar" style="height:' + h + 'px" title="' + e[0] + ': ' + e[1].rvus.toFixed(0) + ' RVUs"></div>';
+          }).join('') +
+        '</div>' +
+        '<div class="rvu-tooltip-trend-label">' + trendEntries[0][0].slice(5) + ' → ' + trendEntries[trendEntries.length-1][0].slice(5) + ' (RVU trend)</div>';
+      }
+
+      html += '</div>';
+    });
+  }
+
+  tooltip.innerHTML = html;
+
+  // Position near cursor
+  var rect = el.getBoundingClientRect();
+  var tipW = 360, tipH = tooltip.offsetHeight || 300;
+  var x = rect.right + 8;
+  var y = rect.top;
+  if (x + tipW > window.innerWidth) x = rect.left - tipW - 8;
+  if (y + tipH > window.innerHeight) y = Math.max(8, window.innerHeight - tipH - 8);
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+  tooltip.classList.add('visible');
 }
 
-async function deleteSchedEntry(row, provider) {
-  if (!confirm(`Delete entry for "${provider}"?`)) return;
-  showLoading(true);
-  try {
-    await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({action:'sched_delete', row})});
-    await loadProjects();
-    if (activePage === 'schedules') renderScheduleCalendar();
-    showToast('Entry deleted');
-  } catch(e) { showToast('Delete failed', 'error'); }
-  showLoading(false);
+function hideRvuTooltip() {
+  _tooltipTimer = setTimeout(function() {
+    document.getElementById('rvuTooltip').classList.remove('visible');
+  }, 100);
 }
 
 // ===== RECURRING OBLIGATIONS =====
@@ -3102,7 +3151,7 @@ async function confirmComplete() {
   showLoading(false);
 }
 
-(function(){ loadProjects(); })();
+(function(){ loadProjects(); loadRvuData().then(function() { if (activePage === 'schedules') renderScheduleCalendar(); }); })();
 
 async function loadProjects() {
   showLoading(true);
