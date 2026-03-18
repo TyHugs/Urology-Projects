@@ -1455,6 +1455,52 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .compliance-stat { font-size: 0.82rem; color: var(--text-2); margin-top: 0.15rem; }
 .compliance-stat strong { color: var(--text); }
 
+
+/* ===== COLLAPSIBLE SECTIONS ===== */
+.section-collapse-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+  padding: 0.1rem 0; margin-bottom: 0.55rem;
+  border-radius: var(--r);
+  transition: background var(--t) var(--ease);
+}
+.section-collapse-header:hover {
+  background: var(--bg-warm);
+  padding-left: 0.4rem; padding-right: 0.4rem;
+  margin-left: -0.4rem; margin-right: -0.4rem;
+}
+.section-collapse-chevron {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: var(--r-full);
+  background: var(--bg-warm); color: var(--text-3);
+  transition: all var(--t) var(--ease); flex-shrink: 0;
+}
+.section-collapse-header:hover .section-collapse-chevron {
+  background: var(--border); color: var(--text);
+}
+.section-collapse-chevron svg {
+  transition: transform 0.2s ease;
+}
+.section-collapse-header.collapsed .section-collapse-chevron svg {
+  transform: rotate(-90deg);
+}
+.section-collapse-body {
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+  overflow: hidden; max-height: 2000px; opacity: 1;
+}
+.section-collapse-body.collapsed {
+  max-height: 0 !important; opacity: 0; margin-bottom: 0;
+}
+/* Adjust inner header styles to remove old margin when wrapped */
+.section-collapse-header .action-items-title,
+.section-collapse-header .goals-title,
+.section-collapse-header .spotlight-title,
+.section-collapse-header .recurring-section-title,
+.section-collapse-header .workload-title,
+.section-collapse-header .changelog-title {
+  margin-bottom: 0;
+}
+
 /* ===== STAT CARD SPARKLINE ===== */
 .stat-spark {
   display: flex; align-items: flex-end; gap: 1px; height: 16px; margin-top: 0.25rem;
@@ -1521,7 +1567,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div class="page-tabs-inner">
     <button class="page-tab active" onclick="setPage('dashboard')" data-page="dashboard">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Dashboard
+      Project Tracker
     </button>
     <button class="page-tab" onclick="setPage('calendar')" data-page="calendar">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -1577,31 +1623,50 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
   <!-- CHAIR ACTION ITEMS (blocked & stale projects) -->
   <div class="action-items-section anim a1" id="actionItemsSection">
-    <div class="action-items-header">
+    <div class="section-collapse-header" data-collapse-target="actionItemsBody" onclick="toggleSection('actionItemsBody')">
       <div class="action-items-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         Needs Attention <span class="action-items-count" id="actionItemsCount">0</span>
       </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
-    <div id="actionItemsGrid" class="action-items-grid"></div>
+    <div id="actionItemsBody" class="section-collapse-body">
+      <div id="actionItemsGrid" class="action-items-grid"></div>
+    </div>
   </div>
 
   <!-- DELIVERY METRICS -->
-  <div class="delivery-metrics anim a1" id="deliveryMetrics"></div>
+  <div class="anim a1" id="deliveryMetricsSection">
+    <div class="section-collapse-header" data-collapse-target="deliveryMetricsBody" onclick="toggleSection('deliveryMetricsBody')">
+      <div class="action-items-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Delivery Metrics
+      </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="deliveryMetricsBody" class="section-collapse-body">
+      <div class="delivery-metrics" id="deliveryMetrics"></div>
+    </div>
+  </div>
 
   <!-- KEY GOALS -->
   <div class="goals-section anim a1" id="goalsSection">
-    <div class="goals-header">
+    <div class="section-collapse-header" data-collapse-target="goalsBody" onclick="toggleSection('goalsBody')">
       <div class="goals-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
         Key Goals <span class="goals-count" id="goalsCount">0</span>
       </div>
-      <button class="btn-add-goal" onclick="openGoalModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Goal
-      </button>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <button class="btn-add-goal" onclick="event.stopPropagation();openGoalModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Goal
+        </button>
+        <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
     </div>
-    <div id="goalsGrid" class="goals-grid"></div>
+    <div id="goalsBody" class="section-collapse-body">
+      <div id="goalsGrid" class="goals-grid"></div>
+    </div>
   </div>
 
   <!-- Goal Add/Edit Modal -->
@@ -1643,43 +1708,46 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
   <!-- KEY PROJECTS SPOTLIGHT -->
   <div class="spotlight anim a1" id="spotlightSection">
-    <div class="spotlight-header">
+    <div class="section-collapse-header" data-collapse-target="spotlightBody" onclick="toggleSection('spotlightBody')">
       <div class="spotlight-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         Key Projects
         <span class="spotlight-count" id="spotlightCount">0</span>
       </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
-    <div id="spotlightGrid" class="spotlight-grid"></div>
+    <div id="spotlightBody" class="section-collapse-body">
+      <div id="spotlightGrid" class="spotlight-grid"></div>
+    </div>
   </div>
 
   <!-- OWNER WORKLOAD -->
   <div class="workload anim a1" id="workloadSection">
-    <div class="workload-header" onclick="toggleWorkload()">
+    <div class="section-collapse-header" data-collapse-target="workloadBody" onclick="toggleSection('workloadBody')">
       <div class="workload-title">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Team Workload
       </div>
-      <div class="workload-toggle" id="workloadToggleLabel">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="workloadChevron" style="transition:transform .2s ease"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
-    <div id="workloadGrid" class="workload-grid"></div>
+    <div id="workloadBody" class="section-collapse-body">
+      <div id="workloadGrid" class="workload-grid"></div>
+    </div>
   </div>
 
   <!-- WEEKLY CHANGELOG -->
   <div class="changelog anim a1" id="changelogSection">
-    <div class="changelog-header" onclick="toggleChangelog()">
+    <div class="section-collapse-header" data-collapse-target="changelogBody2" onclick="toggleSection('changelogBody2')">
       <div class="changelog-title">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         This Week's Activity
         <span class="changelog-count" id="changelogCount">0</span>
       </div>
-      <div class="changelog-toggle">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="changelogChevron" style="transition:transform .2s ease"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
-    <div id="changelogBody" class="changelog-body"></div>
+    <div id="changelogBody2" class="section-collapse-body">
+      <div id="changelogBody" class="changelog-body"></div>
+    </div>
   </div>
 
   <div class="toolbar anim a2">
@@ -1773,27 +1841,31 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
   <!-- ===== RECURRING OBLIGATIONS ===== -->
   <div class="recurring-section anim a4" id="recurringSection">
-    <div class="recurring-section-header">
+    <div class="section-collapse-header" data-collapse-target="recurringBody" onclick="toggleSection('recurringBody')">
       <div class="recurring-section-title">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><circle cx="12" cy="12" r="1"/></svg>
         Recurring Obligations
       </div>
-      <button class="btn btn-primary" onclick="openRecurringModal()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Obligation
-      </button>
-    </div>
-
-    <!-- 12-Month Heatmap -->
-    <div class="rec-heatmap">
-      <div id="recHeatmapGrid" class="rec-heatmap-grid"></div>
-      <div class="rec-heatmap-legend">
-        Less <span class="swatch rec-heat-0"></span><span class="swatch rec-heat-1"></span><span class="swatch rec-heat-2"></span><span class="swatch rec-heat-3"></span><span class="swatch rec-heat-4"></span> More
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <button class="btn btn-primary" onclick="event.stopPropagation();openRecurringModal()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Obligation
+        </button>
+        <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
       </div>
     </div>
+    <div id="recurringBody" class="section-collapse-body">
+      <!-- 12-Month Heatmap -->
+      <div class="rec-heatmap">
+        <div id="recHeatmapGrid" class="rec-heatmap-grid"></div>
+        <div class="rec-heatmap-legend">
+          Less <span class="swatch rec-heat-0"></span><span class="swatch rec-heat-1"></span><span class="swatch rec-heat-2"></span><span class="swatch rec-heat-3"></span><span class="swatch rec-heat-4"></span> More
+        </div>
+      </div>
 
-    <!-- Tiered Cards -->
-    <div id="recTieredCards"></div>
+      <!-- Tiered Cards -->
+      <div id="recTieredCards"></div>
+    </div>
   </div>
 
   <!-- RECURRING ADD/EDIT MODAL -->
@@ -2233,6 +2305,31 @@ function renderChangelog() {
   }).join('');
 }
 
+
+// ===== GENERIC SECTION COLLAPSE =====
+function toggleSection(sectionId) {
+  const header = document.querySelector('[data-collapse-target="' + sectionId + '"]');
+  const body = document.getElementById(sectionId);
+  if (!header || !body) return;
+  const isCollapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', isCollapsed);
+  // Persist state
+  try { localStorage.setItem('collapse_' + sectionId, isCollapsed ? '1' : '0'); } catch(e) {}
+}
+
+function restoreCollapseStates() {
+  document.querySelectorAll('.section-collapse-body').forEach(body => {
+    try {
+      const saved = localStorage.getItem('collapse_' + body.id);
+      if (saved === '1') {
+        body.classList.add('collapsed');
+        const header = document.querySelector('[data-collapse-target="' + body.id + '"]');
+        if (header) header.classList.add('collapsed');
+      }
+    } catch(e) {}
+  });
+}
+
 function toggleChangelog() {
   const body = document.getElementById('changelogBody');
   const chevron = document.getElementById('changelogChevron');
@@ -2612,7 +2709,7 @@ function selectCalDay(dateStr) {
       </div>
       ${e.source === 'calendar' ? `<div class="cal-detail-actions">
         <button class="rec-card-btn" onclick="editCalEvent(${e._row})" title="Edit"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-        <button class="rec-card-btn delete-btn" onclick="deleteCalEvent(${e._row},'${esc(e.title)}')" title="Delete"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        <button class="rec-card-btn delete-btn" onclick="deleteCalEvent(${e._row})" title="Delete"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
       </div>` : `<div class="cal-detail-actions"><span style="font-size:0.6rem;color:var(--text-3);font-style:italic">${e.source}</span></div>`}
     </div>`).join('')}
   </div>`;
@@ -2686,7 +2783,9 @@ async function saveCalEvent() {
   showLoading(false);
 }
 
-async function deleteCalEvent(row, title) {
+async function deleteCalEvent(row) {
+  const _ce = calendarEvents.find(x => x._row === row);
+  const title = _ce ? (_ce['Title'] || _ce['Event']) : 'this event';
   if (!confirm(`Delete "${title}"?`)) return;
   if (deleteCalEvent._busy) return;
   deleteCalEvent._busy = true;
@@ -2922,6 +3021,7 @@ async function loadRvuData() {
     populateSchedFilters();
     checkRvuFreshness();
     renderDeptSummary();
+    restoreCollapseStates();
   } catch(e) {
     console.warn('Could not load provider_analytics.json:', e.message);
     _rvuData = null;
@@ -3560,7 +3660,7 @@ function renderRecurringCards() {
           <button class="rec-card-btn" onclick="event.stopPropagation();editRecurring(${item._row})" title="Edit">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
-          <button class="rec-card-btn delete-btn" onclick="event.stopPropagation();deleteRecurring(${item._row},'${esc(item['Title']||'')}')" title="Delete">
+          <button class="rec-card-btn delete-btn" onclick="event.stopPropagation();deleteRecurring(${item._row})" title="Delete">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           </button>
         </div>
@@ -3687,7 +3787,9 @@ async function saveRecurring() {
   showLoading(false);
 }
 
-async function deleteRecurring(row, title) {
+async function deleteRecurring(row) {
+  const _ri = recurringItems.find(x => x._row === row);
+  const title = _ri ? _ri['Title'] : 'this obligation';
   if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
   if (deleteRecurring._busy) return;
   deleteRecurring._busy = true;
@@ -3909,7 +4011,9 @@ async function addProject() {
   showLoading(false);
 }
 
-async function deleteProject(row, name) {
+async function deleteProject(row) {
+  const _p = projects.find(x => x._row === row);
+  const name = _p ? _p['Project'] : 'this project';
   if(!confirm(`Delete "${name}"?`)) return;
   if(deleteProject._busy) return;
   deleteProject._busy = true;
@@ -3963,7 +4067,7 @@ function renderTable() {
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
       <td><input type="date" class="date-input${dueCls?' '+dueCls:''}" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)" title="${dueCls==='date-overdue'?'Overdue':dueCls==='date-due-soon'?'Due within 3 days':''}"/></td>
       <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
-      <td><button class="btn-delete" onclick="event.stopPropagation();deleteProject(${p._row},'${esc(p['Project']||'')}')" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
+      <td><button class="btn-delete" onclick="event.stopPropagation();deleteProject(${p._row})" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
     </tr>
   `;}).join('');
 }
