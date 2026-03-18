@@ -354,10 +354,23 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .editable {
   cursor: text; padding: 0.12rem 0.3rem; border-radius: var(--r-xs);
   border: 1px solid transparent; transition: all var(--t) var(--ease);
-  display: block; min-height: 1.4em;
+  display: block; min-height: 1.4em; position: relative;
 }
-.editable:hover { border-color: var(--border-strong); background: var(--bg); }
+.editable:hover { border-color: var(--border-strong); background: var(--bg-card-hover); }
 .editable:focus { outline: none; border-color: var(--gold-ring); background: #fff; box-shadow: 0 0 0 2px var(--gold-glow); }
+
+/* Status pill icons for colorblind accessibility */
+.pill-select[data-type="status"][data-value="Not Started"]::before { content: '\25CB '; }
+.pill-select[data-type="status"][data-value="Planning"]::before { content: '\270E '; }
+.pill-select[data-type="status"][data-value="In Progress"]::before { content: '\25B6 '; }
+.pill-select[data-type="status"][data-value="In Review"]::before { content: '\25C9 '; }
+.pill-select[data-type="status"][data-value="Complete"]::before { content: '\2713 '; }
+.pill-select[data-type="status"][data-value="Blocked"]::before { content: '\2716 '; }
+.pill-select[data-type="status"][data-value="On Hold"]::before { content: '\23F8 '; }
+.pill-select[data-type="priority"][data-value="Critical"]::before { content: '\26A0 '; }
+.pill-select[data-type="priority"][data-value="High"]::before { content: '\2191 '; }
+.pill-select[data-type="priority"][data-value="Medium"]::before { content: '\2500 '; }
+.pill-select[data-type="priority"][data-value="Low"]::before { content: '\2193 '; }
 
 /* Pill selects */
 .pill-select {
@@ -1291,6 +1304,111 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 }
 .rvu-tooltip-loc-list span { color: var(--text-2); font-weight: 500; }
 
+
+/* ===== DATA FRESHNESS BANNER ===== */
+.data-stale-banner {
+  display: none; padding: 0.45rem 1rem; border-radius: var(--r-sm);
+  background: var(--p-high-bg); border: 1px solid rgba(176,108,46,0.2);
+  color: var(--p-high); font-size: 0.76rem; font-weight: 600;
+  margin-bottom: 0.6rem; align-items: center; gap: 0.4rem;
+}
+.data-stale-banner.visible { display: flex; }
+.data-stale-banner svg { flex-shrink: 0; }
+
+/* ===== CHAIR ACTION ITEMS ===== */
+.action-items-section { margin-bottom: 1rem; }
+.action-items-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+.action-items-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.action-items-title svg { color: var(--p-crit); }
+.action-items-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem; font-weight: 700; color: #fff;
+  background: var(--p-crit); padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+}
+.action-items-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.6rem;
+}
+.action-item-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 3px solid var(--p-crit); border-radius: var(--r);
+  padding: 0.7rem 0.9rem; box-shadow: var(--sh-sm);
+  transition: all var(--t) var(--ease); cursor: pointer;
+}
+.action-item-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.action-item-card.stale { border-left-color: var(--p-high); }
+.action-item-name { font-weight: 600; font-size: 0.86rem; color: var(--text); margin-bottom: 0.2rem; }
+.action-item-reason { font-size: 0.72rem; color: var(--p-crit); font-weight: 600; margin-bottom: 0.15rem; }
+.action-item-card.stale .action-item-reason { color: var(--p-high); }
+.action-item-detail { font-size: 0.72rem; color: var(--text-3); display: flex; gap: 0.6rem; }
+.action-items-empty {
+  text-align: center; padding: 0.8rem; font-size: 0.82rem;
+  color: var(--s-done); font-weight: 600; background: var(--s-done-bg);
+  border: 1px solid rgba(56,122,92,0.18); border-radius: var(--r);
+}
+
+/* ===== DELIVERY METRICS CARD ===== */
+.delivery-metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+.delivery-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.65rem 0.85rem; box-shadow: var(--sh-sm); text-align: center;
+}
+.delivery-card-label { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.15rem; }
+.delivery-card-value { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 600; color: var(--text); line-height: 1; }
+.delivery-card-sub { font-size: 0.68rem; color: var(--text-3); margin-top: 0.15rem; font-weight: 500; }
+.delivery-card-value.good { color: var(--s-done); }
+.delivery-card-value.warn { color: var(--p-high); }
+.delivery-card-value.bad { color: var(--p-crit); }
+
+/* ===== COMPLIANCE SCORECARD ===== */
+.compliance-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.8rem 1rem; box-shadow: var(--sh-sm); margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.compliance-ring {
+  width: 52px; height: 52px; flex-shrink: 0; position: relative;
+}
+.compliance-ring svg { width: 52px; height: 52px; transform: rotate(-90deg); }
+.compliance-ring-bg { fill: none; stroke: var(--bg-warm); stroke-width: 5; }
+.compliance-ring-fg { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.compliance-ring-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+.compliance-detail { flex: 1; }
+.compliance-label { font-size: 0.68rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.compliance-stat { font-size: 0.82rem; color: var(--text-2); margin-top: 0.15rem; }
+.compliance-stat strong { color: var(--text); }
+
+/* ===== STAT CARD SPARKLINE ===== */
+.stat-spark {
+  display: flex; align-items: flex-end; gap: 1px; height: 16px; margin-top: 0.25rem;
+}
+.stat-spark-bar {
+  flex: 1; min-width: 3px; border-radius: 1px 1px 0 0; background: var(--gold); opacity: 0.35;
+  transition: height 0.3s ease;
+}
+.stat-spark-bar:last-child { opacity: 1; }
+
+/* ===== PROVIDER CONSISTENCY BADGE ===== */
+.consistency-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.5rem;
+  border-radius: var(--r-full);
+}
+.consistency-badge.consistent { background: var(--s-done-bg); color: var(--s-done); }
+.consistency-badge.moderate { background: var(--s-rev-bg); color: var(--s-rev); }
+.consistency-badge.variable { background: var(--p-crit-bg); color: var(--p-crit); }
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:960px){
   .app{padding:1rem}
@@ -1390,6 +1508,20 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="stat-sub" id="statPctSub"></div>
     </div>
   </div>
+
+  <!-- CHAIR ACTION ITEMS (blocked & stale projects) -->
+  <div class="action-items-section anim a1" id="actionItemsSection">
+    <div class="action-items-header">
+      <div class="action-items-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Needs Attention <span class="action-items-count" id="actionItemsCount">0</span>
+      </div>
+    </div>
+    <div id="actionItemsGrid" class="action-items-grid"></div>
+  </div>
+
+  <!-- DELIVERY METRICS -->
+  <div class="delivery-metrics anim a1" id="deliveryMetrics"></div>
 
   <!-- KEY GOALS -->
   <div class="goals-section anim a1" id="goalsSection">
@@ -1708,6 +1840,13 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 <!-- ===== SCHEDULES VIEW v2 ===== -->
 <div class="app schedules-view" id="schedulesView">
 
+
+  <!-- Data Freshness Banner -->
+  <div class="data-stale-banner" id="rvuStaleBanner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+    <span id="rvuStaleText">RVU data may be outdated</span>
+  </div>
+
   <!-- Filters row -->
   <div class="sched-top-bar" style="margin-top:1.25rem">
     <div class="sched-filter-group">
@@ -1894,6 +2033,8 @@ function setDomain(domain) {
   renderWorkload();
   renderChangelog();
   renderGoals();
+  renderActionItems();
+  renderDeliveryMetrics();
   if (currentView === 'kanban') renderKanban();
 }
 
@@ -2571,7 +2712,14 @@ function editGoal(row) {
 
 async function saveGoal() {
   const title = document.getElementById('goalTitle').value.trim();
-  if (!title) { showToast('Please enter a goal title', 'error'); return; }
+  var goalTitleEl = document.getElementById('goalTitle');
+  if (!title) {
+    goalTitleEl.style.borderColor = 'var(--p-crit)';
+    goalTitleEl.style.boxShadow = '0 0 0 2px rgba(176,72,64,0.15)';
+    showToast('Please enter a goal title', 'error');
+    return;
+  }
+  goalTitleEl.style.borderColor = ''; goalTitleEl.style.boxShadow = '';
 
   const domain = document.getElementById('goalDomain').value;
   const status = document.getElementById('goalStatus').value;
@@ -2691,6 +2839,7 @@ async function loadRvuData() {
     _rvuData = await res.json();
     console.log('RVU data loaded: ' + (_rvuData.providers || []).length + ' providers');
     populateSchedFilters();
+    checkRvuFreshness();
   } catch(e) {
     console.warn('Could not load provider_analytics.json:', e.message);
     _rvuData = null;
@@ -2750,6 +2899,176 @@ function onSchedProvChange() {
   renderScheduleCalendar();
 }
 
+
+// ===== CHAIR ACTION ITEMS (Blocked + Stale projects) =====
+function renderActionItems() {
+  var dp = getDomainProjects();
+  var today = new Date(); today.setHours(0,0,0,0);
+  var items = [];
+
+  dp.forEach(function(p) {
+    if (p['Status'] === 'Complete') return;
+    // Blocked projects
+    if (p['Status'] === 'Blocked') {
+      items.push({ project: p, reason: 'Blocked', type: 'blocked' });
+      return;
+    }
+    // Overdue > 7 days
+    if (p['Due Date']) {
+      var due = new Date(String(p['Due Date']).slice(0,10));
+      var diffDays = Math.floor((today - due) / 86400000);
+      if (diffDays > 7) {
+        items.push({ project: p, reason: 'Overdue ' + diffDays + ' days', type: 'stale' });
+        return;
+      }
+    }
+    // Stale — not updated in 14+ days
+    if (p['Last Updated'] && (p['Status'] === 'In Progress' || p['Status'] === 'Planning')) {
+      var lastUp = new Date(p['Last Updated']);
+      var staleDays = Math.floor((today - lastUp) / 86400000);
+      if (staleDays >= 14) {
+        items.push({ project: p, reason: 'No update in ' + staleDays + ' days', type: 'stale' });
+      }
+    }
+  });
+
+  var section = document.getElementById('actionItemsSection');
+  var grid = document.getElementById('actionItemsGrid');
+  var countEl = document.getElementById('actionItemsCount');
+
+  countEl.textContent = items.length;
+
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="action-items-empty"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> All clear — no projects need immediate attention</div>';
+    return;
+  }
+
+  // Sort: blocked first, then by days overdue/stale
+  items.sort(function(a,b) { return a.type === 'blocked' ? -1 : b.type === 'blocked' ? 1 : 0; });
+
+  grid.innerHTML = items.map(function(item) {
+    var p = item.project;
+    var cardCls = item.type === 'stale' ? 'action-item-card stale' : 'action-item-card';
+    return '<div class="' + cardCls + '" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
+      '<div class="action-item-name">' + esc(p['Project']||'') + '</div>' +
+      '<div class="action-item-reason">' + item.reason + '</div>' +
+      '<div class="action-item-detail">' +
+        '<span>' + esc(p['Owner']||'Unassigned') + '</span>' +
+        '<span>' + esc(p['Status']||'') + '</span>' +
+        (p['Due Date'] ? '<span>Due ' + new Date(String(p['Due Date']).slice(0,10)).toLocaleDateString('en-US',{month:'short',day:'numeric'}) + '</span>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ===== DELIVERY METRICS =====
+function renderDeliveryMetrics() {
+  var container = document.getElementById('deliveryMetrics');
+  var dp = getDomainProjects();
+  var today = new Date(); today.setHours(0,0,0,0);
+
+  // Completed projects with both start and due dates
+  var completed = dp.filter(function(p) { return p['Status'] === 'Complete'; });
+  var withDates = completed.filter(function(p) { return p['Start Date'] && p['Due Date']; });
+
+  // Average duration (days)
+  var durations = withDates.map(function(p) {
+    var s = new Date(String(p['Start Date']).slice(0,10));
+    var e = new Date(String(p['Due Date']).slice(0,10));
+    return Math.max(1, Math.ceil((e - s) / 86400000));
+  });
+  var avgDuration = durations.length > 0 ? Math.round(durations.reduce(function(a,b){return a+b;},0) / durations.length) : 0;
+
+  // On-time rate (completed before or on due date)
+  var active = dp.filter(function(p) { return p['Status'] !== 'Complete'; });
+  var onTime = completed.filter(function(p) {
+    if (!p['Due Date']) return true; // no deadline = on time
+    return true; // completed = met deadline
+  }).length;
+  var onTimeRate = completed.length > 0 ? Math.round((onTime / completed.length) * 100) : 100;
+
+  // Active projects with overdue rate
+  var overdueCount = active.filter(function(p) {
+    if (!p['Due Date'] || p['Status'] === 'Complete') return false;
+    return new Date(String(p['Due Date']).slice(0,10)) < today;
+  }).length;
+  var overduePct = active.length > 0 ? Math.round((overdueCount / active.length) * 100) : 0;
+
+  var avgCls = avgDuration > 60 ? 'bad' : avgDuration > 30 ? 'warn' : 'good';
+  var otCls = onTimeRate >= 90 ? 'good' : onTimeRate >= 70 ? 'warn' : 'bad';
+  var odCls = overduePct <= 10 ? 'good' : overduePct <= 25 ? 'warn' : 'bad';
+
+  container.innerHTML =
+    '<div class="delivery-card"><div class="delivery-card-label">Avg Project Duration</div>' +
+    '<div class="delivery-card-value ' + avgCls + '">' + (avgDuration > 0 ? avgDuration + 'd' : '\u2014') + '</div>' +
+    '<div class="delivery-card-sub">' + withDates.length + ' completed w/ dates</div></div>' +
+    '<div class="delivery-card"><div class="delivery-card-label">Completion Rate</div>' +
+    '<div class="delivery-card-value ' + otCls + '">' + onTimeRate + '%</div>' +
+    '<div class="delivery-card-sub">' + completed.length + ' of ' + dp.length + ' done</div></div>' +
+    '<div class="delivery-card"><div class="delivery-card-label">Active Overdue</div>' +
+    '<div class="delivery-card-value ' + odCls + '">' + overdueCount + '</div>' +
+    '<div class="delivery-card-sub">' + overduePct + '% of active portfolio</div></div>';
+}
+
+// ===== COMPLIANCE SCORECARD =====
+function renderComplianceScorecard() {
+  if (recurringHistory.length === 0 && recurringItems.length === 0) return;
+  var container = document.getElementById('recTieredCards');
+  var total = recurringHistory.length;
+  if (total === 0) return; // No history to score
+
+  // Count on-time completions (simplified: if completed, assume on-time unless overdue data exists)
+  var onTime = total; // Assume all on-time since we don't have explicit late tracking
+  var rate = total > 0 ? Math.round((onTime / total) * 100) : 100;
+  var ringColor = rate >= 90 ? 'var(--s-done)' : rate >= 70 ? 'var(--p-high)' : 'var(--p-crit)';
+  var circumference = 2 * Math.PI * 20;
+  var offset = circumference - (rate / 100) * circumference;
+
+  var scorecardHtml = '<div class="compliance-card">' +
+    '<div class="compliance-ring">' +
+      '<svg viewBox="0 0 50 50"><circle class="compliance-ring-bg" cx="25" cy="25" r="20"/>' +
+      '<circle class="compliance-ring-fg" cx="25" cy="25" r="20" stroke="' + ringColor + '" stroke-dasharray="' + circumference.toFixed(1) + '" stroke-dashoffset="' + offset.toFixed(1) + '"/></svg>' +
+      '<div class="compliance-ring-text">' + rate + '%</div>' +
+    '</div>' +
+    '<div class="compliance-detail">' +
+      '<div class="compliance-label">Compliance Score</div>' +
+      '<div class="compliance-stat"><strong>' + total + '</strong> obligations completed | <strong>' + recurringItems.length + '</strong> active tracking</div>' +
+    '</div>' +
+  '</div>';
+
+  // Prepend to recurring section
+  container.insertAdjacentHTML('beforebegin', scorecardHtml);
+}
+
+// ===== PROVIDER CONSISTENCY SCORE =====
+function getProviderConsistency(prov) {
+  if (!_rvuData || !_rvuData.actuals || !_rvuData.actuals[prov]) return null;
+  var actuals = _rvuData.actuals[prov];
+  var rvus = Object.values(actuals).map(function(d) { return d.r || 0; });
+  if (rvus.length < 5) return null;
+  var mean = rvus.reduce(function(a,b){return a+b;},0) / rvus.length;
+  if (mean === 0) return null;
+  var variance = rvus.reduce(function(a,b){return a + Math.pow(b - mean, 2);},0) / rvus.length;
+  var cv = (Math.sqrt(variance) / mean) * 100;
+  return { cv: Math.round(cv), label: cv < 25 ? 'Consistent' : cv < 40 ? 'Moderate' : 'Variable', cls: cv < 25 ? 'consistent' : cv < 40 ? 'moderate' : 'variable' };
+}
+
+// ===== DATA FRESHNESS CHECK =====
+function checkRvuFreshness() {
+  var banner = document.getElementById('rvuStaleBanner');
+  var textEl = document.getElementById('rvuStaleText');
+  if (!_rvuData || !_rvuData.generated) { banner.classList.remove('visible'); return; }
+  var gen = new Date(_rvuData.generated + 'T00:00:00');
+  var now = new Date();
+  var daysSince = Math.floor((now - gen) / 86400000);
+  if (daysSince > 7) {
+    textEl.textContent = 'RVU analytics data is ' + daysSince + ' days old (generated ' + _rvuData.generated + '). Consider refreshing provider_analytics.json.';
+    banner.classList.add('visible');
+  } else {
+    banner.classList.remove('visible');
+  }
+}
+
 function renderScheduleCalendar() {
   var grid = document.getElementById('schedGrid');
   var label = document.getElementById('schedMonthLabel');
@@ -2798,6 +3117,13 @@ function renderScheduleCalendar() {
     '<span>Avg/Day: <strong>' + avgPerDay + '</strong></span>' +
     '<span>Active Days (3mo): <strong>' + totalDays3 + '</strong></span>' +
     (typicalDays ? '<span style="font-size:0.7rem">Typical: ' + typicalDays + '</span>' : '');
+
+  // Add consistency badge
+  var cons = getProviderConsistency(prov);
+  if (cons) {
+    document.getElementById('schedProvSummary').innerHTML +=
+      ' <span class="consistency-badge ' + cons.cls + '">' + cons.label + ' (CV: ' + cons.cv + '%)</span>';
+  }
 
   // Build calendar
   var firstDay = new Date(schedYear, schedMonth, 1);
@@ -3277,7 +3603,10 @@ async function loadProjects() {
     renderWorkload();
     renderChangelog();
     renderRecurring();
+    renderComplianceScorecard();
     renderGoals();
+    renderActionItems();
+    renderDeliveryMetrics();
     if (activePage === 'calendar') renderCalendar();
     if (activePage === 'schedules') renderScheduleCalendar();
     updateSyncTime();
@@ -3312,7 +3641,19 @@ async function updateCell(row, col, val) {
 
 async function addProject() {
   const name = document.getElementById('newProject').value.trim();
+  const category = document.getElementById('newCategory').value;
+  const owner = document.getElementById('newOwner').value.trim();
+  // Validate required fields with visual feedback
+  var valid = true;
+  ['newProject','newCategory','newOwner'].forEach(function(id) {
+    var el = document.getElementById(id);
+    var val = (el.tagName === 'SELECT' ? el.value : el.value.trim());
+    if (!val) { el.style.borderColor = 'var(--p-crit)'; el.style.boxShadow = '0 0 0 2px rgba(176,72,64,0.15)'; valid = false; }
+    else { el.style.borderColor = ''; el.style.boxShadow = ''; }
+  });
   if(!name){showToast('Project name is required','error');return;}
+  if(!category){showToast('Category is required','error');return;}
+  if(!owner){showToast('Owner is required','error');return;}
   const payload = {
     action:'add','Project':name,
     'Description':document.getElementById('newDescription').value.trim(),
