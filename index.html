@@ -456,6 +456,124 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .footer-left { font-weight: 500; }
 .footer-right { display: flex; align-items: center; gap: 0.35rem; }
 
+/* ===== KEY GOALS ===== */
+.goals-section { margin-bottom: 1rem; }
+.goals-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+.goals-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.goals-title svg { color: var(--gold); }
+.goals-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem; font-weight: 700; color: var(--gold);
+  background: var(--gold-badge); border: 1px solid var(--gold-ring);
+  padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+}
+.goals-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.6rem;
+}
+.goal-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 3px solid var(--navy); border-radius: var(--r);
+  padding: 0.85rem 1rem; box-shadow: var(--sh-sm);
+  transition: all var(--t) var(--ease); position: relative;
+  display: flex; align-items: flex-start; gap: 0.75rem;
+}
+.goal-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.goal-card.goal-complete { opacity: 0.65; }
+.goal-card.goal-complete .goal-card-title { text-decoration: line-through; }
+.goal-status-ring {
+  width: 22px; height: 22px; min-width: 22px; border-radius: 50%; border: 2px solid var(--border-strong);
+  cursor: pointer; transition: all var(--t) var(--ease); margin-top: 2px;
+  display: flex; align-items: center; justify-content: center; background: var(--bg-card);
+}
+.goal-status-ring:hover { border-color: var(--gold); }
+.goal-status-ring.s-not-started { border-color: var(--text-3); }
+.goal-status-ring.s-in-progress { border-color: var(--gold); background: var(--gold-badge); }
+.goal-status-ring.s-in-progress::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+}
+.goal-status-ring.s-complete { border-color: var(--s-comp); background: var(--s-comp); }
+.goal-status-ring.s-complete::after {
+  content: ''; width: 10px; height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.goal-card-body { flex: 1; min-width: 0; }
+.goal-card-title { font-weight: 600; font-size: 0.88rem; color: var(--text); line-height: 1.35; }
+.goal-card-notes { font-size: 0.76rem; color: var(--text-3); margin-top: 0.2rem; line-height: 1.35; }
+.goal-card-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; }
+.goal-domain-badge {
+  font-size: 0.65rem; font-weight: 600; padding: 0.1rem 0.4rem;
+  border-radius: var(--r-full); background: rgba(0,39,76,0.08); color: var(--navy);
+}
+.goal-card-actions {
+  display: flex; gap: 0.25rem; flex-shrink: 0; opacity: 0;
+  transition: opacity var(--t) var(--ease);
+}
+.goal-card:hover .goal-card-actions { opacity: 1; }
+.goal-btn-sm {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.2rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+}
+.goal-btn-sm:hover { color: var(--text); background: var(--bg-card-hover); }
+.goal-btn-sm.btn-goal-delete:hover { color: var(--p-crit); background: var(--p-crit-bg); }
+.goals-empty {
+  text-align: center; padding: 1.25rem 1.5rem; color: var(--text-3);
+  font-size: 0.82rem; background: var(--bg-card); border: 1px dashed var(--border-strong);
+  border-radius: var(--r); font-weight: 500;
+}
+.goals-empty svg { vertical-align: -2px; margin-right: 0.25rem; color: var(--gold-light); }
+.btn-add-goal {
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 0.3rem 0.65rem; border-radius: var(--r-xs);
+  font-size: 0.74rem; font-weight: 600; color: var(--text-2);
+  cursor: pointer; transition: all var(--t) var(--ease);
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.btn-add-goal:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Goal Add/Edit Modal */
+.goal-modal-overlay {
+  position: fixed; inset: 0; background: rgba(28,33,39,0.18); backdrop-filter: blur(3px);
+  z-index: 100; display: none; align-items: center; justify-content: center;
+}
+.goal-modal-overlay.active { display: flex; }
+.goal-modal {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1.5rem; width: 440px; max-width: 92vw; box-shadow: var(--sh-lg);
+}
+.goal-modal h3 {
+  font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 400;
+  color: var(--text); margin-bottom: 1rem;
+}
+.goal-modal label {
+  display: block; font-size: 0.76rem; font-weight: 600; color: var(--text-2);
+  margin-bottom: 0.25rem; margin-top: 0.75rem;
+}
+.goal-modal label:first-of-type { margin-top: 0; }
+.goal-modal input, .goal-modal select, .goal-modal textarea {
+  width: 100%; padding: 0.5rem 0.65rem; font-size: 0.85rem;
+  border: 1px solid var(--border); border-radius: var(--r-xs);
+  background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.goal-modal textarea { resize: vertical; min-height: 60px; }
+.goal-modal-btns {
+  display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.15rem;
+}
+.goal-modal-btns button {
+  padding: 0.45rem 1rem; border-radius: var(--r-xs); font-size: 0.82rem;
+  font-weight: 600; cursor: pointer; transition: all var(--t) var(--ease);
+}
+.goal-btn-cancel { background: var(--bg); border: 1px solid var(--border); color: var(--text-2); }
+.goal-btn-cancel:hover { background: var(--bg-card-hover); }
+.goal-btn-save { background: var(--navy); border: 1px solid var(--navy); color: #fff; }
+.goal-btn-save:hover { opacity: 0.9; }
+
 /* ===== KEY PROJECTS SPOTLIGHT ===== */
 .spotlight { margin-bottom: 1rem; }
 .spotlight-header {
@@ -1037,6 +1155,54 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .cal-legend-item { display: flex; align-items: center; gap: 0.25rem; }
 .cal-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
+/* ===== PROVIDER SCHEDULES ===== */
+.schedules-view { display: none; }
+.schedules-view.active { display: block; }
+.sched-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+.sched-nav { display: flex; align-items: center; gap: 0.6rem; }
+
+/* Provider filter pills */
+.sched-providers {
+  display: flex; flex-wrap: wrap; gap: 0.3rem;
+  margin-bottom: 0.7rem;
+}
+.sched-prov-pill {
+  padding: 0.22rem 0.6rem; border-radius: var(--r-full);
+  font-size: 0.68rem; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border-strong); background: var(--bg-card);
+  color: var(--text-2); transition: all var(--t) var(--ease);
+}
+.sched-prov-pill:hover { border-color: var(--gold-ring); }
+.sched-prov-pill.active { color: #fff; border-color: transparent; }
+
+/* Assignment type colors */
+.sched-assign { font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.3rem; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.35; margin-bottom: 1px; display: block; }
+.sched-assign.assign-or { background: var(--s-prog-bg); color: var(--s-prog); }
+.sched-assign.assign-clinic { background: var(--s-done-bg); color: var(--s-done); }
+.sched-assign.assign-admin { background: var(--bg-warm); color: var(--text-2); }
+.sched-assign.assign-research { background: var(--s-plan-bg); color: var(--s-plan); }
+.sched-assign.assign-call { background: var(--s-rev-bg); color: var(--s-rev); }
+.sched-assign.assign-off { background: var(--bg); color: var(--text-3); font-style: italic; }
+.sched-assign.assign-other { background: var(--gold-badge); color: var(--gold); }
+
+.sched-prov-tag {
+  font-size: 0.5rem; font-weight: 700; display: inline-block;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; opacity: 0.7;
+}
+
+.sched-day-entries { display: flex; flex-direction: column; gap: 1px; }
+
+.sched-legend {
+  display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
+  margin-top: 0.6rem; font-size: 0.62rem; color: var(--text-3); font-weight: 500;
+}
+.sched-legend-item { display: flex; align-items: center; gap: 0.2rem; }
+.sched-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:960px){
   .app{padding:1rem}
@@ -1089,6 +1255,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Calendar
     </button>
+    <button class="page-tab" onclick="setPage('schedules')" data-page="schedules">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Schedules
+    </button>
   </div>
 </div>
 
@@ -1130,6 +1300,58 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="stat-label">Complete</div>
       <div class="stat-num" id="statPct">&mdash;</div>
       <div class="stat-sub" id="statPctSub"></div>
+    </div>
+  </div>
+
+  <!-- KEY GOALS -->
+  <div class="goals-section anim a1" id="goalsSection">
+    <div class="goals-header">
+      <div class="goals-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Key Goals <span class="goals-count" id="goalsCount">0</span>
+      </div>
+      <button class="btn-add-goal" onclick="openGoalModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Goal
+      </button>
+    </div>
+    <div id="goalsGrid" class="goals-grid"></div>
+  </div>
+
+  <!-- Goal Add/Edit Modal -->
+  <div class="goal-modal-overlay" id="goalModalOverlay">
+    <div class="goal-modal">
+      <h3 id="goalModalTitle">Add Goal</h3>
+      <label>Title</label>
+      <input type="text" id="goalTitle" placeholder="e.g., Complete 10 hours of leadership volunteering">
+      <label>Domain</label>
+      <select id="goalDomain">
+        <option value="">Global (all domains)</option>
+        <option value="BizIQ">BizIQ</option>
+        <option value="Finance">Finance</option>
+        <option value="Analytics">Analytics</option>
+        <option value="Operations">Operations</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Education">Education</option>
+        <option value="Research">Research</option>
+        <option value="Strategy">Strategy</option>
+        <option value="Digital">Digital</option>
+        <option value="Administrative">Administrative</option>
+      </select>
+      <label>Status</label>
+      <select id="goalStatus">
+        <option value="Not Started">Not Started</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Complete">Complete</option>
+      </select>
+      <label>Notes</label>
+      <textarea id="goalNotes" placeholder="Optional details or context"></textarea>
+      <input type="hidden" id="goalEditRow" value="">
+      <input type="hidden" id="goalEditId" value="">
+      <div class="goal-modal-btns">
+        <button class="goal-btn-cancel" onclick="closeGoalModal()">Cancel</button>
+        <button class="goal-btn-save" onclick="saveGoal()">Save Goal</button>
+      </div>
     </div>
   </div>
 
@@ -1395,6 +1617,87 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div id="calDayDetail"></div>
 </div>
 
+<!-- ===== SCHEDULES VIEW ===== -->
+<div class="app schedules-view" id="schedulesView">
+  <div class="sched-header" style="margin-top:1.25rem">
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="schedNav(-1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="cal-month-label" id="schedMonthLabel"></span>
+      <button class="cal-nav-btn" onclick="schedNav(1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <button class="cal-today-btn" onclick="schedToday()">Today</button>
+    </div>
+    <button class="btn btn-primary" onclick="openSchedModal()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Entry
+    </button>
+  </div>
+  <div id="schedProviders" class="sched-providers"></div>
+  <div id="schedGrid" class="cal-grid"></div>
+  <div class="sched-legend">
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-prog)"></span> OR</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-done)"></span> Clinic</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Admin</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> Research</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-rev)"></span> Call</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> Other</span>
+  </div>
+  <div id="schedDayDetail"></div>
+</div>
+
+<!-- SCHEDULE ADD/EDIT MODAL -->
+<div class="modal-overlay" id="schedModalOverlay" onclick="closeSchedModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2 id="schedModalTitle">Add Schedule Entry</h2>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Provider</label>
+        <input type="text" id="schedProvider" placeholder="e.g., Dr. Smith" list="schedProviderList"/>
+        <datalist id="schedProviderList"></datalist>
+      </div>
+      <div class="modal-field">
+        <label>Date</label>
+        <input type="date" id="schedDate"/>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Assignment</label>
+        <select id="schedAssignment">
+          <option>OR</option>
+          <option>Clinic</option>
+          <option>Admin</option>
+          <option>Research</option>
+          <option>Call</option>
+          <option>Off</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Location</label>
+        <input type="text" id="schedLocation" placeholder="e.g., UH, BCSC, Brighton"/>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Time (optional)</label>
+        <input type="text" id="schedTime" placeholder="e.g., 7:30 AM - 3:30 PM"/>
+      </div>
+      <div class="modal-field">
+        <label>Notes</label>
+        <input type="text" id="schedNotes" placeholder="Additional details..."/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeSchedModal()">Cancel</button>
+      <button class="btn btn-primary" id="schedSaveBtn" onclick="saveSchedEntry()">Add Entry</button>
+    </div>
+  </div>
+</div>
+
 <!-- CALENDAR ADD/EDIT MODAL -->
 <div class="modal-overlay" id="calModalOverlay" onclick="closeCalModal()">
   <div class="modal" onclick="event.stopPropagation()">
@@ -1513,11 +1816,12 @@ function setDomain(domain) {
   renderSpotlight();
   renderWorkload();
   renderChangelog();
+  renderGoals();
   if (currentView === 'kanban') renderKanban();
 }
 
 function getDomainProjects() {
-  if (activeDomain === 'all') return projects;
+  if (activeDomain === 'all') return projects.filter(p => (p['Category'] || '') !== 'BizIQ');
   return projects.filter(p => (p['Category'] || '') === activeDomain);
 }
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
@@ -1844,7 +2148,9 @@ function setPage(page) {
   document.querySelectorAll('.page-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-page') === page));
   document.getElementById('dashboardView').style.display = page === 'dashboard' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
+  document.getElementById('schedulesView').classList.toggle('active', page === 'schedules');
   if (page === 'calendar') renderCalendar();
+  if (page === 'schedules') renderScheduleCalendar();
 }
 
 // ===== CALENDAR =====
@@ -2097,6 +2403,422 @@ async function deleteCalEvent(row, title) {
     await loadProjects();
     if (activePage === 'calendar') renderCalendar();
     showToast('Event deleted');
+  } catch(e) { showToast('Delete failed', 'error'); }
+  showLoading(false);
+}
+
+// ===== KEY GOALS =====
+let goalItems = [];
+
+function getDomainGoals() {
+  if (activeDomain === 'all') return goalItems.filter(g => (g['Domain'] || '') !== 'BizIQ');
+  return goalItems.filter(g => {
+    const d = g['Domain'] || '';
+    return d === activeDomain || d === '';
+  });
+}
+
+function renderGoals() {
+  const container = document.getElementById('goalsGrid');
+  const countEl = document.getElementById('goalsCount');
+  const domGoals = getDomainGoals();
+  countEl.textContent = domGoals.length;
+
+  if (domGoals.length === 0) {
+    container.innerHTML = '<div class="goals-empty"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> No goals yet. Click "Add Goal" to set a department objective.</div>';
+    return;
+  }
+
+  // Sort: In Progress first, then Not Started, then Complete
+  const statusRank = { 'In Progress': 0, 'Not Started': 1, 'Complete': 2 };
+  const sorted = [...domGoals].sort((a, b) => (statusRank[a['Status']] || 1) - (statusRank[b['Status']] || 1));
+
+  container.innerHTML = sorted.map(g => {
+    const status = g['Status'] || 'Not Started';
+    const statusClass = status === 'Complete' ? 's-complete' : status === 'In Progress' ? 's-in-progress' : 's-not-started';
+    const cardClass = status === 'Complete' ? 'goal-card goal-complete' : 'goal-card';
+    const domain = g['Domain'] || '';
+    const domBadge = domain ? '<span class="goal-domain-badge">' + domain + '</span>' : '';
+    const notes = g['Notes'] || '';
+    const row = g._row;
+    const id = g['ID'] || '';
+
+    return '<div class="' + cardClass + '">' +
+      '<div class="goal-status-ring ' + statusClass + '" onclick="cycleGoalStatus(' + row + ',\'' + id + '\',\'' + status + '\')" title="Click to change status"></div>' +
+      '<div class="goal-card-body">' +
+        '<div class="goal-card-title">' + (g['Title'] || 'Untitled Goal') + '</div>' +
+        (notes ? '<div class="goal-card-notes">' + notes + '</div>' : '') +
+        '<div class="goal-card-meta">' + domBadge + '</div>' +
+      '</div>' +
+      '<div class="goal-card-actions">' +
+        '<button class="goal-btn-sm" onclick="editGoal(' + row + ')" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+        '<button class="goal-btn-sm btn-goal-delete" onclick="deleteGoal(' + row + ')" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function openGoalModal(editRow) {
+  document.getElementById('goalTitle').value = '';
+  document.getElementById('goalDomain').value = '';
+  document.getElementById('goalStatus').value = 'Not Started';
+  document.getElementById('goalNotes').value = '';
+  document.getElementById('goalEditRow').value = '';
+  document.getElementById('goalEditId').value = '';
+  document.getElementById('goalModalTitle').textContent = 'Add Goal';
+  if (editRow) {
+    const g = goalItems.find(i => i._row === editRow);
+    if (g) {
+      document.getElementById('goalTitle').value = g['Title'] || '';
+      document.getElementById('goalDomain').value = g['Domain'] || '';
+      document.getElementById('goalStatus').value = g['Status'] || 'Not Started';
+      document.getElementById('goalNotes').value = g['Notes'] || '';
+      document.getElementById('goalEditRow').value = editRow;
+      document.getElementById('goalEditId').value = g['ID'] || '';
+      document.getElementById('goalModalTitle').textContent = 'Edit Goal';
+    }
+  }
+  document.getElementById('goalModalOverlay').classList.add('active');
+}
+
+function closeGoalModal() {
+  document.getElementById('goalModalOverlay').classList.remove('active');
+}
+
+function editGoal(row) {
+  openGoalModal(row);
+}
+
+async function saveGoal() {
+  const title = document.getElementById('goalTitle').value.trim();
+  if (!title) { showToast('Please enter a goal title', 'error'); return; }
+
+  const domain = document.getElementById('goalDomain').value;
+  const status = document.getElementById('goalStatus').value;
+  const notes = document.getElementById('goalNotes').value.trim();
+  const editRow = document.getElementById('goalEditRow').value;
+
+  closeGoalModal();
+  showLoading(true);
+
+  try {
+    if (editRow) {
+      // Update existing goal fields
+      const updates = [
+        { action: 'goal_update', row: parseInt(editRow), column: 'Title', value: title },
+        { action: 'goal_update', row: parseInt(editRow), column: 'Domain', value: domain },
+        { action: 'goal_update', row: parseInt(editRow), column: 'Status', value: status },
+        { action: 'goal_update', row: parseInt(editRow), column: 'Notes', value: notes }
+      ];
+      for (const u of updates) {
+        await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(u) });
+      }
+      showToast('Goal updated');
+    } else {
+      // Add new goal
+      const payload = {
+        action: 'goal_add',
+        Title: title,
+        Domain: domain,
+        Status: status,
+        Notes: notes,
+        Created: new Date().toISOString().split('T')[0]
+      };
+      await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
+      showToast('Goal added');
+    }
+    await loadProjects();
+  } catch (e) {
+    console.error(e);
+    showToast('Failed to save goal', 'error');
+  }
+  showLoading(false);
+}
+
+async function deleteGoal(row) {
+  if (!confirm('Delete this goal?')) return;
+  showLoading(true);
+  try {
+    await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'goal_delete', row }) });
+    showToast('Goal deleted');
+    await loadProjects();
+  } catch (e) {
+    console.error(e);
+    showToast('Failed to delete goal', 'error');
+  }
+  showLoading(false);
+}
+
+async function cycleGoalStatus(row, id, current) {
+  const cycle = { 'Not Started': 'In Progress', 'In Progress': 'Complete', 'Complete': 'Not Started' };
+  const next = cycle[current] || 'Not Started';
+  showLoading(true);
+  try {
+    await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'goal_update', row, column: 'Status', value: next }) });
+    showToast('Goal: ' + next);
+    await loadProjects();
+  } catch (e) {
+    console.error(e);
+    showToast('Failed to update goal', 'error');
+  }
+  showLoading(false);
+}
+
+// ===== PROVIDER SCHEDULES =====
+let scheduleEntries = [];
+let schedYear, schedMonth;
+let _schedEditRow = null;
+let schedFilterProviders = new Set(); // empty = show all
+
+// Provider color palette for pills
+const PROVIDER_COLORS = [
+  '#1A2740','#B8863A','#3D6CB4','#387A5C','#695DA0',
+  '#A07C28','#B04840','#2E7D6A','#7C5295','#4A7C3F'
+];
+let _providerColorMap = {};
+
+function getProviderColor(name) {
+  if (!_providerColorMap[name]) {
+    const idx = Object.keys(_providerColorMap).length % PROVIDER_COLORS.length;
+    _providerColorMap[name] = PROVIDER_COLORS[idx];
+  }
+  return _providerColorMap[name];
+}
+
+(function() {
+  const now = new Date();
+  schedYear = now.getFullYear();
+  schedMonth = now.getMonth();
+})();
+
+function schedNav(dir) {
+  schedMonth += dir;
+  if (schedMonth > 11) { schedMonth = 0; schedYear++; }
+  if (schedMonth < 0) { schedMonth = 11; schedYear--; }
+  renderScheduleCalendar();
+}
+
+function schedToday() {
+  const now = new Date();
+  schedYear = now.getFullYear();
+  schedMonth = now.getMonth();
+  renderScheduleCalendar();
+}
+
+function getAssignClass(assignment) {
+  const a = (assignment || '').toLowerCase();
+  if (a.includes('or') && !a.includes('other')) return 'assign-or';
+  if (a.includes('clinic')) return 'assign-clinic';
+  if (a.includes('admin')) return 'assign-admin';
+  if (a.includes('research')) return 'assign-research';
+  if (a.includes('call')) return 'assign-call';
+  if (a.includes('off')) return 'assign-off';
+  return 'assign-other';
+}
+
+function toggleSchedProvider(name) {
+  if (schedFilterProviders.has(name)) {
+    schedFilterProviders.delete(name);
+  } else {
+    schedFilterProviders.add(name);
+  }
+  renderScheduleCalendar();
+}
+
+function renderScheduleProviders() {
+  const providers = [...new Set(scheduleEntries.map(s => s['Provider']).filter(Boolean))].sort();
+  const container = document.getElementById('schedProviders');
+  const datalist = document.getElementById('schedProviderList');
+
+  // Provider filter pills
+  const showAll = schedFilterProviders.size === 0;
+  container.innerHTML = `<button class="sched-prov-pill${showAll?' active':''}" style="${showAll?'background:var(--navy);color:#fff':''}" onclick="schedFilterProviders.clear();renderScheduleCalendar()">All</button>` +
+    providers.map(p => {
+      const active = schedFilterProviders.has(p);
+      const color = getProviderColor(p);
+      return `<button class="sched-prov-pill${active?' active':''}" style="${active?'background:'+color+';border-color:'+color:''}" onclick="toggleSchedProvider('${esc(p)}')">${esc(p)}</button>`;
+    }).join('');
+
+  // Datalist for autocomplete
+  datalist.innerHTML = providers.map(p => `<option value="${esc(p)}"/>`).join('');
+}
+
+function renderScheduleCalendar() {
+  const grid = document.getElementById('schedGrid');
+  const label = document.getElementById('schedMonthLabel');
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent = `${monthNames[schedMonth]} ${schedYear}`;
+
+  renderScheduleProviders();
+
+  const firstDay = new Date(schedYear, schedMonth, 1);
+  const lastDay = new Date(schedYear, schedMonth + 1, 0);
+  const startDow = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // Filter entries by provider selection
+  const filtered = schedFilterProviders.size === 0
+    ? scheduleEntries
+    : scheduleEntries.filter(s => schedFilterProviders.has(s['Provider']));
+
+  let html = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  // Leading
+  const prevMonth = new Date(schedYear, schedMonth, 0);
+  for (let i = startDow - 1; i >= 0; i--) {
+    html += `<div class="cal-day outside"><div class="cal-day-num">${prevMonth.getDate() - i}</div></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${schedYear}-${String(schedMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = today.getFullYear() === schedYear && today.getMonth() === schedMonth && today.getDate() === d;
+    const dayEntries = filtered.filter(s => String(s['Date']).slice(0,10) === dateStr)
+      .sort((a,b) => (a['Provider']||'').localeCompare(b['Provider']||''));
+    const maxShow = 4;
+
+    let entriesHtml = dayEntries.slice(0, maxShow).map(s => {
+      const cls = getAssignClass(s['Assignment']);
+      const provColor = getProviderColor(s['Provider']);
+      return `<div class="sched-assign ${cls}" title="${esc(s['Provider']||'')}: ${esc(s['Assignment']||'')} ${esc(s['Location']||'')}">
+        <span class="sched-prov-tag" style="color:${provColor}">${esc((s['Provider']||'').split(' ').pop())}</span> ${esc(s['Assignment']||'')}${s['Location']?' · '+esc(s['Location']):''}
+      </div>`;
+    }).join('');
+
+    if (dayEntries.length > maxShow) {
+      entriesHtml += `<div class="cal-event-more">+${dayEntries.length - maxShow} more</div>`;
+    }
+
+    html += `<div class="cal-day${isToday?' today':''}" onclick="selectSchedDay('${dateStr}')">
+      <div class="cal-day-num">${d}</div>
+      <div class="sched-day-entries">${entriesHtml}</div>
+    </div>`;
+  }
+
+  // Trailing
+  const endDow = lastDay.getDay();
+  for (let i = 1; i <= 6 - endDow; i++) {
+    html += `<div class="cal-day outside"><div class="cal-day-num">${i}</div></div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+function selectSchedDay(dateStr) {
+  const detail = document.getElementById('schedDayDetail');
+  const filtered = schedFilterProviders.size === 0
+    ? scheduleEntries
+    : scheduleEntries.filter(s => schedFilterProviders.has(s['Provider']));
+  const dayEntries = filtered.filter(s => String(s['Date']).slice(0,10) === dateStr)
+    .sort((a,b) => (a['Provider']||'').localeCompare(b['Provider']||''));
+  const dayLabel = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+
+  detail.innerHTML = `<div class="cal-day-detail">
+    <div class="cal-day-detail-header">
+      <div class="cal-day-detail-title">${dayLabel}</div>
+      <button class="btn btn-primary" style="font-size:0.72rem;padding:0.25rem 0.6rem" onclick="openSchedModal('${dateStr}')">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add
+      </button>
+    </div>
+    ${dayEntries.length === 0 ? '<div style="text-align:center;padding:0.8rem;color:var(--text-3);font-size:0.82rem">No assignments scheduled</div>' :
+    dayEntries.map(s => {
+      const cls = getAssignClass(s['Assignment']);
+      const dotMap = {'assign-or':'var(--s-prog)','assign-clinic':'var(--s-done)','assign-admin':'var(--text-3)','assign-research':'var(--s-plan)','assign-call':'var(--s-rev)','assign-off':'var(--border-strong)','assign-other':'var(--gold)'};
+      return `<div class="cal-detail-item">
+        <div class="cal-detail-dot" style="background:${dotMap[cls]||'var(--text-3)'}"></div>
+        <div class="cal-detail-content">
+          <strong>${esc(s['Provider']||'')}</strong> — ${esc(s['Assignment']||'')}
+          <div class="cal-detail-meta">${[s['Location'],s['Time'],s['Notes']].filter(Boolean).map(v=>esc(v)).join(' · ') || 'No additional details'}</div>
+        </div>
+        <div class="cal-detail-actions">
+          <button class="rec-card-btn" onclick="editSchedEntry(${s._row})" title="Edit"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="rec-card-btn delete-btn" onclick="deleteSchedEntry(${s._row},'${esc(s['Provider']||'')}')" title="Delete"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// --- Schedule Modal ---
+function openSchedModal(dateStr) {
+  _schedEditRow = null;
+  document.getElementById('schedModalTitle').textContent = 'Add Schedule Entry';
+  document.getElementById('schedSaveBtn').textContent = 'Add Entry';
+  document.getElementById('schedProvider').value = '';
+  document.getElementById('schedDate').value = dateStr || '';
+  document.getElementById('schedAssignment').value = 'OR';
+  document.getElementById('schedLocation').value = '';
+  document.getElementById('schedTime').value = '';
+  document.getElementById('schedNotes').value = '';
+  document.getElementById('schedModalOverlay').classList.add('active');
+}
+
+function editSchedEntry(row) {
+  const entry = scheduleEntries.find(s => s._row === row);
+  if (!entry) return;
+  _schedEditRow = row;
+  document.getElementById('schedModalTitle').textContent = 'Edit Schedule Entry';
+  document.getElementById('schedSaveBtn').textContent = 'Save Changes';
+  document.getElementById('schedProvider').value = entry['Provider'] || '';
+  document.getElementById('schedDate').value = entry['Date'] ? String(entry['Date']).slice(0,10) : '';
+  document.getElementById('schedAssignment').value = entry['Assignment'] || 'OR';
+  document.getElementById('schedLocation').value = entry['Location'] || '';
+  document.getElementById('schedTime').value = entry['Time'] || '';
+  document.getElementById('schedNotes').value = entry['Notes'] || '';
+  document.getElementById('schedModalOverlay').classList.add('active');
+}
+
+function closeSchedModal() {
+  document.getElementById('schedModalOverlay').classList.remove('active');
+  _schedEditRow = null;
+}
+
+async function saveSchedEntry() {
+  const provider = document.getElementById('schedProvider').value.trim();
+  const date = document.getElementById('schedDate').value;
+  if (!provider) { showToast('Provider is required', 'error'); return; }
+  if (!date) { showToast('Date is required', 'error'); return; }
+
+  const fields = {
+    'Provider': provider,
+    'Date': date,
+    'Assignment': document.getElementById('schedAssignment').value,
+    'Location': document.getElementById('schedLocation').value.trim(),
+    'Time': document.getElementById('schedTime').value.trim(),
+    'Notes': document.getElementById('schedNotes').value.trim(),
+  };
+
+  showLoading(true);
+  try {
+    if (_schedEditRow) {
+      for (const [col, val] of Object.entries(fields)) {
+        await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
+          body: JSON.stringify({action:'sched_update', row:_schedEditRow, column:col, value:val})});
+      }
+      showToast('Entry updated');
+    } else {
+      const payload = { action: 'sched_add', ...fields };
+      const res = await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload)});
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      showToast('Entry added');
+    }
+    closeSchedModal();
+    await loadProjects();
+    if (activePage === 'schedules') renderScheduleCalendar();
+  } catch(e) { showToast('Failed to save entry', 'error'); }
+  showLoading(false);
+}
+
+async function deleteSchedEntry(row, provider) {
+  if (!confirm(`Delete entry for "${provider}"?`)) return;
+  showLoading(true);
+  try {
+    await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({action:'sched_delete', row})});
+    await loadProjects();
+    if (activePage === 'schedules') renderScheduleCalendar();
+    showToast('Entry deleted');
   } catch(e) { showToast('Delete failed', 'error'); }
   showLoading(false);
 }
@@ -2392,6 +3114,8 @@ async function loadProjects() {
     recurringItems = data.recurring || [];
     recurringHistory = data.history || [];
     calendarEvents = data.calendarEvents || [];
+    scheduleEntries = data.schedules || [];
+    goalItems = data.goals || [];
     lastSyncTime = new Date();
     buildDynamicFilters();
     renderTable();
@@ -2400,7 +3124,9 @@ async function loadProjects() {
     renderWorkload();
     renderChangelog();
     renderRecurring();
+    renderGoals();
     if (activePage === 'calendar') renderCalendar();
+    if (activePage === 'schedules') renderScheduleCalendar();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
   showLoading(false);
