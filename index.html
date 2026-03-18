@@ -1305,6 +1305,72 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .rvu-tooltip-loc-list span { color: var(--text-2); font-weight: 500; }
 
 
+
+/* ===== AI RISK BADGES ===== */
+.risk-badge {
+  display: inline-flex; align-items: center; gap: 0.2rem;
+  font-size: 0.62rem; font-weight: 700; padding: 0.12rem 0.45rem;
+  border-radius: var(--r-full); margin-left: 0.3rem;
+}
+.risk-badge.risk-low { background: var(--s-done-bg); color: var(--s-done); }
+.risk-badge.risk-med { background: var(--s-rev-bg); color: var(--s-rev); }
+.risk-badge.risk-high { background: var(--p-crit-bg); color: var(--p-crit); }
+.risk-badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.risk-badge.risk-low .risk-badge-dot { background: var(--s-done); }
+.risk-badge.risk-med .risk-badge-dot { background: var(--s-rev); }
+.risk-badge.risk-high .risk-badge-dot { background: var(--p-crit); }
+
+/* Anomaly day markers */
+.sched-activity-chip.has-anomaly {
+  box-shadow: 0 0 0 2px var(--p-crit), 0 0 8px rgba(176,72,64,0.3);
+}
+.anomaly-marker {
+  position: absolute; top: -3px; right: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--p-crit); border: 1.5px solid var(--bg-card);
+}
+
+/* Tooltip enhancement for multi-line insights */
+.rvu-tooltip-insight {
+  font-size: 0.72rem; color: var(--text-2); font-style: normal;
+  background: var(--bg-warm); border-left: 3px solid var(--gold);
+  padding: 0.5rem 0.7rem; border-radius: 0 var(--r-xs) var(--r-xs) 0;
+  margin-bottom: 0.6rem; line-height: 1.5;
+}
+.rvu-tooltip-risk-flags {
+  display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem;
+}
+.rvu-tooltip-risk-flag {
+  font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.35rem;
+  border-radius: var(--r-full); background: var(--p-high-bg); color: var(--p-high);
+}
+.rvu-tooltip-risk-flag.critical { background: var(--p-crit-bg); color: var(--p-crit); }
+.rvu-tooltip-anomaly {
+  font-size: 0.68rem; color: var(--p-crit); font-weight: 600;
+  background: var(--p-crit-bg); padding: 0.3rem 0.5rem;
+  border-radius: var(--r-xs); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+
+/* Department summary bar */
+.dept-summary-bar {
+  display: flex; gap: 0.5rem; margin-bottom: 0.65rem;
+  padding: 0.6rem 0.8rem; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--r);
+  box-shadow: var(--sh-sm); font-size: 0.74rem; color: var(--text-2);
+  flex-wrap: wrap; align-items: center;
+}
+.dept-summary-bar strong { color: var(--text); font-weight: 600; }
+.dept-summary-bar .dept-sep { width: 1px; height: 16px; background: var(--border-strong); }
+
+/* Balance recommendation */
+.balance-rec {
+  font-size: 0.7rem; color: var(--s-rev); font-weight: 500;
+  padding: 0.3rem 0.6rem; background: var(--s-rev-bg);
+  border-radius: var(--r-xs); margin-top: 0.3rem;
+  border-left: 3px solid var(--s-rev);
+}
+
 /* ===== DATA FRESHNESS BANNER ===== */
 .data-stale-banner {
   display: none; padding: 0.45rem 1rem; border-radius: var(--r-sm);
@@ -1841,6 +1907,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 <div class="app schedules-view" id="schedulesView">
 
 
+
+  <!-- Department Summary Bar -->
+  <div class="dept-summary-bar" id="deptSummaryBar" style="display:none"></div>
+
   <!-- Data Freshness Banner -->
   <div class="data-stale-banner" id="rvuStaleBanner">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
@@ -2034,6 +2104,7 @@ function setDomain(domain) {
   renderChangelog();
   renderGoals();
   renderActionItems();
+  renderPredictiveAlerts();
   renderDeliveryMetrics();
   if (currentView === 'kanban') renderKanban();
 }
@@ -2617,15 +2688,20 @@ async function saveCalEvent() {
 
 async function deleteCalEvent(row, title) {
   if (!confirm(`Delete "${title}"?`)) return;
+  if (deleteCalEvent._busy) return;
+  deleteCalEvent._busy = true;
   showLoading(true);
   try {
-    await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
+    const res = await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({action:'cal_delete', row})});
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
     await loadProjects();
     if (activePage === 'calendar') renderCalendar();
     showToast('Event deleted');
   } catch(e) { showToast('Delete failed', 'error'); }
   showLoading(false);
+  deleteCalEvent._busy = false;
 }
 
 // ===== KEY GOALS =====
@@ -2765,16 +2841,21 @@ async function saveGoal() {
 
 async function deleteGoal(row) {
   if (!confirm('Delete this goal?')) return;
+  if (deleteGoal._busy) return;
+  deleteGoal._busy = true;
   showLoading(true);
   try {
-    await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'goal_delete', row }) });
-    showToast('Goal deleted');
+    const res = await fetch(scriptUrl, { method: 'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action: 'goal_delete', row }) });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
     await loadProjects();
+    showToast('Goal deleted');
   } catch (e) {
     console.error(e);
     showToast('Failed to delete goal', 'error');
   }
   showLoading(false);
+  deleteGoal._busy = false;
 }
 
 async function cycleGoalStatus(row, id, current) {
@@ -2840,6 +2921,7 @@ async function loadRvuData() {
     console.log('RVU data loaded: ' + (_rvuData.providers || []).length + ' providers');
     populateSchedFilters();
     checkRvuFreshness();
+    renderDeptSummary();
   } catch(e) {
     console.warn('Could not load provider_analytics.json:', e.message);
     _rvuData = null;
@@ -3069,6 +3151,43 @@ function checkRvuFreshness() {
   }
 }
 
+
+// ===== DEPARTMENT SUMMARY BAR =====
+function renderDeptSummary() {
+  var bar = document.getElementById('deptSummaryBar');
+  if (!_rvuData || !_rvuData.department) { bar.style.display = 'none'; return; }
+  var dept = _rvuData.department;
+  bar.style.display = '';
+  bar.innerHTML =
+    '<span>3-Mo RVUs: <strong>' + (dept.total_rvu_3mo || 0).toLocaleString() + '</strong></span>' +
+    '<span class="dept-sep"></span>' +
+    '<span>12-Mo RVUs: <strong>' + (dept.total_rvu_12mo || 0).toLocaleString() + '</strong></span>' +
+    '<span class="dept-sep"></span>' +
+    '<span>Avg RVU/Provider-Day: <strong>' + (dept.avg_rvu_per_provider_day || 0).toFixed(1) + '</strong></span>' +
+    '<span class="dept-sep"></span>' +
+    '<span>Active Providers: <strong>' + (_rvuData.providers || []).length + '</strong></span>' +
+    (dept.concern_list && dept.concern_list.length > 0 ?
+      '<span class="dept-sep"></span><span style="color:var(--p-high);font-weight:600">' + dept.concern_list.length + ' providers flagged</span>' : '');
+}
+
+// ===== RISK BADGE for provider dropdown/header =====
+function getProvRiskBadge(prov) {
+  if (!_rvuData || !_rvuData.risk || !_rvuData.risk[prov]) return '';
+  var risk = _rvuData.risk[prov];
+  var score = risk.burnout_score || 0;
+  var cls = score >= 60 ? 'risk-high' : score >= 30 ? 'risk-med' : 'risk-low';
+  var label = score >= 60 ? 'High Risk' : score >= 30 ? 'Monitor' : 'Healthy';
+  return '<span class="risk-badge ' + cls + '"><span class="risk-badge-dot"></span>' + label + ' (' + score + ')</span>';
+}
+
+// ===== BALANCE RECOMMENDATION =====
+function getBalanceRec(prov) {
+  if (!_rvuData || !_rvuData.balance || !_rvuData.balance[prov]) return '';
+  var bal = _rvuData.balance[prov];
+  if (!bal.balance_recommendation) return '';
+  return '<div class="balance-rec">' + esc(bal.balance_recommendation) + '</div>';
+}
+
 function renderScheduleCalendar() {
   var grid = document.getElementById('schedGrid');
   var label = document.getElementById('schedMonthLabel');
@@ -3125,6 +3244,18 @@ function renderScheduleCalendar() {
       ' <span class="consistency-badge ' + cons.cls + '">' + cons.label + ' (CV: ' + cons.cv + '%)</span>';
   }
 
+  // Add risk badge
+  var riskHtml = getProvRiskBadge(prov);
+  if (riskHtml) {
+    document.getElementById('schedProvName').innerHTML += riskHtml;
+  }
+
+  // Add balance recommendation
+  var balHtml = getBalanceRec(prov);
+  if (balHtml) {
+    document.getElementById('schedProvSummary').innerHTML += balHtml;
+  }
+
   // Build calendar
   var firstDay = new Date(schedYear, schedMonth, 1);
   var lastDay = new Date(schedYear, schedMonth + 1, 0);
@@ -3161,8 +3292,10 @@ function renderScheduleCalendar() {
 
     if (actual) {
       var cls = getActClass(actual.a);
+      var isAnomaly = _rvuData.anomalies && _rvuData.anomalies[prov] && _rvuData.anomalies[prov].some(function(a){ return a.date === dateStr; });
+      var anomalyCls = isAnomaly ? ' has-anomaly' : '';
       cellHtml = '<div class="sched-day-cell">' +
-        '<div class="sched-activity-chip ' + cls + '" data-prov="' + esc(prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
+        '<div class="sched-activity-chip ' + cls + anomalyCls + '" data-prov="' + esc(prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
           esc(actual.a) +
         '</div>' +
         '<div class="sched-loc-label" title="' + esc(actual.l) + '">' + esc(actual.l) + '</div>' +
@@ -3222,9 +3355,38 @@ function showRvuTooltip(evt, el) {
 
   var html = '<div class="rvu-tooltip-header">' + esc(prov) + ' \u2014 ' + dowName + 's</div>';
 
-  // AI Insight
+  // AI Insight (enhanced)
   if (insight) {
     html += '<div class="rvu-tooltip-insight">' + esc(insight) + '</div>';
+  }
+
+  // Risk flags
+  var provRisk = _rvuData.risk && _rvuData.risk[prov];
+  if (provRisk && provRisk.risk_flags && provRisk.risk_flags.length > 0) {
+    html += '<div class="rvu-tooltip-risk-flags">';
+    provRisk.risk_flags.forEach(function(flag) {
+      var cls = (flag.toLowerCase().indexOf('burnout') >= 0 || flag.toLowerCase().indexOf('sustained') >= 0) ? 'critical' : '';
+      html += '<span class="rvu-tooltip-risk-flag ' + cls + '">' + esc(flag) + '</span>';
+    });
+    html += '</div>';
+  }
+
+  // Anomaly on this specific date
+  var provAnomalies = _rvuData.anomalies && _rvuData.anomalies[prov];
+  if (provAnomalies && actual) {
+    var dayAnomaly = provAnomalies.find(function(a) { return a.date === dateStr; });
+    if (dayAnomaly) {
+      html += '<div class="rvu-tooltip-anomaly">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ' +
+        'Anomaly: ' + esc(dayAnomaly.note || (dayAnomaly.direction === 'high' ? 'Unusually high RVU' : 'Unusually low RVU')) +
+        ' (' + dayAnomaly.sigma.toFixed(1) + '\u03C3)' +
+      '</div>';
+    }
+  }
+
+  // Peer percentile
+  if (provRisk && provRisk.peer_percentile !== undefined) {
+    html += '<div style="font-size:0.64rem;color:var(--text-3);margin-bottom:0.3rem">Peer Percentile: <strong style="color:var(--text)">' + Math.round(provRisk.peer_percentile) + 'th</strong> among ' + (_rvuData.meta[prov] && _rvuData.meta[prov].type || 'peers') + '</div>';
   }
 
   // Day actual
@@ -3527,6 +3689,8 @@ async function saveRecurring() {
 
 async function deleteRecurring(row, title) {
   if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+  if (deleteRecurring._busy) return;
+  deleteRecurring._busy = true;
   showLoading(true);
   try {
     const res = await fetch(scriptUrl, {method:'POST', headers:{'Content-Type':'text/plain'},
@@ -3537,6 +3701,7 @@ async function deleteRecurring(row, title) {
     showToast('Obligation deleted');
   } catch(e) { showToast('Delete failed', 'error'); }
   showLoading(false);
+  deleteRecurring._busy = false;
 }
 
 // --- Complete Modal ---
@@ -3581,6 +3746,75 @@ async function confirmComplete() {
   showLoading(false);
 }
 
+
+// ===== PREDICTIVE PROJECT ALERTS =====
+function renderPredictiveAlerts() {
+  var dp = getDomainProjects();
+  var today = new Date(); today.setHours(0,0,0,0);
+  var alerts = [];
+
+  dp.forEach(function(p) {
+    if (p['Status'] === 'Complete' || p['Status'] === 'On Hold') return;
+    if (!p['Due Date']) return;
+
+    var due = new Date(String(p['Due Date']).slice(0,10));
+    var daysLeft = Math.ceil((due - today) / 86400000);
+
+    // Skip if already overdue (handled by Action Items)
+    if (daysLeft < 0) return;
+
+    // Velocity-based prediction: how long has this been in current status?
+    var start = p['Start Date'] ? new Date(String(p['Start Date']).slice(0,10)) : null;
+    if (!start) return;
+
+    var elapsed = Math.ceil((today - start) / 86400000);
+    var totalPlanned = Math.ceil((due - start) / 86400000);
+    if (totalPlanned <= 0 || elapsed <= 0) return;
+
+    // Estimate completion % based on status
+    var statusPct = { 'Not Started': 0, 'Planning': 15, 'In Progress': 50, 'In Review': 85, 'Blocked': -1 };
+    var pctDone = statusPct[p['Status']] !== undefined ? statusPct[p['Status']] : 30;
+    if (pctDone < 0) return; // Blocked handled elsewhere
+
+    var pctElapsed = (elapsed / totalPlanned) * 100;
+
+    // If we're >60% through time but <40% through work, flag it
+    if (pctElapsed > 60 && pctDone < 40 && daysLeft > 0) {
+      var projectedOverage = Math.round(((pctElapsed / Math.max(pctDone, 5)) * totalPlanned) - totalPlanned);
+      alerts.push({
+        project: p,
+        daysLeft: daysLeft,
+        pctElapsed: Math.round(pctElapsed),
+        pctDone: pctDone,
+        projectedOverage: projectedOverage
+      });
+    }
+  });
+
+  // Add to action items if any exist
+  if (alerts.length > 0) {
+    var grid = document.getElementById('actionItemsGrid');
+    var countEl = document.getElementById('actionItemsCount');
+    var current = parseInt(countEl.textContent) || 0;
+    countEl.textContent = current + alerts.length;
+
+    var alertHtml = alerts.map(function(a) {
+      var p = a.project;
+      return '<div class="action-item-card stale" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
+        '<div class="action-item-name">' + esc(p['Project']||'') + '</div>' +
+        '<div class="action-item-reason" style="color:var(--s-rev)">At risk: ' + a.pctElapsed + '% of time elapsed, ~' + a.pctDone + '% complete</div>' +
+        '<div class="action-item-detail">' +
+          '<span>' + esc(p['Owner']||'Unassigned') + '</span>' +
+          '<span>' + a.daysLeft + ' days left</span>' +
+          '<span>May slip ~' + a.projectedOverage + ' days</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    grid.insertAdjacentHTML('beforeend', alertHtml);
+  }
+}
+
 (function(){ loadProjects(); loadRvuData().then(function() { if (activePage === 'schedules') renderScheduleCalendar(); }); })();
 
 async function loadProjects() {
@@ -3606,6 +3840,7 @@ async function loadProjects() {
     renderComplianceScorecard();
     renderGoals();
     renderActionItems();
+    renderPredictiveAlerts();
     renderDeliveryMetrics();
     if (activePage === 'calendar') renderCalendar();
     if (activePage === 'schedules') renderScheduleCalendar();
@@ -3676,6 +3911,8 @@ async function addProject() {
 
 async function deleteProject(row, name) {
   if(!confirm(`Delete "${name}"?`)) return;
+  if(deleteProject._busy) return;
+  deleteProject._busy = true;
   showLoading(true);
   try {
     const res = await fetch(scriptUrl,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',row})});
@@ -3683,6 +3920,7 @@ async function deleteProject(row, name) {
     await loadProjects(); showToast('Project deleted');
   } catch(e){showToast('Delete failed','error');}
   showLoading(false);
+  deleteProject._busy = false;
 }
 
 function renderTable() {
