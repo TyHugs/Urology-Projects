@@ -1296,6 +1296,14 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .base-act-chip.act-ed::before { content: '\26A1 '; font-size: 0.58rem; }
 .base-act-chip.act-mpu::before { content: '\2605 '; font-size: 0.58rem; }
 .base-act-chip.act-ir::before { content: '\2316 '; font-size: 0.58rem; }
+
+/* Admin day styling */
+.base-act-chip.act-admin {
+  background: var(--bg-warm); color: var(--text-3);
+  border: 1.5px dashed var(--border-strong);
+  font-style: italic;
+}
+.base-act-chip.act-admin::before { content: '\1F4CB '; font-size: 0.58rem; font-style: normal; }
 .base-act-chip.act-other::before { content: '\2022 '; font-size: 0.58rem; }
 
 .base-loc-label {
@@ -1334,6 +1342,149 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   margin-bottom: 0.65rem; display: none;
 }
 .data-stale-banner.visible { display: flex; }
+
+
+/* ===== RVU TOOLTIP ===== */
+.rvu-tooltip {
+  position: fixed; z-index: 200; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.9rem 1.1rem; box-shadow: var(--sh-lg);
+  max-width: 400px; min-width: 300px; pointer-events: none;
+  font-size: 0.74rem; line-height: 1.45;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.rvu-tooltip.visible { opacity: 1; }
+.rvu-tooltip-header {
+  font-weight: 700; font-size: 0.85rem; color: var(--text);
+  border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.5rem;
+}
+.rvu-tooltip-insight {
+  font-size: 0.72rem; color: var(--text-2); font-style: normal;
+  background: var(--bg-warm); border-left: 3px solid var(--gold);
+  padding: 0.5rem 0.7rem; border-radius: 0 var(--r-xs) var(--r-xs) 0;
+  margin-bottom: 0.6rem; line-height: 1.5;
+}
+.rvu-tooltip-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.15rem 0.8rem;
+  margin-bottom: 0.5rem;
+}
+.rvu-tooltip-stat {
+  display: flex; justify-content: space-between; padding: 0.06rem 0;
+}
+.rvu-tooltip-stat-label { color: var(--text-3); font-size: 0.7rem; }
+.rvu-tooltip-stat-value { font-weight: 600; color: var(--text); font-size: 0.7rem; }
+.rvu-tooltip-trend {
+  display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 0.35rem;
+  padding: 0 2px;
+}
+.rvu-tooltip-bar {
+  flex: 1; border-radius: 2px 2px 0 0; min-width: 6px; position: relative;
+}
+.rvu-tooltip-bar-inner {
+  width: 100%; border-radius: 2px 2px 0 0;
+  position: absolute; bottom: 0;
+  background: var(--gold); opacity: 0.7;
+}
+.rvu-tooltip-trend-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.52rem; color: var(--text-3); margin-top: 0.15rem;
+}
+.rvu-tooltip-section-label {
+  font-weight: 700; font-size: 0.64rem; color: var(--navy);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-top: 0.4rem; margin-bottom: 0.15rem;
+}
+.rvu-tooltip-loc-list {
+  font-size: 0.66rem; color: var(--text-3);
+}
+.rvu-tooltip-loc-list span { color: var(--text-2); font-weight: 500; }
+.rvu-tooltip-risk-flags {
+  display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem;
+}
+.rvu-tooltip-risk-flag {
+  font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.35rem;
+  border-radius: var(--r-full); background: var(--p-high-bg); color: var(--p-high);
+}
+.rvu-tooltip-risk-flag.critical { background: var(--p-crit-bg); color: var(--p-crit); }
+.rvu-tooltip-anomaly {
+  font-size: 0.68rem; color: var(--p-crit); font-weight: 600;
+  background: var(--p-crit-bg); padding: 0.3rem 0.5rem;
+  border-radius: var(--r-xs); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+
+/* ===== ACTION ITEMS ===== */
+.action-items-section { margin-bottom: 1rem; }
+.action-items-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+.action-items-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.action-items-title svg { color: var(--p-crit); }
+.action-items-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem; font-weight: 700; color: #fff;
+  background: var(--p-crit); padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+}
+.action-items-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.6rem;
+}
+.action-item-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 3px solid var(--p-crit); border-radius: var(--r);
+  padding: 0.7rem 0.9rem; box-shadow: var(--sh-sm);
+  transition: all var(--t) var(--ease); cursor: pointer;
+}
+.action-item-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.action-item-card.stale { border-left-color: var(--p-high); }
+.action-item-name { font-weight: 600; font-size: 0.86rem; color: var(--text); margin-bottom: 0.2rem; }
+.action-item-reason { font-size: 0.72rem; color: var(--p-crit); font-weight: 600; margin-bottom: 0.15rem; }
+.action-item-card.stale .action-item-reason { color: var(--p-high); }
+.action-item-detail { font-size: 0.72rem; color: var(--text-3); display: flex; gap: 0.6rem; }
+.action-items-empty {
+  text-align: center; padding: 0.8rem; font-size: 0.82rem;
+  color: var(--s-done); font-weight: 600; background: var(--s-done-bg);
+  border: 1px solid rgba(56,122,92,0.18); border-radius: var(--r);
+}
+
+/* ===== DELIVERY METRICS ===== */
+.delivery-metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+.delivery-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.65rem 0.85rem; box-shadow: var(--sh-sm); text-align: center;
+}
+.delivery-card-label { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.15rem; }
+.delivery-card-value { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 600; color: var(--text); line-height: 1; }
+.delivery-card-sub { font-size: 0.68rem; color: var(--text-3); margin-top: 0.15rem; font-weight: 500; }
+.delivery-card-value.good { color: var(--s-done); }
+.delivery-card-value.warn { color: var(--p-high); }
+.delivery-card-value.bad { color: var(--p-crit); }
+
+/* ===== COMPLIANCE SCORECARD ===== */
+.compliance-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.8rem 1rem; box-shadow: var(--sh-sm); margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.compliance-ring {
+  width: 52px; height: 52px; flex-shrink: 0; position: relative;
+}
+.compliance-ring svg { width: 52px; height: 52px; transform: rotate(-90deg); }
+.compliance-ring-bg { fill: none; stroke: var(--bg-warm); stroke-width: 5; }
+.compliance-ring-fg { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.compliance-ring-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+.compliance-detail { flex: 1; }
+.compliance-label { font-size: 0.68rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.compliance-stat { font-size: 0.82rem; color: var(--text-2); margin-top: 0.15rem; }
+.compliance-stat strong { color: var(--text); }
 
 /* ===== COLLAPSIBLE SECTIONS ===== */
 .section-collapse-header {
@@ -1906,6 +2057,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> MPU</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> IR</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Other</span>
+    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1.5px dashed var(--border-strong)"></span> Admin</span>
     <span style="opacity:0.4">|</span>
     <span style="font-style:italic;color:var(--text-3)">Hover any cell for detailed analytics</span>
   </div>
@@ -2932,6 +3084,27 @@ function checkRvuFreshness() {
   }
 }
 
+function isAdminDay(pat) {
+  // Detect admin/non-clinical days:
+  // - Low RVU relative to clinical work (< 12 RVU avg)
+  // - High confidence but low revenue = consistently non-clinical
+  // - Ignore call/inpatient as those are sporadic
+  if (!pat) return false;
+  var a = (pat.a || '').toLowerCase();
+  // If it's clearly OR or Clinic with decent RVU, it's clinical
+  if ((a === 'or' || a.startsWith('or/')) && pat.avg_rvu >= 12) return false;
+  if (a === 'clinic' && pat.avg_rvu >= 12) return false;
+  if (a === 'ir' && pat.avg_rvu >= 12) return false;
+  if (a === 'mpu' && pat.avg_rvu >= 12) return false;
+  // ED is sporadic but clinical — keep if decent RVU
+  if (a === 'ed' && pat.avg_rvu >= 12) return false;
+  // Low RVU with any activity type = likely admin
+  if (pat.avg_rvu < 12) return true;
+  // 'nan' or 'other' activity = admin
+  if (a === 'nan' || a === 'other' || a === '') return true;
+  return false;
+}
+
 function renderBaseSchedule() {
   var grid = document.getElementById('schedGrid');
   var provHeader = document.getElementById('schedProvHeader');
@@ -2958,7 +3131,6 @@ function renderBaseSchedule() {
   var patterns = _rvuData.patterns[prov] || {};
   var monthly = _rvuData.monthly[prov] || {};
   var risk = (_rvuData.risk && _rvuData.risk[prov]) || {};
-  var balance = (_rvuData.balance && _rvuData.balance[prov]) || {};
 
   // --- Provider header ---
   provHeader.style.display = '';
@@ -2969,25 +3141,34 @@ function renderBaseSchedule() {
   if (meta.type) nameHtml += '<span class="sched-prov-badge type-badge">' + esc(meta.type) + '</span>';
   document.getElementById('schedProvName').innerHTML = nameHtml;
 
-  // --- Metrics ---
-  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-  var weeklyRvu = 0, activeDays = 0, primaryAct = {}, avgConf = 0;
-  days.forEach(function(d) {
+  // --- Compute metrics ---
+  var dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  var clinicalRvu = 0, clinicalDays = 0, adminDays = 0;
+  var primaryAct = {}, avgConf = 0, confCount = 0;
+
+  dayNames.forEach(function(d) {
     var p = patterns[d];
-    if (p && p.c >= 0.3) {
-      weeklyRvu += p.avg_rvu;
-      activeDays++;
+    if (!p || p.c < 0.3) return;
+    confCount++;
+    avgConf += p.c;
+    if (isAdminDay(p)) {
+      adminDays++;
+    } else {
+      clinicalRvu += p.avg_rvu;
+      clinicalDays++;
       primaryAct[p.a] = (primaryAct[p.a] || 0) + 1;
-      avgConf += p.c;
     }
   });
-  avgConf = activeDays > 0 ? Math.round((avgConf / activeDays) * 100) : 0;
-  var monthlyRvu = Math.round(weeklyRvu * (20/5));
+
+  avgConf = confCount > 0 ? Math.round((avgConf / confCount) * 100) : 0;
+  var weeklyRvu = Math.round(clinicalRvu);
+  var monthlyRvu = Math.round(clinicalRvu * 4);
+
   var topActivity = Object.entries(primaryAct).sort(function(a,b){return b[1]-a[1];})[0];
   var topActLabel = topActivity ? topActivity[0] : '\u2014';
-  var topActPct = topActivity && activeDays > 0 ? Math.round((topActivity[1] / activeDays) * 100) : 0;
+  var topActPct = topActivity && clinicalDays > 0 ? Math.round((topActivity[1] / clinicalDays) * 100) : 0;
 
-  // Monthly trend from last 3 months
+  // 3-month actual average
   var monthKeys = Object.keys(monthly).sort();
   var recent3 = monthKeys.slice(-3);
   var totalRvu3 = recent3.reduce(function(s, k) { return s + (monthly[k].r || 0); }, 0);
@@ -3003,19 +3184,19 @@ function renderBaseSchedule() {
   var metricsHtml =
     '<div class="sched-metric-card"><div class="sched-metric-label">Monthly Est.</div>' +
     '<div class="sched-metric-value">' + monthlyRvu.toLocaleString() + '</div>' +
-    '<div class="sched-metric-sub">RVU / month</div></div>' +
+    '<div class="sched-metric-sub">clinical RVU / mo</div></div>' +
 
     '<div class="sched-metric-card"><div class="sched-metric-label">Weekly Est.</div>' +
-    '<div class="sched-metric-value">' + Math.round(weeklyRvu).toLocaleString() + '</div>' +
-    '<div class="sched-metric-sub">RVU / week</div></div>' +
+    '<div class="sched-metric-value">' + weeklyRvu.toLocaleString() + '</div>' +
+    '<div class="sched-metric-sub">' + clinicalDays + ' clinical + ' + adminDays + ' admin days</div></div>' +
 
     '<div class="sched-metric-card"><div class="sched-metric-label">Avg / Day</div>' +
     '<div class="sched-metric-value">' + avgPerDay3 + '</div>' +
-    '<div class="sched-metric-sub">last 3 months</div></div>' +
+    '<div class="sched-metric-sub">actual, last 3 mo</div></div>' +
 
     '<div class="sched-metric-card"><div class="sched-metric-label">Primary Activity</div>' +
     '<div class="sched-metric-value" style="font-size:0.95rem">' + esc(topActLabel) + '</div>' +
-    '<div class="sched-metric-sub">' + topActPct + '% of days</div></div>' +
+    '<div class="sched-metric-sub">' + topActPct + '% of clinical days</div></div>' +
 
     '<div class="sched-metric-card"><div class="sched-metric-label">Confidence</div>' +
     '<div class="sched-metric-value">' + avgConf + '%</div>' +
@@ -3049,28 +3230,41 @@ function renderBaseSchedule() {
   // 5 weeks
   for (var wk = 1; wk <= 5; wk++) {
     html += '<div class="base-sched-wk-label">Wk ' + wk + '</div>';
-    dowFull.forEach(function(dayName, di) {
+    dowFull.forEach(function(dayName) {
       var pat = patterns[dayName];
-      if (pat && pat.c >= 0.3) {
-        var cls = getActClass(pat.a);
-        // Shorten activity label for display
-        var actLabel = pat.a;
-        if (actLabel.length > 12) actLabel = actLabel.replace(/\s*\(.*\)/, '').slice(0,12);
-        // Shorten location
-        var locLabel = (pat.l || '').replace(/Urology Clinic \| /, '').replace(/\s*\|.*/, '');
-        if (locLabel.length > 16) locLabel = locLabel.slice(0,16) + '\u2026';
 
-        html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
-          '<div class="base-act-chip ' + cls + '">' + esc(actLabel) + '</div>' +
-          '<div class="base-loc-label" title="' + esc(pat.l || '') + '">' + esc(locLabel) + '</div>' +
-          '<div class="base-rvu-label">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
-          '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
-        '</div>';
-      } else {
-        html += '<div class="base-sched-cell" style="opacity:0.4">' +
+      if (!pat || pat.c < 0.3) {
+        // No pattern data
+        html += '<div class="base-sched-cell" style="opacity:0.35">' +
           '<div style="font-size:0.64rem;color:var(--text-3);padding-top:0.5rem">\u2014</div>' +
         '</div>';
+        return;
       }
+
+      if (isAdminDay(pat)) {
+        // Admin / non-clinical day
+        html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
+          '<div class="base-act-chip act-admin">Admin</div>' +
+          '<div class="base-loc-label" style="color:var(--text-3);font-style:italic">Non-clinical</div>' +
+          '<div class="base-rvu-label" style="color:var(--text-3);opacity:0.5">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
+          '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
+        '</div>';
+        return;
+      }
+
+      // Clinical day
+      var cls = getActClass(pat.a);
+      var actLabel = pat.a;
+      if (actLabel.length > 12) actLabel = actLabel.replace(/\s*\(.*\)/, '').slice(0,12);
+      var locLabel = (pat.l || '').replace(/Urology Clinic \| /, '').replace(/\s*\|.*/, '');
+      if (locLabel.length > 16) locLabel = locLabel.slice(0,16) + '\u2026';
+
+      html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
+        '<div class="base-act-chip ' + cls + '">' + esc(actLabel) + '</div>' +
+        '<div class="base-loc-label" title="' + esc(pat.l || '') + '">' + esc(locLabel) + '</div>' +
+        '<div class="base-rvu-label">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
+        '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
+      '</div>';
     });
   }
 
