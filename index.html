@@ -1168,359 +1168,172 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .cal-legend-item { display: flex; align-items: center; gap: 0.25rem; }
 .cal-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
-/* ===== PROVIDER SCHEDULES v2 ===== */
+/* ===== BASE SCHEDULE ===== */
 .schedules-view { display: none; }
 .schedules-view.active { display: block; }
-.sched-top-bar {
-  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-  margin-bottom: 0.65rem;
+
+/* Section header */
+.sched-section-header {
+  margin-top: 1.25rem; margin-bottom: 0.6rem;
 }
-.sched-filter-group {
-  display: flex; align-items: center; gap: 0.3rem;
+.sched-section-title {
+  font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.sched-section-sub {
+  font-size: 0.72rem; color: var(--text-3); margin-top: 0.15rem;
+}
+
+/* Filters */
+.sched-filters {
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  margin-bottom: 0.75rem;
 }
 .sched-filter-label {
-  font-size: 0.68rem; font-weight: 600; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.03em;
+  font-size: 0.62rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.04em;
 }
 .sched-select {
-  padding: 0.25rem 0.5rem; font-size: 0.76rem; font-weight: 500;
+  padding: 0.3rem 0.55rem; font-size: 0.78rem; font-weight: 500;
   border: 1px solid var(--border); border-radius: var(--r-xs);
   background: var(--bg-card); color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+  transition: border-color var(--t) var(--ease);
 }
 .sched-select:focus { border-color: var(--gold); outline: none; }
-.sched-provider-name {
-  font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 400;
-  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+.sched-select:hover { border-color: var(--border-warm); }
+
+/* Provider header */
+.sched-prov-header {
+  display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+  margin-bottom: 0.15rem;
 }
-.sched-provider-badges { display: flex; gap: 0.3rem; }
+.sched-prov-name {
+  font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 400; color: var(--text);
+}
 .sched-prov-badge {
-  font-size: 0.62rem; font-weight: 600; padding: 0.12rem 0.45rem;
+  font-size: 0.6rem; font-weight: 600; padding: 0.12rem 0.45rem;
   border-radius: var(--r-full); background: rgba(0,39,76,0.08); color: var(--navy);
 }
 .sched-prov-badge.type-badge { background: var(--gold-badge); color: var(--gold); }
-.sched-header {
-  display: flex; align-items: center; justify-content: space-between;
+
+/* Metrics strip */
+.sched-metrics {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+  gap: 0.45rem; margin-bottom: 0.75rem;
+}
+.sched-metric-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.5rem 0.7rem; box-shadow: var(--sh-sm); text-align: center;
+}
+.sched-metric-label {
+  font-size: 0.56rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.05rem;
+}
+.sched-metric-value {
+  font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600;
+  color: var(--text); line-height: 1.1;
+}
+.sched-metric-sub {
+  font-size: 0.6rem; color: var(--text-3); margin-top: 0.05rem; font-weight: 500;
+}
+.sched-metric-value.good { color: var(--s-done); }
+.sched-metric-value.warn { color: var(--p-high); }
+.sched-metric-value.bad { color: var(--p-crit); }
+
+/* 5-week base schedule grid */
+.base-sched-grid {
+  display: grid; grid-template-columns: 52px repeat(5, 1fr);
+  border: 1px solid var(--border); border-radius: var(--r);
+  overflow: hidden; background: var(--bg-card); box-shadow: var(--sh-sm);
   margin-bottom: 0.6rem;
 }
-.sched-prov-summary {
-  font-size: 0.76rem; color: var(--text-3); margin-bottom: 0.5rem;
-  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+.base-sched-dow {
+  font-size: 0.64rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 0.55rem 0.4rem; text-align: center;
+  background: var(--bg-warm); border-bottom: 1px solid var(--border);
 }
-.sched-prov-summary strong { color: var(--text); font-weight: 600; }
+.base-sched-wk-label {
+  font-size: 0.58rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 0.6rem 0.3rem; text-align: center;
+  background: var(--bg-warm); border-right: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+}
+.base-sched-cell {
+  padding: 0.4rem 0.35rem; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+  min-height: 68px; transition: background var(--t) var(--ease);
+  cursor: default;
+}
+.base-sched-cell:hover { background: var(--bg-warm); }
+.base-sched-cell:nth-child(6n+1) { border-right: 1px solid var(--border); }
+.base-sched-row:last-child .base-sched-cell,
+.base-sched-row:last-child .base-sched-wk-label { border-bottom: none; }
 
-/* Single-provider calendar cell */
-.sched-day-cell {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 0.2rem; padding-top: 0.15rem;
-}
-.sched-activity-chip {
-  font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.5rem;
+/* Activity chip in schedule */
+.base-act-chip {
+  font-size: 0.68rem; font-weight: 600; padding: 0.18rem 0.45rem;
   border-radius: 4px; white-space: nowrap; text-align: center;
-  width: 90%; cursor: default; transition: all var(--t) var(--ease);
-  line-height: 1.3;
+  width: 92%; line-height: 1.3; position: relative;
+  transition: all var(--t) var(--ease);
 }
-.sched-activity-chip:hover { transform: scale(1.03); box-shadow: var(--sh-sm); }
-.sched-activity-chip.act-or { background: var(--s-prog-bg); color: var(--s-prog); }
-.sched-activity-chip.act-clinic { background: var(--s-done-bg); color: var(--s-done); }
-.sched-activity-chip.act-inpatient { background: var(--s-rev-bg); color: var(--s-rev); }
-.sched-activity-chip.act-ed { background: var(--p-crit-bg); color: var(--p-crit); }
-.sched-activity-chip.act-mpu { background: var(--gold-badge); color: var(--gold); }
-.sched-activity-chip.act-ir { background: var(--s-plan-bg); color: var(--s-plan); }
-.sched-activity-chip.act-other { background: var(--bg-warm); color: var(--text-2); }
-.sched-activity-chip.act-projected {
-  border: 1.5px dashed var(--border-strong); background: transparent;
-  color: var(--text-3); font-style: italic;
-}
-.sched-loc-label {
-  font-size: 0.54rem; color: var(--text-3); text-align: center;
+.base-act-chip:hover { transform: scale(1.03); box-shadow: var(--sh-sm); }
+.base-act-chip.act-or { background: var(--s-prog-bg); color: var(--s-prog); }
+.base-act-chip.act-clinic { background: var(--s-done-bg); color: var(--s-done); }
+.base-act-chip.act-inpatient { background: var(--s-rev-bg); color: var(--s-rev); }
+.base-act-chip.act-ed { background: var(--p-crit-bg); color: var(--p-crit); }
+.base-act-chip.act-mpu { background: var(--gold-badge); color: var(--gold); }
+.base-act-chip.act-ir { background: var(--s-plan-bg); color: var(--s-plan); }
+.base-act-chip.act-other { background: var(--bg-warm); color: var(--text-2); }
+
+/* Accessibility icons */
+.base-act-chip.act-or::before { content: '\2694 '; font-size: 0.58rem; }
+.base-act-chip.act-clinic::before { content: '\2695 '; font-size: 0.58rem; }
+.base-act-chip.act-inpatient::before { content: '\2302 '; font-size: 0.58rem; }
+.base-act-chip.act-ed::before { content: '\26A1 '; font-size: 0.58rem; }
+.base-act-chip.act-mpu::before { content: '\2605 '; font-size: 0.58rem; }
+.base-act-chip.act-ir::before { content: '\2316 '; font-size: 0.58rem; }
+.base-act-chip.act-other::before { content: '\2022 '; font-size: 0.58rem; }
+
+.base-loc-label {
+  font-size: 0.52rem; color: var(--text-3); text-align: center;
   max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   line-height: 1.2;
 }
-.sched-rvu-label {
-  font-size: 0.52rem; font-weight: 700; color: var(--gold);
+.base-rvu-label {
+  font-size: 0.54rem; font-weight: 700; color: var(--gold);
 }
-
-
-/* Provider detail cards row */
-.prov-detail-cards {
-  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; margin-top: 0.3rem;
+.base-conf-label {
+  font-size: 0.48rem; color: var(--text-3); font-weight: 500;
 }
-.prov-detail-chip {
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
-  border-radius: var(--r); background: var(--bg-card);
-  border: 1px solid var(--border); box-shadow: var(--sh-sm);
-}
-.prov-detail-chip .chip-label {
-  font-size: 0.56rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.prov-detail-chip .chip-value { color: var(--text); }
-.prov-detail-chip.chip-risk-high { border-left: 3px solid var(--p-crit); }
-.prov-detail-chip.chip-risk-med { border-left: 3px solid var(--s-rev); }
-.prov-detail-chip.chip-risk-low { border-left: 3px solid var(--s-done); }
-.prov-detail-chip.chip-consistency { border-left: 3px solid var(--gold); }
-.prov-detail-chip.chip-balance { border-left: 3px solid var(--s-plan); }
-
-/* Month summary strip above calendar */
-.month-summary-strip {
-  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;
-  padding: 0.4rem 0.65rem; background: var(--bg-warm);
-  border-radius: var(--r); font-size: 0.7rem; color: var(--text-2);
-  align-items: center;
-}
-.month-summary-strip strong { color: var(--text); font-weight: 600; }
-.month-summary-strip .mss-sep { width: 1px; height: 12px; background: var(--border-strong); }
 
 /* Legend */
 .sched-legend {
   display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
-  margin-top: 0.6rem; font-size: 0.62rem; color: var(--text-3); font-weight: 500;
+  margin-top: 0.5rem; font-size: 0.62rem; color: var(--text-3); font-weight: 500;
 }
 .sched-legend-item { display: flex; align-items: center; gap: 0.2rem; }
 .sched-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
-/* RVU Tooltip */
-.rvu-tooltip {
-  position: fixed; z-index: 200; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 0.9rem 1.1rem; box-shadow: var(--sh-lg);
-  max-width: 400px; min-width: 300px; pointer-events: none;
-  font-size: 0.74rem; line-height: 1.45;
-  opacity: 0; transition: opacity 0.15s ease;
+/* Empty / no-provider state */
+.sched-empty-state {
+  text-align: center; padding: 3rem 1rem; color: var(--text-3);
+  font-size: 0.88rem;
 }
-.rvu-tooltip.visible { opacity: 1; }
-.rvu-tooltip-header {
-  font-weight: 700; font-size: 0.85rem; color: var(--text);
-  border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.5rem;
-}
-.rvu-tooltip-insight {
-  font-size: 0.72rem; color: var(--text-2); font-style: italic;
-  background: var(--bg-warm); border-left: 3px solid var(--gold);
-  padding: 0.4rem 0.6rem; border-radius: 0 var(--r-xs) var(--r-xs) 0;
-  margin-bottom: 0.6rem; line-height: 1.4;
-}
-.rvu-tooltip-stats {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0.15rem 0.8rem;
-  margin-bottom: 0.5rem;
-}
-.rvu-tooltip-stat {
-  display: flex; justify-content: space-between; padding: 0.06rem 0;
-}
-.rvu-tooltip-stat-label { color: var(--text-3); font-size: 0.7rem; }
-.rvu-tooltip-stat-value { font-weight: 600; color: var(--text); font-size: 0.7rem; }
-.rvu-tooltip-trend {
-  display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 0.35rem;
-  padding: 0 2px;
-}
-.rvu-tooltip-bar {
-  flex: 1; border-radius: 2px 2px 0 0; min-width: 6px;
-  position: relative;
-}
-.rvu-tooltip-bar-inner {
-  width: 100%; border-radius: 2px 2px 0 0;
-  position: absolute; bottom: 0;
-  background: var(--gold); opacity: 0.7;
-}
-.rvu-tooltip-trend-labels {
-  display: flex; justify-content: space-between;
-  font-size: 0.52rem; color: var(--text-3); margin-top: 0.15rem;
-}
-.rvu-tooltip-section-label {
-  font-weight: 700; font-size: 0.64rem; color: var(--navy);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  margin-top: 0.4rem; margin-bottom: 0.15rem;
-}
-.rvu-tooltip-loc-list {
-  font-size: 0.66rem; color: var(--text-3);
-}
-.rvu-tooltip-loc-list span { color: var(--text-2); font-weight: 500; }
+.sched-empty-state svg { vertical-align: -4px; margin-right: 0.4rem; color: var(--gold); }
 
-
-
-/* ===== AI RISK BADGES ===== */
-.risk-badge {
-  display: inline-flex; align-items: center; gap: 0.2rem;
-  font-size: 0.62rem; font-weight: 700; padding: 0.12rem 0.45rem;
-  border-radius: var(--r-full); margin-left: 0.3rem;
-}
-.risk-badge.risk-low { background: var(--s-done-bg); color: var(--s-done); }
-.risk-badge.risk-med { background: var(--s-rev-bg); color: var(--s-rev); }
-.risk-badge.risk-high { background: var(--p-crit-bg); color: var(--p-crit); }
-.risk-badge-dot { width: 5px; height: 5px; border-radius: 50%; }
-.risk-badge.risk-low .risk-badge-dot { background: var(--s-done); }
-.risk-badge.risk-med .risk-badge-dot { background: var(--s-rev); }
-.risk-badge.risk-high .risk-badge-dot { background: var(--p-crit); }
-
-
-/* Activity chip accessibility icons */
-.sched-activity-chip.act-or::before { content: '\2694 '; font-size: 0.6rem; }
-.sched-activity-chip.act-clinic::before { content: '\2695 '; font-size: 0.6rem; }
-.sched-activity-chip.act-inpatient::before { content: '\2302 '; font-size: 0.6rem; }
-.sched-activity-chip.act-ed::before { content: '\26A1 '; font-size: 0.6rem; }
-.sched-activity-chip.act-mpu::before { content: '\2605 '; font-size: 0.6rem; }
-.sched-activity-chip.act-ir::before { content: '\2316 '; font-size: 0.6rem; }
-.sched-activity-chip.act-other::before { content: '\2022 '; font-size: 0.6rem; }
-.sched-activity-chip.act-projected::before { content: '\2026 '; font-size: 0.6rem; }
-
-/* Risk badge a11y icons */
-.risk-badge.risk-low::before { content: '\2713 '; }
-.risk-badge.risk-med::before { content: '\25B2 '; }
-.risk-badge.risk-high::before { content: '\26A0 '; }
-
-/* Anomaly chip: add warning triangle besides glow */
-.sched-activity-chip.has-anomaly::after {
-  content: '\26A0'; position: absolute; top: -6px; right: -4px;
-  font-size: 0.55rem; color: var(--p-crit); font-weight: 700;
-}
-.sched-activity-chip { position: relative; }
-
-/* Anomaly day markers */
-.sched-activity-chip.has-anomaly {
-  box-shadow: 0 0 0 2px var(--p-crit), 0 0 8px rgba(176,72,64,0.3);
-}
-.anomaly-marker {
-  position: absolute; top: -3px; right: -3px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--p-crit); border: 1.5px solid var(--bg-card);
-}
-
-/* Tooltip enhancement for multi-line insights */
-.rvu-tooltip-insight {
-  font-size: 0.72rem; color: var(--text-2); font-style: normal;
-  background: var(--bg-warm); border-left: 3px solid var(--gold);
-  padding: 0.5rem 0.7rem; border-radius: 0 var(--r-xs) var(--r-xs) 0;
-  margin-bottom: 0.6rem; line-height: 1.5;
-}
-.rvu-tooltip-risk-flags {
-  display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem;
-}
-.rvu-tooltip-risk-flag {
-  font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.35rem;
-  border-radius: var(--r-full); background: var(--p-high-bg); color: var(--p-high);
-}
-.rvu-tooltip-risk-flag.critical { background: var(--p-crit-bg); color: var(--p-crit); }
-.rvu-tooltip-anomaly {
-  font-size: 0.68rem; color: var(--p-crit); font-weight: 600;
-  background: var(--p-crit-bg); padding: 0.3rem 0.5rem;
-  border-radius: var(--r-xs); margin-bottom: 0.4rem;
-  display: flex; align-items: center; gap: 0.3rem;
-}
-
-/* Department summary cards */
-.dept-summary-bar {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.55rem; margin-bottom: 0.8rem;
-}
-.dept-stat-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 0.6rem 0.8rem; box-shadow: var(--sh-sm); text-align: center;
-}
-.dept-stat-label {
-  font-size: 0.6rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.1rem;
-}
-.dept-stat-value {
-  font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600;
-  color: var(--text); line-height: 1.1;
-}
-.dept-stat-sub {
-  font-size: 0.64rem; color: var(--text-3); margin-top: 0.1rem; font-weight: 500;
-}
-.dept-stat-value.flagged { color: var(--p-high); }
-
-/* Balance recommendation */
-.balance-rec {
-  font-size: 0.7rem; color: var(--s-rev); font-weight: 500;
-  padding: 0.3rem 0.6rem; background: var(--s-rev-bg);
-  border-radius: var(--r-xs); margin-top: 0.3rem;
-  border-left: 3px solid var(--s-rev);
-}
-
-/* ===== DATA FRESHNESS BANNER ===== */
+/* Stale data banner */
 .data-stale-banner {
-  display: none; padding: 0.45rem 1rem; border-radius: var(--r-sm);
-  background: var(--p-high-bg); border: 1px solid rgba(176,108,46,0.2);
-  color: var(--p-high); font-size: 0.76rem; font-weight: 600;
-  margin-bottom: 0.6rem; align-items: center; gap: 0.4rem;
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 0.8rem; background: var(--p-high-bg);
+  border: 1px solid rgba(203,139,58,0.2); border-radius: var(--r);
+  font-size: 0.72rem; font-weight: 500; color: var(--p-high);
+  margin-bottom: 0.65rem; display: none;
 }
 .data-stale-banner.visible { display: flex; }
-.data-stale-banner svg { flex-shrink: 0; }
-
-/* ===== CHAIR ACTION ITEMS ===== */
-.action-items-section { margin-bottom: 1rem; }
-.action-items-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 0.55rem;
-}
-.action-items-title {
-  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
-  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
-}
-.action-items-title svg { color: var(--p-crit); }
-.action-items-count {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.68rem; font-weight: 700; color: #fff;
-  background: var(--p-crit); padding: 0.1rem 0.45rem; border-radius: var(--r-full);
-}
-.action-items-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.6rem;
-}
-.action-item-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-left: 3px solid var(--p-crit); border-radius: var(--r);
-  padding: 0.7rem 0.9rem; box-shadow: var(--sh-sm);
-  transition: all var(--t) var(--ease); cursor: pointer;
-}
-.action-item-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
-.action-item-card.stale { border-left-color: var(--p-high); }
-.action-item-name { font-weight: 600; font-size: 0.86rem; color: var(--text); margin-bottom: 0.2rem; }
-.action-item-reason { font-size: 0.72rem; color: var(--p-crit); font-weight: 600; margin-bottom: 0.15rem; }
-.action-item-card.stale .action-item-reason { color: var(--p-high); }
-.action-item-detail { font-size: 0.72rem; color: var(--text-3); display: flex; gap: 0.6rem; }
-.action-items-empty {
-  text-align: center; padding: 0.8rem; font-size: 0.82rem;
-  color: var(--s-done); font-weight: 600; background: var(--s-done-bg);
-  border: 1px solid rgba(56,122,92,0.18); border-radius: var(--r);
-}
-
-/* ===== DELIVERY METRICS CARD ===== */
-.delivery-metrics {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem;
-  margin-bottom: 1rem;
-}
-.delivery-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 0.65rem 0.85rem; box-shadow: var(--sh-sm); text-align: center;
-}
-.delivery-card-label { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.15rem; }
-.delivery-card-value { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 600; color: var(--text); line-height: 1; }
-.delivery-card-sub { font-size: 0.68rem; color: var(--text-3); margin-top: 0.15rem; font-weight: 500; }
-.delivery-card-value.good { color: var(--s-done); }
-.delivery-card-value.warn { color: var(--p-high); }
-.delivery-card-value.bad { color: var(--p-crit); }
-
-/* ===== COMPLIANCE SCORECARD ===== */
-.compliance-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 0.8rem 1rem; box-shadow: var(--sh-sm); margin-bottom: 0.8rem;
-  display: flex; align-items: center; gap: 1rem;
-}
-.compliance-ring {
-  width: 52px; height: 52px; flex-shrink: 0; position: relative;
-}
-.compliance-ring svg { width: 52px; height: 52px; transform: rotate(-90deg); }
-.compliance-ring-bg { fill: none; stroke: var(--bg-warm); stroke-width: 5; }
-.compliance-ring-fg { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
-.compliance-ring-text {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'Fraunces', serif; font-size: 0.85rem; font-weight: 600; color: var(--text);
-}
-.compliance-detail { flex: 1; }
-.compliance-label { font-size: 0.68rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
-.compliance-stat { font-size: 0.82rem; color: var(--text-2); margin-top: 0.15rem; }
-.compliance-stat strong { color: var(--text); }
-
 
 /* ===== COLLAPSIBLE SECTIONS ===== */
 .section-collapse-header {
@@ -2041,87 +1854,51 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div id="calDayDetail"></div>
 </div>
 
-<!-- ===== SCHEDULES VIEW v2 ===== -->
+<!-- ===== BASE SCHEDULE VIEW ===== -->
 <div class="app schedules-view" id="schedulesView">
 
-
-
   <!-- Section Header -->
-  <div style="margin-top:1.25rem;margin-bottom:0.3rem">
-    <div style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:400;color:var(--text);display:flex;align-items:center;gap:0.5rem">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Provider Schedules &amp; Analytics
+  <div class="sched-section-header">
+    <div class="sched-section-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Base Schedule
     </div>
-    <div style="font-size:0.72rem;color:var(--text-3);margin-top:0.15rem">Department-level RVU performance and individual provider scheduling data</div>
+    <div class="sched-section-sub">Predicted monthly schedule based on historical RVU and activity data</div>
   </div>
-
-  <!-- Department Summary Cards -->
-  <div class="dept-summary-bar" id="deptSummaryBar" style="display:none"></div>
 
   <!-- Data Freshness Banner -->
   <div class="data-stale-banner" id="rvuStaleBanner">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-    <span id="rvuStaleText">RVU data may be outdated</span>
+    <span id="rvuStaleText">Analytics data may not reflect recent activity</span>
   </div>
 
-  <!-- Filters row -->
-  <div class="sched-top-bar">
-    <div class="sched-filter-group">
-      <span class="sched-filter-label">Division</span>
-      <select class="sched-select" id="schedDivFilter" onchange="onSchedFilterChange()">
-        <option value="">All Divisions</option>
-      </select>
-    </div>
-    <div class="sched-filter-group">
-      <span class="sched-filter-label">Type</span>
-      <select class="sched-select" id="schedTypeFilter" onchange="onSchedFilterChange()">
-        <option value="">All Types</option>
-      </select>
-    </div>
-    <div class="sched-filter-group">
-      <span class="sched-filter-label">Provider</span>
-      <select class="sched-select" id="schedProvSelect" onchange="onSchedProvChange()" style="min-width:160px">
-        <option value="">Select a provider...</option>
-      </select>
-    </div>
+  <!-- Filters -->
+  <div class="sched-filters">
+    <span class="sched-filter-label">Division</span>
+    <select class="sched-select" id="schedDivFilter" onchange="onSchedFilterChange()">
+      <option value="">All Divisions</option>
+    </select>
+    <span class="sched-filter-label">Type</span>
+    <select class="sched-select" id="schedTypeFilter" onchange="onSchedFilterChange()">
+      <option value="">All Types</option>
+    </select>
+    <span class="sched-filter-label">Provider</span>
+    <select class="sched-select" id="schedProvSelect" onchange="onSchedProvChange()" style="min-width:160px">
+      <option value="">Select a provider...</option>
+    </select>
   </div>
 
-  <!-- Provider header & summary (shown when a provider is selected) -->
+  <!-- Provider Header (shown when selected) -->
   <div id="schedProvHeader" style="display:none">
-    <div class="sched-provider-name" id="schedProvName"></div>
-    <div class="sched-prov-summary" id="schedProvSummary"></div>
-    <div class="prov-detail-cards" id="schedProvDetail"></div>
+    <div class="sched-prov-header" id="schedProvName"></div>
+    <div class="sched-metrics" id="schedMetrics"></div>
   </div>
 
-  <!-- Month nav -->
-  <div class="sched-header">
-    <div class="cal-nav">
-      <button class="cal-nav-btn" onclick="schedNav(-1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <span class="cal-month-label" id="schedMonthLabel"></span>
-      <button class="cal-nav-btn" onclick="schedNav(1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <button class="cal-today-btn" onclick="schedToday()">Today</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.7rem;color:var(--text-3)">
-      <span style="display:flex;align-items:center;gap:0.25rem">
-        <span style="width:8px;height:8px;border:1.5px dashed var(--border-strong);border-radius:2px;display:inline-block"></span> Projected
-      </span>
-      <span style="opacity:0.5">|</span>
-      <span>Hover any day for 12-month analytics</span>
-    </div>
-  </div>
-
-  <!-- Month summary -->
-  <div id="schedMonthSummary" class="month-summary-strip" style="display:none"></div>
-
-  <!-- Calendar grid -->
-  <div id="schedGrid" class="cal-grid"></div>
+  <!-- Base Schedule Grid -->
+  <div id="schedGrid"></div>
 
   <!-- Legend -->
-  <div class="sched-legend">
+  <div class="sched-legend" id="schedLegend" style="display:none">
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-prog)"></span> OR</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-done)"></span> Clinic</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-rev)"></span> Inpatient</span>
@@ -2129,9 +1906,12 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> MPU</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> IR</span>
     <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Other</span>
+    <span style="opacity:0.4">|</span>
+    <span style="font-style:italic;color:var(--text-3)">Hover any cell for detailed analytics</span>
   </div>
 </div>
 
+<!-- RVU Tooltip -->
 <!-- RVU Tooltip -->
 <div class="rvu-tooltip" id="rvuTooltip"></div>
 
@@ -2616,8 +2396,8 @@ function setPage(page) {
   document.getElementById('schedulesView').classList.toggle('active', page === 'schedules');
   if (page === 'calendar') renderCalendar();
   if (page === 'schedules') {
-    if (!_rvuData) loadRvuData().then(function() { renderScheduleCalendar(); });
-    else renderScheduleCalendar();
+    if (!_rvuData) loadRvuData().then(function() { renderBaseSchedule(); });
+    else renderBaseSchedule();
   }
 }
 
@@ -3051,31 +2831,10 @@ async function cycleGoalStatus(row, id, current) {
   showLoading(false);
 }
 
-// ===== PROVIDER SCHEDULES v2 =====
+// ===== BASE SCHEDULE =====
 let scheduleEntries = [];
 let _rvuData = null;
-let schedYear, schedMonth;
 let _selectedProv = '';
-
-(function() {
-  const now = new Date();
-  schedYear = now.getFullYear();
-  schedMonth = now.getMonth();
-})();
-
-function schedNav(dir) {
-  schedMonth += dir;
-  if (schedMonth > 11) { schedMonth = 0; schedYear++; }
-  if (schedMonth < 0) { schedMonth = 11; schedYear--; }
-  renderScheduleCalendar();
-}
-
-function schedToday() {
-  const now = new Date();
-  schedYear = now.getFullYear();
-  schedMonth = now.getMonth();
-  renderScheduleCalendar();
-}
 
 function getActClass(activity) {
   var a = (activity || '').toLowerCase().trim();
@@ -3099,8 +2858,6 @@ async function loadRvuData() {
     console.log('RVU data loaded: ' + (_rvuData.providers || []).length + ' providers');
     populateSchedFilters();
     checkRvuFreshness();
-    renderDeptSummary();
-    restoreCollapseStates();
   } catch(e) {
     console.warn('Could not load provider_analytics.json:', e.message);
     _rvuData = null;
@@ -3152,14 +2909,174 @@ function updateProviderDropdown() {
 
 function onSchedFilterChange() {
   updateProviderDropdown();
-  if (_selectedProv) renderScheduleCalendar();
+  if (_selectedProv) renderBaseSchedule();
 }
 
 function onSchedProvChange() {
   _selectedProv = document.getElementById('schedProvSelect').value;
-  renderScheduleCalendar();
+  renderBaseSchedule();
 }
 
+function checkRvuFreshness() {
+  var banner = document.getElementById('rvuStaleBanner');
+  var textEl = document.getElementById('rvuStaleText');
+  if (!_rvuData || !_rvuData.generated) { banner.classList.remove('visible'); return; }
+  var gen = new Date(_rvuData.generated + 'T00:00:00');
+  var now = new Date();
+  var daysSince = Math.floor((now - gen) / 86400000);
+  if (daysSince > 7) {
+    textEl.textContent = 'Analytics data was last updated ' + daysSince + ' days ago (' + _rvuData.generated + '). Some metrics may not reflect recent activity.';
+    banner.classList.add('visible');
+  } else {
+    banner.classList.remove('visible');
+  }
+}
+
+function renderBaseSchedule() {
+  var grid = document.getElementById('schedGrid');
+  var provHeader = document.getElementById('schedProvHeader');
+  var legend = document.getElementById('schedLegend');
+
+  if (!_rvuData) {
+    grid.innerHTML = '<div class="sched-empty-state">Loading provider analytics data...</div>';
+    provHeader.style.display = 'none';
+    legend.style.display = 'none';
+    return;
+  }
+
+  if (!_selectedProv) {
+    grid.innerHTML = '<div class="sched-empty-state">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' +
+      'Select a provider to view their predicted base schedule</div>';
+    provHeader.style.display = 'none';
+    legend.style.display = 'none';
+    return;
+  }
+
+  var prov = _selectedProv;
+  var meta = _rvuData.meta[prov] || {};
+  var patterns = _rvuData.patterns[prov] || {};
+  var monthly = _rvuData.monthly[prov] || {};
+  var risk = (_rvuData.risk && _rvuData.risk[prov]) || {};
+  var balance = (_rvuData.balance && _rvuData.balance[prov]) || {};
+
+  // --- Provider header ---
+  provHeader.style.display = '';
+  legend.style.display = '';
+
+  var nameHtml = '<span class="sched-prov-name">' + esc(prov) + '</span>';
+  if (meta.division) nameHtml += '<span class="sched-prov-badge">' + esc(meta.division) + '</span>';
+  if (meta.type) nameHtml += '<span class="sched-prov-badge type-badge">' + esc(meta.type) + '</span>';
+  document.getElementById('schedProvName').innerHTML = nameHtml;
+
+  // --- Metrics ---
+  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  var weeklyRvu = 0, activeDays = 0, primaryAct = {}, avgConf = 0;
+  days.forEach(function(d) {
+    var p = patterns[d];
+    if (p && p.c >= 0.3) {
+      weeklyRvu += p.avg_rvu;
+      activeDays++;
+      primaryAct[p.a] = (primaryAct[p.a] || 0) + 1;
+      avgConf += p.c;
+    }
+  });
+  avgConf = activeDays > 0 ? Math.round((avgConf / activeDays) * 100) : 0;
+  var monthlyRvu = Math.round(weeklyRvu * (20/5));
+  var topActivity = Object.entries(primaryAct).sort(function(a,b){return b[1]-a[1];})[0];
+  var topActLabel = topActivity ? topActivity[0] : '\u2014';
+  var topActPct = topActivity && activeDays > 0 ? Math.round((topActivity[1] / activeDays) * 100) : 0;
+
+  // Monthly trend from last 3 months
+  var monthKeys = Object.keys(monthly).sort();
+  var recent3 = monthKeys.slice(-3);
+  var totalRvu3 = recent3.reduce(function(s, k) { return s + (monthly[k].r || 0); }, 0);
+  var totalDays3 = recent3.reduce(function(s, k) { return s + (monthly[k].d || 0); }, 0);
+  var avgPerDay3 = totalDays3 > 0 ? (totalRvu3 / totalDays3).toFixed(1) : '0';
+
+  // Risk
+  var burnout = risk.burnout_score || 0;
+  var riskCls = burnout >= 60 ? 'bad' : burnout >= 30 ? 'warn' : 'good';
+  var riskLabel = burnout >= 60 ? 'High' : burnout >= 30 ? 'Monitor' : 'Healthy';
+  var peerPct = risk.peer_percentile !== undefined ? Math.round(risk.peer_percentile) : null;
+
+  var metricsHtml =
+    '<div class="sched-metric-card"><div class="sched-metric-label">Monthly Est.</div>' +
+    '<div class="sched-metric-value">' + monthlyRvu.toLocaleString() + '</div>' +
+    '<div class="sched-metric-sub">RVU / month</div></div>' +
+
+    '<div class="sched-metric-card"><div class="sched-metric-label">Weekly Est.</div>' +
+    '<div class="sched-metric-value">' + Math.round(weeklyRvu).toLocaleString() + '</div>' +
+    '<div class="sched-metric-sub">RVU / week</div></div>' +
+
+    '<div class="sched-metric-card"><div class="sched-metric-label">Avg / Day</div>' +
+    '<div class="sched-metric-value">' + avgPerDay3 + '</div>' +
+    '<div class="sched-metric-sub">last 3 months</div></div>' +
+
+    '<div class="sched-metric-card"><div class="sched-metric-label">Primary Activity</div>' +
+    '<div class="sched-metric-value" style="font-size:0.95rem">' + esc(topActLabel) + '</div>' +
+    '<div class="sched-metric-sub">' + topActPct + '% of days</div></div>' +
+
+    '<div class="sched-metric-card"><div class="sched-metric-label">Confidence</div>' +
+    '<div class="sched-metric-value">' + avgConf + '%</div>' +
+    '<div class="sched-metric-sub">pattern strength</div></div>' +
+
+    '<div class="sched-metric-card"><div class="sched-metric-label">Risk Score</div>' +
+    '<div class="sched-metric-value ' + riskCls + '">' + riskLabel + '</div>' +
+    '<div class="sched-metric-sub">burnout: ' + burnout + '/100</div></div>';
+
+  if (peerPct !== null) {
+    metricsHtml +=
+      '<div class="sched-metric-card"><div class="sched-metric-label">Peer Rank</div>' +
+      '<div class="sched-metric-value">' + peerPct + '<span style="font-size:0.7rem;font-weight:400">th</span></div>' +
+      '<div class="sched-metric-sub">vs. ' + esc(meta.type || 'peers') + '</div></div>';
+  }
+
+  document.getElementById('schedMetrics').innerHTML = metricsHtml;
+
+  // --- 5-week grid ---
+  var dowLabels = ['Mon','Tue','Wed','Thu','Fri'];
+  var dowFull = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+
+  var html = '<div class="base-sched-grid">';
+
+  // Header row
+  html += '<div class="base-sched-dow" style="background:transparent"></div>';
+  dowLabels.forEach(function(d) {
+    html += '<div class="base-sched-dow">' + d + '</div>';
+  });
+
+  // 5 weeks
+  for (var wk = 1; wk <= 5; wk++) {
+    html += '<div class="base-sched-wk-label">Wk ' + wk + '</div>';
+    dowFull.forEach(function(dayName, di) {
+      var pat = patterns[dayName];
+      if (pat && pat.c >= 0.3) {
+        var cls = getActClass(pat.a);
+        // Shorten activity label for display
+        var actLabel = pat.a;
+        if (actLabel.length > 12) actLabel = actLabel.replace(/\s*\(.*\)/, '').slice(0,12);
+        // Shorten location
+        var locLabel = (pat.l || '').replace(/Urology Clinic \| /, '').replace(/\s*\|.*/, '');
+        if (locLabel.length > 16) locLabel = locLabel.slice(0,16) + '\u2026';
+
+        html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
+          '<div class="base-act-chip ' + cls + '">' + esc(actLabel) + '</div>' +
+          '<div class="base-loc-label" title="' + esc(pat.l || '') + '">' + esc(locLabel) + '</div>' +
+          '<div class="base-rvu-label">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
+          '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
+        '</div>';
+      } else {
+        html += '<div class="base-sched-cell" style="opacity:0.4">' +
+          '<div style="font-size:0.64rem;color:var(--text-3);padding-top:0.5rem">\u2014</div>' +
+        '</div>';
+      }
+    });
+  }
+
+  html += '</div>';
+  grid.innerHTML = html;
+}
 
 // ===== CHAIR ACTION ITEMS (Blocked + Stale projects) =====
 function renderActionItems() {
@@ -3306,268 +3223,6 @@ function renderComplianceScorecard() {
   container.insertAdjacentHTML('beforebegin', scorecardHtml);
 }
 
-// ===== PROVIDER CONSISTENCY SCORE =====
-function getProviderConsistency(prov) {
-  if (!_rvuData || !_rvuData.actuals || !_rvuData.actuals[prov]) return null;
-  var actuals = _rvuData.actuals[prov];
-  var rvus = Object.values(actuals).map(function(d) { return d.r || 0; });
-  if (rvus.length < 5) return null;
-  var mean = rvus.reduce(function(a,b){return a+b;},0) / rvus.length;
-  if (mean === 0) return null;
-  var variance = rvus.reduce(function(a,b){return a + Math.pow(b - mean, 2);},0) / rvus.length;
-  var cv = (Math.sqrt(variance) / mean) * 100;
-  return { cv: Math.round(cv), label: cv < 25 ? 'Consistent' : cv < 40 ? 'Moderate' : 'Variable', cls: cv < 25 ? 'consistent' : cv < 40 ? 'moderate' : 'variable' };
-}
-
-// ===== DATA FRESHNESS CHECK =====
-function checkRvuFreshness() {
-  var banner = document.getElementById('rvuStaleBanner');
-  var textEl = document.getElementById('rvuStaleText');
-  if (!_rvuData || !_rvuData.generated) { banner.classList.remove('visible'); return; }
-  var gen = new Date(_rvuData.generated + 'T00:00:00');
-  var now = new Date();
-  var daysSince = Math.floor((now - gen) / 86400000);
-  if (daysSince > 7) {
-    textEl.textContent = 'Analytics data was last updated ' + daysSince + ' days ago (' + _rvuData.generated + '). Some metrics may not reflect recent activity.';
-    banner.classList.add('visible');
-  } else {
-    banner.classList.remove('visible');
-  }
-}
-
-
-// ===== DEPARTMENT SUMMARY BAR =====
-function renderDeptSummary() {
-  var bar = document.getElementById('deptSummaryBar');
-  if (!_rvuData || !_rvuData.department) { bar.style.display = 'none'; return; }
-  var dept = _rvuData.department;
-  bar.style.display = '';
-  var flagCount = (dept.concern_list && dept.concern_list.length) || 0;
-  bar.innerHTML =
-    '<div class="dept-stat-card"><div class="dept-stat-label">3-Month RVUs</div>' +
-    '<div class="dept-stat-value">' + (dept.total_rvu_3mo || 0).toLocaleString() + '</div></div>' +
-    '<div class="dept-stat-card"><div class="dept-stat-label">12-Month RVUs</div>' +
-    '<div class="dept-stat-value">' + (dept.total_rvu_12mo || 0).toLocaleString() + '</div></div>' +
-    '<div class="dept-stat-card"><div class="dept-stat-label">Avg RVU / Provider-Day</div>' +
-    '<div class="dept-stat-value">' + (dept.avg_rvu_per_provider_day || 0).toFixed(1) + '</div></div>' +
-    '<div class="dept-stat-card"><div class="dept-stat-label">Active Providers</div>' +
-    '<div class="dept-stat-value">' + (_rvuData.providers || []).length + '</div></div>' +
-    (flagCount > 0 ?
-      '<div class="dept-stat-card"><div class="dept-stat-label">Flagged Providers</div>' +
-      '<div class="dept-stat-value flagged">' + flagCount + '</div>' +
-      '<div class="dept-stat-sub">Need attention</div></div>' : '');
-}
-
-// ===== RISK BADGE for provider dropdown/header =====
-function getProvRiskBadge(prov) {
-  if (!_rvuData || !_rvuData.risk || !_rvuData.risk[prov]) return '';
-  var risk = _rvuData.risk[prov];
-  var score = risk.burnout_score || 0;
-  var cls = score >= 60 ? 'risk-high' : score >= 30 ? 'risk-med' : 'risk-low';
-  var label = score >= 60 ? 'High Risk' : score >= 30 ? 'Monitor' : 'Healthy';
-  return '<span class="risk-badge ' + cls + '"><span class="risk-badge-dot"></span>' + label + ' (' + score + ')</span>';
-}
-
-// ===== BALANCE RECOMMENDATION =====
-function getBalanceRec(prov) {
-  if (!_rvuData || !_rvuData.balance || !_rvuData.balance[prov]) return '';
-  var bal = _rvuData.balance[prov];
-  if (!bal.balance_recommendation) return '';
-  return '<div class="balance-rec">' + esc(bal.balance_recommendation) + '</div>';
-}
-
-function renderScheduleCalendar() {
-  var grid = document.getElementById('schedGrid');
-  var label = document.getElementById('schedMonthLabel');
-  var provHeader = document.getElementById('schedProvHeader');
-  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  label.textContent = monthNames[schedMonth] + ' ' + schedYear;
-
-  if (!_rvuData) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--text-3);font-size:0.88rem">Loading provider analytics data...</div>';
-    provHeader.style.display = 'none';
-    document.getElementById('schedMonthSummary').style.display = 'none';
-    return;
-  }
-
-  if (!_selectedProv) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--text-3);font-size:0.88rem">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-4px;margin-right:0.4rem;color:var(--gold)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' +
-      'Select a provider above to view their schedule and RVU analytics</div>';
-    document.getElementById('schedMonthSummary').style.display = 'none';
-    provHeader.style.display = 'none';
-    return;
-  }
-
-  // Show provider header
-  var meta = _rvuData.meta[_selectedProv] || {};
-  provHeader.style.display = '';
-  document.getElementById('schedProvName').innerHTML = esc(_selectedProv) +
-    '<div class="sched-provider-badges">' +
-      (meta.division ? '<span class="sched-prov-badge">' + esc(meta.division) + '</span>' : '') +
-      (meta.type ? '<span class="sched-prov-badge type-badge">' + esc(meta.type) + '</span>' : '') +
-    '</div>';
-
-  // Summary stats
-  var monthly = _rvuData.monthly[_selectedProv] || {};
-  var monthKeys = Object.keys(monthly).sort();
-  var recent3 = monthKeys.slice(-3);
-  var totalRvu3 = recent3.reduce(function(s, k) { return s + (monthly[k].r || 0); }, 0);
-  var totalDays3 = recent3.reduce(function(s, k) { return s + (monthly[k].d || 0); }, 0);
-  var avgPerDay = totalDays3 > 0 ? (totalRvu3 / totalDays3).toFixed(1) : '0';
-
-  var patterns = _rvuData.patterns[_selectedProv] || {};
-  var typicalDays = Object.keys(patterns).map(function(d) {
-    return '<strong>' + d.slice(0,3) + '</strong>: ' + (patterns[d].a || '\u2014');
-  }).join(' &nbsp;\u00B7&nbsp; ');
-
-  document.getElementById('schedProvSummary').innerHTML =
-    '<span>3-Month RVUs: <strong>' + totalRvu3.toFixed(0) + '</strong></span>' +
-    '<span>Avg/Day: <strong>' + avgPerDay + '</strong></span>' +
-    '<span>Active Days (3mo): <strong>' + totalDays3 + '</strong></span>' +
-    (typicalDays ? '<span style="font-size:0.7rem">Typical: ' + typicalDays + '</span>' : '');
-
-  // Render provider detail chips (risk, consistency, balance)
-  var detailEl = document.getElementById('schedProvDetail');
-  var detailHtml = '';
-  var provRisk = _rvuData.risk && _rvuData.risk[_selectedProv];
-  if (provRisk) {
-    var score = provRisk.burnout_score || 0;
-    var rCls = score >= 60 ? 'chip-risk-high' : score >= 30 ? 'chip-risk-med' : 'chip-risk-low';
-    var rLabel = score >= 60 ? 'High Risk' : score >= 30 ? 'Monitor' : 'Healthy';
-    detailHtml += '<div class="prov-detail-chip ' + rCls + '">' +
-      '<span class="chip-label">Risk</span>' +
-      '<span class="chip-value">' + rLabel + ' (' + score + ')</span></div>';
-    if (provRisk.peer_percentile !== undefined) {
-      detailHtml += '<div class="prov-detail-chip">' +
-        '<span class="chip-label">Peer Rank</span>' +
-        '<span class="chip-value">' + Math.round(provRisk.peer_percentile) + 'th percentile</span></div>';
-    }
-  }
-  var cons = getProviderConsistency(_selectedProv);
-  if (cons) {
-    detailHtml += '<div class="prov-detail-chip chip-consistency">' +
-      '<span class="chip-label">Consistency</span>' +
-      '<span class="chip-value">' + cons.label + ' (CV: ' + cons.cv + '%)</span></div>';
-  }
-  var bal = _rvuData.balance && _rvuData.balance[_selectedProv];
-  if (bal && bal.balance_recommendation) {
-    detailHtml += '<div class="prov-detail-chip chip-balance">' +
-      '<span class="chip-label">Balance</span>' +
-      '<span class="chip-value">' + esc(bal.balance_recommendation) + '</span></div>';
-  }
-  detailEl.innerHTML = detailHtml;
-
-  // Build calendar
-  var firstDay = new Date(schedYear, schedMonth, 1);
-  var lastDay = new Date(schedYear, schedMonth + 1, 0);
-  var startDow = firstDay.getDay();
-  var daysInMonth = lastDay.getDate();
-  var today = new Date(); today.setHours(0,0,0,0);
-  var todayStr = today.toISOString().slice(0,10);
-  var dowNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-  var html = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(d) { return '<div class="cal-dow">' + d + '</div>'; }).join('');
-
-  // Leading
-  var prevMonth = new Date(schedYear, schedMonth, 0);
-  for (var i = startDow - 1; i >= 0; i--) {
-    html += '<div class="cal-day outside"><div class="cal-day-num">' + (prevMonth.getDate() - i) + '</div></div>';
-  }
-
-  var prov = _selectedProv;
-  for (var d = 1; d <= daysInMonth; d++) {
-    var dateStr = schedYear + '-' + String(schedMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-    var isToday = todayStr === dateStr;
-    var isFuture = dateStr > todayStr;
-    var dow = new Date(schedYear, schedMonth, d).getDay();
-    var dowName = dowNames[dow];
-
-    if (dow === 0 || dow === 6) {
-      html += '<div class="cal-day' + (isToday ? ' today' : '') + ' outside"><div class="cal-day-num">' + d + '</div></div>';
-      continue;
-    }
-
-    var actual = _rvuData.actuals[prov] && _rvuData.actuals[prov][dateStr];
-    var pat = _rvuData.patterns[prov] && _rvuData.patterns[prov][dowName];
-    var cellHtml = '';
-
-    if (actual) {
-      var cls = getActClass(actual.a);
-      var isAnomaly = _rvuData.anomalies && _rvuData.anomalies[prov] && _rvuData.anomalies[prov].some(function(a){ return a.date === dateStr; });
-      var anomalyCls = isAnomaly ? ' has-anomaly' : '';
-      cellHtml = '<div class="sched-day-cell">' +
-        '<div class="sched-activity-chip ' + cls + anomalyCls + '" data-prov="' + esc(prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
-          esc(actual.a) +
-        '</div>' +
-        '<div class="sched-loc-label" title="' + esc(actual.l) + '">' + esc(actual.l) + '</div>' +
-        '<div class="sched-rvu-label">' + actual.r.toFixed(1) + ' RVU</div>' +
-      '</div>';
-    } else if (isFuture && pat && pat.c >= 0.3) {
-      cellHtml = '<div class="sched-day-cell">' +
-        '<div class="sched-activity-chip act-projected" data-prov="' + esc(prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
-          esc(pat.a) +
-        '</div>' +
-        '<div class="sched-loc-label" title="' + esc(pat.l) + '" style="font-style:italic">' + esc(pat.l) + '</div>' +
-        '<div class="sched-rvu-label" style="opacity:0.5">~' + pat.avg_rvu.toFixed(0) + ' RVU</div>' +
-      '</div>';
-    } else if (pat) {
-      cellHtml = '<div class="sched-day-cell" style="opacity:0.35">' +
-        '<div class="sched-activity-chip ' + getActClass(pat.a) + '" data-prov="' + esc(prov) + '" data-date="' + dateStr + '" data-dow="' + dowName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()" style="opacity:0.5">' +
-          esc(pat.a) + '?' +
-        '</div>' +
-      '</div>';
-    }
-
-    html += '<div class="cal-day' + (isToday ? ' today' : '') + '">' +
-      '<div class="cal-day-num">' + d + '</div>' +
-      cellHtml +
-    '</div>';
-  }
-
-  var endDow = lastDay.getDay();
-  for (var j = 1; j <= 6 - endDow; j++) {
-    html += '<div class="cal-day outside"><div class="cal-day-num">' + j + '</div></div>';
-  }
-
-
-  // Month summary strip
-  var msSummary = document.getElementById('schedMonthSummary');
-  if (actual) {
-    // We've been counting — tally up this month's actuals
-    // (computed below after the loop)
-  }
-  var _monthTotalRvu = 0, _monthTotalDays = 0, _monthActivities = {};
-  var _monthActuals = _rvuData.actuals[prov] || {};
-  for (var _mKey in _monthActuals) {
-    if (_mKey.startsWith(schedYear + '-' + String(schedMonth+1).padStart(2,'0'))) {
-      _monthTotalRvu += _monthActuals[_mKey].r || 0;
-      _monthTotalDays++;
-      var _act = _monthActuals[_mKey].a || 'Other';
-      _monthActivities[_act] = (_monthActivities[_act] || 0) + 1;
-    }
-  }
-  var _avgRvuDay = _monthTotalDays > 0 ? (_monthTotalRvu / _monthTotalDays).toFixed(1) : '0';
-  var _actBreakdown = Object.entries(_monthActivities).sort(function(a,b){ return b[1]-a[1]; })
-    .map(function(e){ return '<strong>' + e[1] + '</strong> ' + e[0]; }).join('<span class="mss-sep"></span>');
-
-  if (_monthTotalDays > 0) {
-    msSummary.style.display = '';
-    msSummary.innerHTML =
-      '<span>This Month: <strong>' + _monthTotalRvu.toFixed(0) + ' RVU</strong></span>' +
-      '<span class="mss-sep"></span>' +
-      '<span><strong>' + _monthTotalDays + '</strong> active days</span>' +
-      '<span class="mss-sep"></span>' +
-      '<span>Avg: <strong>' + _avgRvuDay + '</strong> RVU/day</span>' +
-      '<span class="mss-sep"></span>' +
-      _actBreakdown;
-  } else {
-    msSummary.style.display = 'none';
-  }
-
-  grid.innerHTML = html;
-}
-
 // ===== RVU TOOLTIP with 12-month trend + AI insight =====
 var _tooltipTimer = null;
 
@@ -3576,7 +3231,7 @@ function showRvuTooltip(evt, el) {
   clearTimeout(_tooltipTimer);
 
   var prov = el.getAttribute('data-prov');
-  var dateStr = el.getAttribute('data-date');
+  var dateStr = el.getAttribute('data-date') || '';
   var dowName = el.getAttribute('data-dow');
   var tooltip = document.getElementById('rvuTooltip');
 
@@ -4035,6 +3690,11 @@ function renderPredictiveAlerts() {
     var grid = document.getElementById('actionItemsGrid');
     var countEl = document.getElementById('actionItemsCount');
     var current = parseInt(countEl.textContent) || 0;
+
+    // Clear the "All clear" empty state if it's present
+    var emptyState = grid.querySelector('.action-items-empty');
+    if (emptyState) emptyState.remove();
+
     countEl.textContent = current + alerts.length;
 
     var alertHtml = alerts.map(function(a) {
@@ -4054,7 +3714,7 @@ function renderPredictiveAlerts() {
   }
 }
 
-(function(){ loadProjects(); loadRvuData().then(function() { if (activePage === 'schedules') renderScheduleCalendar(); }); })();
+(function(){ loadProjects(); loadRvuData().then(function() { if (activePage === 'schedules') renderBaseSchedule(); }); })();
 
 async function loadProjects() {
   showLoading(true);
@@ -4082,7 +3742,7 @@ async function loadProjects() {
     renderPredictiveAlerts();
     renderDeliveryMetrics();
     if (activePage === 'calendar') renderCalendar();
-    if (activePage === 'schedules') renderScheduleCalendar();
+    if (activePage === 'schedules') renderBaseSchedule();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
   showLoading(false);
