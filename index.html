@@ -1169,248 +1169,32 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .cal-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
 /* ===== BASE SCHEDULE ===== */
-.schedules-view { display: none; }
-.schedules-view.active { display: block; }
 
 /* Section header */
-.sched-section-header {
-  margin-top: 1.25rem; margin-bottom: 0.6rem;
-}
-.sched-section-title {
-  font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 400;
-  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
-}
-.sched-section-sub {
-  font-size: 0.72rem; color: var(--text-3); margin-top: 0.15rem;
-}
 
 /* Filters */
-.sched-filters {
-  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-  margin-bottom: 0.75rem;
-}
-.sched-filter-label {
-  font-size: 0.62rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.sched-select {
-  padding: 0.3rem 0.55rem; font-size: 0.78rem; font-weight: 500;
-  border: 1px solid var(--border); border-radius: var(--r-xs);
-  background: var(--bg-card); color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
-  transition: border-color var(--t) var(--ease);
-}
-.sched-select:focus { border-color: var(--gold); outline: none; }
-.sched-select:hover { border-color: var(--border-warm); }
 
 /* Provider header */
-.sched-prov-header {
-  display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
-  margin-bottom: 0.15rem;
-}
-.sched-prov-name {
-  font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 400; color: var(--text);
-}
-.sched-prov-badge {
-  font-size: 0.6rem; font-weight: 600; padding: 0.12rem 0.45rem;
-  border-radius: var(--r-full); background: rgba(0,39,76,0.08); color: var(--navy);
-}
-.sched-prov-badge.type-badge { background: var(--gold-badge); color: var(--gold); }
 
 /* Metrics strip */
-.sched-metrics {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
-  gap: 0.45rem; margin-bottom: 0.75rem;
-}
-.sched-metric-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 0.5rem 0.7rem; box-shadow: var(--sh-sm); text-align: center;
-}
-.sched-metric-label {
-  font-size: 0.56rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.05rem;
-}
-.sched-metric-value {
-  font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600;
-  color: var(--text); line-height: 1.1;
-}
-.sched-metric-sub {
-  font-size: 0.6rem; color: var(--text-3); margin-top: 0.05rem; font-weight: 500;
-}
-.sched-metric-value.good { color: var(--s-done); }
-.sched-metric-value.warn { color: var(--p-high); }
-.sched-metric-value.bad { color: var(--p-crit); }
 
 /* 5-week base schedule grid */
-.base-sched-grid {
-  display: grid; grid-template-columns: 52px repeat(5, 1fr);
-  border: 1px solid var(--border); border-radius: var(--r);
-  overflow: hidden; background: var(--bg-card); box-shadow: var(--sh-sm);
-  margin-bottom: 0.6rem;
-}
-.base-sched-dow {
-  font-size: 0.64rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  padding: 0.55rem 0.4rem; text-align: center;
-  background: var(--bg-warm); border-bottom: 1px solid var(--border);
-}
-.base-sched-wk-label {
-  font-size: 0.58rem; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  padding: 0.6rem 0.3rem; text-align: center;
-  background: var(--bg-warm); border-right: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-}
-.base-sched-cell {
-  padding: 0.4rem 0.35rem; border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
-  min-height: 68px; transition: background var(--t) var(--ease);
-  cursor: default;
-}
-.base-sched-cell:hover { background: var(--bg-warm); }
-.base-sched-cell:nth-child(6n+1) { border-right: 1px solid var(--border); }
-.base-sched-row:last-child .base-sched-cell,
-.base-sched-row:last-child .base-sched-wk-label { border-bottom: none; }
 
 /* Activity chip in schedule */
-.base-act-chip {
-  font-size: 0.68rem; font-weight: 600; padding: 0.18rem 0.45rem;
-  border-radius: 4px; white-space: nowrap; text-align: center;
-  width: 92%; line-height: 1.3; position: relative;
-  transition: all var(--t) var(--ease);
-}
-.base-act-chip:hover { transform: scale(1.03); box-shadow: var(--sh-sm); }
-.base-act-chip.act-or { background: var(--s-prog-bg); color: var(--s-prog); }
-.base-act-chip.act-clinic { background: var(--s-done-bg); color: var(--s-done); }
-.base-act-chip.act-inpatient { background: var(--s-rev-bg); color: var(--s-rev); }
-.base-act-chip.act-ed { background: var(--p-crit-bg); color: var(--p-crit); }
-.base-act-chip.act-mpu { background: var(--gold-badge); color: var(--gold); }
-.base-act-chip.act-ir { background: var(--s-plan-bg); color: var(--s-plan); }
-.base-act-chip.act-other { background: var(--bg-warm); color: var(--text-2); }
 
 /* Accessibility icons */
-.base-act-chip.act-or::before { content: '\2694 '; font-size: 0.58rem; }
-.base-act-chip.act-clinic::before { content: '\2695 '; font-size: 0.58rem; }
-.base-act-chip.act-inpatient::before { content: '\2302 '; font-size: 0.58rem; }
-.base-act-chip.act-ed::before { content: '\26A1 '; font-size: 0.58rem; }
-.base-act-chip.act-mpu::before { content: '\2605 '; font-size: 0.58rem; }
-.base-act-chip.act-ir::before { content: '\2316 '; font-size: 0.58rem; }
 
 /* Admin day styling */
-.base-act-chip.act-admin {
-  background: var(--bg-warm); color: var(--text-3);
-  border: 1.5px dashed var(--border-strong);
-  font-style: italic;
-}
-.base-act-chip.act-admin::before { content: '\1F4CB '; font-size: 0.58rem; font-style: normal; }
-.base-act-chip.act-other::before { content: '\2022 '; font-size: 0.58rem; }
 
-.base-loc-label {
-  font-size: 0.52rem; color: var(--text-3); text-align: center;
-  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  line-height: 1.2;
-}
-.base-rvu-label {
-  font-size: 0.54rem; font-weight: 700; color: var(--gold);
-}
-.base-conf-label {
-  font-size: 0.48rem; color: var(--text-3); font-weight: 500;
-}
 
 /* Legend */
-.sched-legend {
-  display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
-  margin-top: 0.5rem; font-size: 0.62rem; color: var(--text-3); font-weight: 500;
-}
-.sched-legend-item { display: flex; align-items: center; gap: 0.2rem; }
-.sched-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
 /* Empty / no-provider state */
-.sched-empty-state {
-  text-align: center; padding: 3rem 1rem; color: var(--text-3);
-  font-size: 0.88rem;
-}
-.sched-empty-state svg { vertical-align: -4px; margin-right: 0.4rem; color: var(--gold); }
 
 /* Stale data banner */
-.data-stale-banner {
-  display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.5rem 0.8rem; background: var(--p-high-bg);
-  border: 1px solid rgba(203,139,58,0.2); border-radius: var(--r);
-  font-size: 0.72rem; font-weight: 500; color: var(--p-high);
-  margin-bottom: 0.65rem; display: none;
-}
-.data-stale-banner.visible { display: flex; }
 
 
 /* ===== RVU TOOLTIP ===== */
-.rvu-tooltip {
-  position: fixed; z-index: 200; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 0.9rem 1.1rem; box-shadow: var(--sh-lg);
-  max-width: 400px; min-width: 300px; pointer-events: none;
-  font-size: 0.74rem; line-height: 1.45;
-  opacity: 0; transition: opacity 0.15s ease;
-}
-.rvu-tooltip.visible { opacity: 1; }
-.rvu-tooltip-header {
-  font-weight: 700; font-size: 0.85rem; color: var(--text);
-  border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.5rem;
-}
-.rvu-tooltip-insight {
-  font-size: 0.72rem; color: var(--text-2); font-style: normal;
-  background: var(--bg-warm); border-left: 3px solid var(--gold);
-  padding: 0.5rem 0.7rem; border-radius: 0 var(--r-xs) var(--r-xs) 0;
-  margin-bottom: 0.6rem; line-height: 1.5;
-}
-.rvu-tooltip-stats {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0.15rem 0.8rem;
-  margin-bottom: 0.5rem;
-}
-.rvu-tooltip-stat {
-  display: flex; justify-content: space-between; padding: 0.06rem 0;
-}
-.rvu-tooltip-stat-label { color: var(--text-3); font-size: 0.7rem; }
-.rvu-tooltip-stat-value { font-weight: 600; color: var(--text); font-size: 0.7rem; }
-.rvu-tooltip-trend {
-  display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 0.35rem;
-  padding: 0 2px;
-}
-.rvu-tooltip-bar {
-  flex: 1; border-radius: 2px 2px 0 0; min-width: 6px; position: relative;
-}
-.rvu-tooltip-bar-inner {
-  width: 100%; border-radius: 2px 2px 0 0;
-  position: absolute; bottom: 0;
-  background: var(--gold); opacity: 0.7;
-}
-.rvu-tooltip-trend-labels {
-  display: flex; justify-content: space-between;
-  font-size: 0.52rem; color: var(--text-3); margin-top: 0.15rem;
-}
-.rvu-tooltip-section-label {
-  font-weight: 700; font-size: 0.64rem; color: var(--navy);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  margin-top: 0.4rem; margin-bottom: 0.15rem;
-}
-.rvu-tooltip-loc-list {
-  font-size: 0.66rem; color: var(--text-3);
-}
-.rvu-tooltip-loc-list span { color: var(--text-2); font-weight: 500; }
-.rvu-tooltip-risk-flags {
-  display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem;
-}
-.rvu-tooltip-risk-flag {
-  font-size: 0.58rem; font-weight: 600; padding: 0.1rem 0.35rem;
-  border-radius: var(--r-full); background: var(--p-high-bg); color: var(--p-high);
-}
-.rvu-tooltip-risk-flag.critical { background: var(--p-crit-bg); color: var(--p-crit); }
-.rvu-tooltip-anomaly {
-  font-size: 0.68rem; color: var(--p-crit); font-weight: 600;
-  background: var(--p-crit-bg); padding: 0.3rem 0.5rem;
-  border-radius: var(--r-xs); margin-bottom: 0.4rem;
-  display: flex; align-items: center; gap: 0.3rem;
-}
 
 /* ===== ACTION ITEMS ===== */
 .action-items-section { margin-bottom: 1rem; }
@@ -1542,14 +1326,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .stat-spark-bar:last-child { opacity: 1; }
 
 /* ===== PROVIDER CONSISTENCY BADGE ===== */
-.consistency-badge {
-  display: inline-flex; align-items: center; gap: 0.25rem;
-  font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.5rem;
-  border-radius: var(--r-full);
-}
-.consistency-badge.consistent { background: var(--s-done-bg); color: var(--s-done); }
-.consistency-badge.moderate { background: var(--s-rev-bg); color: var(--s-rev); }
-.consistency-badge.variable { background: var(--p-crit-bg); color: var(--p-crit); }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:960px){
@@ -1602,10 +1378,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <button class="page-tab" onclick="setPage('calendar')" data-page="calendar">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Calendar
-    </button>
-    <button class="page-tab" onclick="setPage('schedules')" data-page="schedules">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Schedules
     </button>
   </div>
 </div>
@@ -2006,62 +1778,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 </div>
 
 <!-- ===== BASE SCHEDULE VIEW ===== -->
-<div class="app schedules-view" id="schedulesView">
-
-  <!-- Section Header -->
-  <div class="sched-section-header">
-    <div class="sched-section-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Base Schedule
-    </div>
-    <div class="sched-section-sub">Predicted monthly schedule based on historical RVU and activity data</div>
-  </div>
-
-  <!-- Data Freshness Banner -->
-  <div class="data-stale-banner" id="rvuStaleBanner">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-    <span id="rvuStaleText">Analytics data may not reflect recent activity</span>
-  </div>
-
-  <!-- Filters -->
-  <div class="sched-filters">
-    <span class="sched-filter-label">Division</span>
-    <select class="sched-select" id="schedDivFilter" onchange="onSchedFilterChange()">
-      <option value="">All Divisions</option>
-    </select>
-    <span class="sched-filter-label">Type</span>
-    <select class="sched-select" id="schedTypeFilter" onchange="onSchedFilterChange()">
-      <option value="">All Types</option>
-    </select>
-    <span class="sched-filter-label">Provider</span>
-    <select class="sched-select" id="schedProvSelect" onchange="onSchedProvChange()" style="min-width:160px">
-      <option value="">Select a provider...</option>
-    </select>
-  </div>
-
-  <!-- Provider Header (shown when selected) -->
-  <div id="schedProvHeader" style="display:none">
-    <div class="sched-prov-header" id="schedProvName"></div>
-    <div class="sched-metrics" id="schedMetrics"></div>
-  </div>
-
-  <!-- Base Schedule Grid -->
-  <div id="schedGrid"></div>
-
-  <!-- Legend -->
-  <div class="sched-legend" id="schedLegend" style="display:none">
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-prog)"></span> OR</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-done)"></span> Clinic</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-rev)"></span> Inpatient</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--p-crit)"></span> ED</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--gold)"></span> MPU</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--s-plan)"></span> IR</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></span> Other</span>
-    <span class="sched-legend-item"><span class="sched-legend-dot" style="background:var(--bg-warm);border:1.5px dashed var(--border-strong)"></span> Admin</span>
-    <span style="opacity:0.4">|</span>
-    <span style="font-style:italic;color:var(--text-3)">Hover any cell for detailed analytics</span>
-  </div>
-</div>
 
 <!-- RVU Tooltip -->
 <!-- RVU Tooltip -->
@@ -2545,12 +2261,7 @@ function setPage(page) {
   document.querySelectorAll('.page-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-page') === page));
   document.getElementById('dashboardView').style.display = page === 'dashboard' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
-  document.getElementById('schedulesView').classList.toggle('active', page === 'schedules');
   if (page === 'calendar') renderCalendar();
-  if (page === 'schedules') {
-    if (!_rvuData) loadRvuData().then(function() { renderBaseSchedule(); });
-    else renderBaseSchedule();
-  }
 }
 
 // ===== CALENDAR =====
@@ -2984,293 +2695,15 @@ async function cycleGoalStatus(row, id, current) {
 }
 
 // ===== BASE SCHEDULE =====
-let scheduleEntries = [];
-let _rvuData = null;
-let _selectedProv = '';
 
-function getActClass(activity) {
-  var a = (activity || '').toLowerCase().trim();
-  if (a === 'or' || a.startsWith('or/')) return 'act-or';
-  if (a === 'clinic') return 'act-clinic';
-  if (a === 'inpatient') return 'act-inpatient';
-  if (a === 'ed') return 'act-ed';
-  if (a === 'mpu') return 'act-mpu';
-  if (a === 'ir') return 'act-ir';
-  return 'act-other';
-}
 
-async function loadRvuData() {
-  try {
-    var base = window.location.href.includes('github.io')
-      ? window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1)
-      : './';
-    var res = await fetch(base + 'provider_analytics.json?v=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    _rvuData = await res.json();
-    console.log('RVU data loaded: ' + (_rvuData.providers || []).length + ' providers');
-    populateSchedFilters();
-    checkRvuFreshness();
-  } catch(e) {
-    console.warn('Could not load provider_analytics.json:', e.message);
-    _rvuData = null;
-  }
-}
 
-function populateSchedFilters() {
-  if (!_rvuData) return;
-  var divSel = document.getElementById('schedDivFilter');
-  var typeSel = document.getElementById('schedTypeFilter');
 
-  divSel.innerHTML = '<option value="">All Divisions</option>' +
-    (_rvuData.divisions || []).map(function(d) { return '<option value="' + d + '">' + d + '</option>'; }).join('');
 
-  typeSel.innerHTML = '<option value="">All Types</option>' +
-    (_rvuData.provTypes || []).map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join('');
 
-  updateProviderDropdown();
-}
 
-function updateProviderDropdown() {
-  if (!_rvuData) return;
-  var divFilter = document.getElementById('schedDivFilter').value;
-  var typeFilter = document.getElementById('schedTypeFilter').value;
-  var provSel = document.getElementById('schedProvSelect');
-  var currentProv = provSel.value;
 
-  var filtered = _rvuData.providers.filter(function(p) {
-    var m = _rvuData.meta[p];
-    if (!m) return false;
-    if (divFilter && m.division !== divFilter) return false;
-    if (typeFilter && m.type !== typeFilter) return false;
-    return true;
-  });
 
-  provSel.innerHTML = '<option value="">Select a provider (' + filtered.length + ')...</option>' +
-    filtered.map(function(p) {
-      var m = _rvuData.meta[p] || {};
-      var label = p + (m.division ? ' \u00B7 ' + m.division : '') + (m.type ? ' \u00B7 ' + m.type : '');
-      return '<option value="' + esc(p) + '"' + (p === currentProv ? ' selected' : '') + '>' + esc(label) + '</option>';
-    }).join('');
-
-  if (currentProv && !filtered.includes(currentProv)) {
-    provSel.value = '';
-    _selectedProv = '';
-    document.getElementById('schedProvHeader').style.display = 'none';
-  }
-}
-
-function onSchedFilterChange() {
-  updateProviderDropdown();
-  if (_selectedProv) renderBaseSchedule();
-}
-
-function onSchedProvChange() {
-  _selectedProv = document.getElementById('schedProvSelect').value;
-  renderBaseSchedule();
-}
-
-function checkRvuFreshness() {
-  var banner = document.getElementById('rvuStaleBanner');
-  var textEl = document.getElementById('rvuStaleText');
-  if (!_rvuData || !_rvuData.generated) { banner.classList.remove('visible'); return; }
-  var gen = new Date(_rvuData.generated + 'T00:00:00');
-  var now = new Date();
-  var daysSince = Math.floor((now - gen) / 86400000);
-  if (daysSince > 7) {
-    textEl.textContent = 'Analytics data was last updated ' + daysSince + ' days ago (' + _rvuData.generated + '). Some metrics may not reflect recent activity.';
-    banner.classList.add('visible');
-  } else {
-    banner.classList.remove('visible');
-  }
-}
-
-function isAdminDay(pat) {
-  // Detect admin/non-clinical days:
-  // - Low RVU relative to clinical work (< 12 RVU avg)
-  // - High confidence but low revenue = consistently non-clinical
-  // - Ignore call/inpatient as those are sporadic
-  if (!pat) return false;
-  var a = (pat.a || '').toLowerCase();
-  // If it's clearly OR or Clinic with decent RVU, it's clinical
-  if ((a === 'or' || a.startsWith('or/')) && pat.avg_rvu >= 12) return false;
-  if (a === 'clinic' && pat.avg_rvu >= 12) return false;
-  if (a === 'ir' && pat.avg_rvu >= 12) return false;
-  if (a === 'mpu' && pat.avg_rvu >= 12) return false;
-  // ED is sporadic but clinical — keep if decent RVU
-  if (a === 'ed' && pat.avg_rvu >= 12) return false;
-  // Low RVU with any activity type = likely admin
-  if (pat.avg_rvu < 12) return true;
-  // 'nan' or 'other' activity = admin
-  if (a === 'nan' || a === 'other' || a === '') return true;
-  return false;
-}
-
-function renderBaseSchedule() {
-  var grid = document.getElementById('schedGrid');
-  var provHeader = document.getElementById('schedProvHeader');
-  var legend = document.getElementById('schedLegend');
-
-  if (!_rvuData) {
-    grid.innerHTML = '<div class="sched-empty-state">Loading provider analytics data...</div>';
-    provHeader.style.display = 'none';
-    legend.style.display = 'none';
-    return;
-  }
-
-  if (!_selectedProv) {
-    grid.innerHTML = '<div class="sched-empty-state">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' +
-      'Select a provider to view their predicted base schedule</div>';
-    provHeader.style.display = 'none';
-    legend.style.display = 'none';
-    return;
-  }
-
-  var prov = _selectedProv;
-  var meta = _rvuData.meta[prov] || {};
-  var patterns = _rvuData.patterns[prov] || {};
-  var monthly = _rvuData.monthly[prov] || {};
-  var risk = (_rvuData.risk && _rvuData.risk[prov]) || {};
-
-  // --- Provider header ---
-  provHeader.style.display = '';
-  legend.style.display = '';
-
-  var nameHtml = '<span class="sched-prov-name">' + esc(prov) + '</span>';
-  if (meta.division) nameHtml += '<span class="sched-prov-badge">' + esc(meta.division) + '</span>';
-  if (meta.type) nameHtml += '<span class="sched-prov-badge type-badge">' + esc(meta.type) + '</span>';
-  document.getElementById('schedProvName').innerHTML = nameHtml;
-
-  // --- Compute metrics ---
-  var dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-  var clinicalRvu = 0, clinicalDays = 0, adminDays = 0;
-  var primaryAct = {}, avgConf = 0, confCount = 0;
-
-  dayNames.forEach(function(d) {
-    var p = patterns[d];
-    if (!p || p.c < 0.3) return;
-    confCount++;
-    avgConf += p.c;
-    if (isAdminDay(p)) {
-      adminDays++;
-    } else {
-      clinicalRvu += p.avg_rvu;
-      clinicalDays++;
-      primaryAct[p.a] = (primaryAct[p.a] || 0) + 1;
-    }
-  });
-
-  avgConf = confCount > 0 ? Math.round((avgConf / confCount) * 100) : 0;
-  var weeklyRvu = Math.round(clinicalRvu);
-  var monthlyRvu = Math.round(clinicalRvu * 4);
-
-  var topActivity = Object.entries(primaryAct).sort(function(a,b){return b[1]-a[1];})[0];
-  var topActLabel = topActivity ? topActivity[0] : '\u2014';
-  var topActPct = topActivity && clinicalDays > 0 ? Math.round((topActivity[1] / clinicalDays) * 100) : 0;
-
-  // 3-month actual average
-  var monthKeys = Object.keys(monthly).sort();
-  var recent3 = monthKeys.slice(-3);
-  var totalRvu3 = recent3.reduce(function(s, k) { return s + (monthly[k].r || 0); }, 0);
-  var totalDays3 = recent3.reduce(function(s, k) { return s + (monthly[k].d || 0); }, 0);
-  var avgPerDay3 = totalDays3 > 0 ? (totalRvu3 / totalDays3).toFixed(1) : '0';
-
-  // Risk
-  var burnout = risk.burnout_score || 0;
-  var riskCls = burnout >= 60 ? 'bad' : burnout >= 30 ? 'warn' : 'good';
-  var riskLabel = burnout >= 60 ? 'High' : burnout >= 30 ? 'Monitor' : 'Healthy';
-  var peerPct = risk.peer_percentile !== undefined ? Math.round(risk.peer_percentile) : null;
-
-  var metricsHtml =
-    '<div class="sched-metric-card"><div class="sched-metric-label">Monthly Est.</div>' +
-    '<div class="sched-metric-value">' + monthlyRvu.toLocaleString() + '</div>' +
-    '<div class="sched-metric-sub">clinical RVU / mo</div></div>' +
-
-    '<div class="sched-metric-card"><div class="sched-metric-label">Weekly Est.</div>' +
-    '<div class="sched-metric-value">' + weeklyRvu.toLocaleString() + '</div>' +
-    '<div class="sched-metric-sub">' + clinicalDays + ' clinical + ' + adminDays + ' admin days</div></div>' +
-
-    '<div class="sched-metric-card"><div class="sched-metric-label">Avg / Day</div>' +
-    '<div class="sched-metric-value">' + avgPerDay3 + '</div>' +
-    '<div class="sched-metric-sub">actual, last 3 mo</div></div>' +
-
-    '<div class="sched-metric-card"><div class="sched-metric-label">Primary Activity</div>' +
-    '<div class="sched-metric-value" style="font-size:0.95rem">' + esc(topActLabel) + '</div>' +
-    '<div class="sched-metric-sub">' + topActPct + '% of clinical days</div></div>' +
-
-    '<div class="sched-metric-card"><div class="sched-metric-label">Confidence</div>' +
-    '<div class="sched-metric-value">' + avgConf + '%</div>' +
-    '<div class="sched-metric-sub">pattern strength</div></div>' +
-
-    '<div class="sched-metric-card"><div class="sched-metric-label">Risk Score</div>' +
-    '<div class="sched-metric-value ' + riskCls + '">' + riskLabel + '</div>' +
-    '<div class="sched-metric-sub">burnout: ' + burnout + '/100</div></div>';
-
-  if (peerPct !== null) {
-    metricsHtml +=
-      '<div class="sched-metric-card"><div class="sched-metric-label">Peer Rank</div>' +
-      '<div class="sched-metric-value">' + peerPct + '<span style="font-size:0.7rem;font-weight:400">th</span></div>' +
-      '<div class="sched-metric-sub">vs. ' + esc(meta.type || 'peers') + '</div></div>';
-  }
-
-  document.getElementById('schedMetrics').innerHTML = metricsHtml;
-
-  // --- 5-week grid ---
-  var dowLabels = ['Mon','Tue','Wed','Thu','Fri'];
-  var dowFull = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-
-  var html = '<div class="base-sched-grid">';
-
-  // Header row
-  html += '<div class="base-sched-dow" style="background:transparent"></div>';
-  dowLabels.forEach(function(d) {
-    html += '<div class="base-sched-dow">' + d + '</div>';
-  });
-
-  // 5 weeks
-  for (var wk = 1; wk <= 5; wk++) {
-    html += '<div class="base-sched-wk-label">Wk ' + wk + '</div>';
-    dowFull.forEach(function(dayName) {
-      var pat = patterns[dayName];
-
-      if (!pat || pat.c < 0.3) {
-        // No pattern data
-        html += '<div class="base-sched-cell" style="opacity:0.35">' +
-          '<div style="font-size:0.64rem;color:var(--text-3);padding-top:0.5rem">\u2014</div>' +
-        '</div>';
-        return;
-      }
-
-      if (isAdminDay(pat)) {
-        // Admin / non-clinical day
-        html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
-          '<div class="base-act-chip act-admin">Admin</div>' +
-          '<div class="base-loc-label" style="color:var(--text-3);font-style:italic">Non-clinical</div>' +
-          '<div class="base-rvu-label" style="color:var(--text-3);opacity:0.5">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
-          '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
-        '</div>';
-        return;
-      }
-
-      // Clinical day
-      var cls = getActClass(pat.a);
-      var actLabel = pat.a;
-      if (actLabel.length > 12) actLabel = actLabel.replace(/\s*\(.*\)/, '').slice(0,12);
-      var locLabel = (pat.l || '').replace(/Urology Clinic \| /, '').replace(/\s*\|.*/, '');
-      if (locLabel.length > 16) locLabel = locLabel.slice(0,16) + '\u2026';
-
-      html += '<div class="base-sched-cell" data-prov="' + esc(prov) + '" data-dow="' + dayName + '" onmouseenter="showRvuTooltip(event,this)" onmouseleave="hideRvuTooltip()">' +
-        '<div class="base-act-chip ' + cls + '">' + esc(actLabel) + '</div>' +
-        '<div class="base-loc-label" title="' + esc(pat.l || '') + '">' + esc(locLabel) + '</div>' +
-        '<div class="base-rvu-label">~' + Math.round(pat.avg_rvu) + ' RVU</div>' +
-        '<div class="base-conf-label">' + Math.round(pat.c * 100) + '% conf</div>' +
-      '</div>';
-    });
-  }
-
-  html += '</div>';
-  grid.innerHTML = html;
-}
 
 // ===== CHAIR ACTION ITEMS (Blocked + Stale projects) =====
 function renderActionItems() {
@@ -3418,137 +2851,8 @@ function renderComplianceScorecard() {
 }
 
 // ===== RVU TOOLTIP with 12-month trend + AI insight =====
-var _tooltipTimer = null;
 
-function showRvuTooltip(evt, el) {
-  if (!_rvuData) return;
-  clearTimeout(_tooltipTimer);
 
-  var prov = el.getAttribute('data-prov');
-  var dateStr = el.getAttribute('data-date') || '';
-  var dowName = el.getAttribute('data-dow');
-  var tooltip = document.getElementById('rvuTooltip');
-
-  var actual = _rvuData.actuals[prov] && _rvuData.actuals[prov][dateStr];
-  var trend = _rvuData.trends[prov] && _rvuData.trends[prov][dowName];
-  var insight = _rvuData.insights[prov] && _rvuData.insights[prov][dowName];
-  var pat = _rvuData.patterns[prov] && _rvuData.patterns[prov][dowName];
-
-  if (!actual && !trend && !pat) {
-    tooltip.classList.remove('visible');
-    return;
-  }
-
-  var html = '<div class="rvu-tooltip-header">' + esc(prov) + ' \u2014 ' + dowName + 's</div>';
-
-  // AI Insight (enhanced)
-  if (insight) {
-    html += '<div class="rvu-tooltip-insight">' + esc(insight) + '</div>';
-  }
-
-  // Risk flags
-  var provRisk = _rvuData.risk && _rvuData.risk[prov];
-  if (provRisk && provRisk.risk_flags && provRisk.risk_flags.length > 0) {
-    html += '<div class="rvu-tooltip-risk-flags">';
-    provRisk.risk_flags.forEach(function(flag) {
-      var cls = (flag.toLowerCase().indexOf('burnout') >= 0 || flag.toLowerCase().indexOf('sustained') >= 0) ? 'critical' : '';
-      html += '<span class="rvu-tooltip-risk-flag ' + cls + '">' + esc(flag) + '</span>';
-    });
-    html += '</div>';
-  }
-
-  // Anomaly on this specific date
-  var provAnomalies = _rvuData.anomalies && _rvuData.anomalies[prov];
-  if (provAnomalies && actual) {
-    var dayAnomaly = provAnomalies.find(function(a) { return a.date === dateStr; });
-    if (dayAnomaly) {
-      html += '<div class="rvu-tooltip-anomaly">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ' +
-        'Anomaly: ' + esc(dayAnomaly.note || (dayAnomaly.direction === 'high' ? 'Unusually high RVU' : 'Unusually low RVU')) +
-        ' (' + dayAnomaly.sigma.toFixed(1) + '\u03C3)' +
-      '</div>';
-    }
-  }
-
-  // Peer percentile
-  if (provRisk && provRisk.peer_percentile !== undefined) {
-    html += '<div style="font-size:0.64rem;color:var(--text-3);margin-bottom:0.3rem">Peer Percentile: <strong style="color:var(--text)">' + Math.round(provRisk.peer_percentile) + 'th</strong> among ' + (_rvuData.meta[prov] && _rvuData.meta[prov].type || 'peers') + '</div>';
-  }
-
-  // Day actual
-  if (actual) {
-    html += '<div class="rvu-tooltip-section-label">This Day (' + dateStr + ')</div>' +
-      '<div class="rvu-tooltip-stats">' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Activity</span><span class="rvu-tooltip-stat-value">' + esc(actual.a) + '</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">RVUs</span><span class="rvu-tooltip-stat-value">' + actual.r.toFixed(1) + '</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Location</span><span class="rvu-tooltip-stat-value" style="font-size:0.62rem">' + esc(actual.l) + '</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Encounters</span><span class="rvu-tooltip-stat-value">' + actual.n + '</span></div>' +
-      '</div>';
-  }
-
-  // Pattern summary
-  if (pat) {
-    html += '<div class="rvu-tooltip-section-label">Typical ' + dowName + ' Pattern</div>' +
-      '<div class="rvu-tooltip-stats">' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Primary</span><span class="rvu-tooltip-stat-value">' + esc(pat.a) + ' (' + Math.round(pat.c * 100) + '%)</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Avg RVU/day</span><span class="rvu-tooltip-stat-value">' + pat.avg_rvu.toFixed(1) + '</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Sample</span><span class="rvu-tooltip-stat-value">' + pat.days + ' ' + dowName + 's</span></div>' +
-        '<div class="rvu-tooltip-stat"><span class="rvu-tooltip-stat-label">Location</span><span class="rvu-tooltip-stat-value" style="font-size:0.62rem">' + esc(pat.l) + '</span></div>' +
-      '</div>';
-
-    if (pat.act_dist && Object.keys(pat.act_dist).length > 1) {
-      html += '<div class="rvu-tooltip-loc-list"><span>Activity mix:</span> ' +
-        Object.entries(pat.act_dist).map(function(e) { return e[0] + ' ' + Math.round(e[1]*100) + '%'; }).join(', ') + '</div>';
-    }
-    if (pat.loc_dist && Object.keys(pat.loc_dist).length > 1) {
-      html += '<div class="rvu-tooltip-loc-list"><span>Location mix:</span> ' +
-        Object.entries(pat.loc_dist).map(function(e) { return e[0] + ' ' + Math.round(e[1]*100) + '%'; }).join(', ') + '</div>';
-    }
-  }
-
-  // 12-month RVU trend
-  if (trend) {
-    var trendEntries = Object.entries(trend).sort(function(a,b) { return a[0].localeCompare(b[0]); });
-    if (trendEntries.length > 0) {
-      var maxRpd = Math.max.apply(null, trendEntries.map(function(e) { return e[1].rpd || 0; }));
-
-      html += '<div class="rvu-tooltip-section-label">12-Month RVU/Day Trend (' + dowName + 's)</div>';
-      html += '<div class="rvu-tooltip-trend">';
-      trendEntries.forEach(function(e) {
-        var h = maxRpd > 0 ? Math.max(2, Math.round((e[1].rpd / maxRpd) * 38)) : 2;
-        html += '<div class="rvu-tooltip-bar" style="height:40px">' +
-          '<div class="rvu-tooltip-bar-inner" style="height:' + h + 'px" title="' + e[0] + ': ' + e[1].rpd.toFixed(1) + ' RVU/day (' + e[1].d + ' days, ' + e[1].r.toFixed(0) + ' total)"></div>' +
-        '</div>';
-      });
-      html += '</div>';
-      html += '<div class="rvu-tooltip-trend-labels"><span>' + trendEntries[0][0] + '</span><span>' + trendEntries[trendEntries.length-1][0] + '</span></div>';
-    }
-  }
-
-  tooltip.innerHTML = html;
-
-  // Position
-  var rect = el.getBoundingClientRect();
-  var tipW = 400;
-  var x = rect.right + 10;
-  var y = rect.top - 20;
-  if (x + tipW > window.innerWidth) x = rect.left - tipW - 10;
-  if (y < 8) y = 8;
-  tooltip.style.left = x + 'px';
-  tooltip.style.top = y + 'px';
-  tooltip.classList.add('visible');
-  var tipH = tooltip.offsetHeight;
-  if (y + tipH > window.innerHeight - 8) {
-    y = Math.max(8, window.innerHeight - tipH - 8);
-    tooltip.style.top = y + 'px';
-  }
-}
-
-function hideRvuTooltip() {
-  _tooltipTimer = setTimeout(function() {
-    document.getElementById('rvuTooltip').classList.remove('visible');
-  }, 120);
-}
 
 // ===== RECURRING OBLIGATIONS =====
 let recurringItems = [];
@@ -3908,7 +3212,6 @@ function renderPredictiveAlerts() {
   }
 }
 
-(function(){ loadProjects(); loadRvuData().then(function() { if (activePage === 'schedules') renderBaseSchedule(); }); })();
 
 async function loadProjects() {
   showLoading(true);
@@ -3920,7 +3223,6 @@ async function loadProjects() {
     recurringItems = data.recurring || [];
     recurringHistory = data.history || [];
     calendarEvents = data.calendarEvents || [];
-    scheduleEntries = data.schedules || [];
     goalItems = data.goals || [];
     lastSyncTime = new Date();
     buildDynamicFilters();
@@ -3936,7 +3238,6 @@ async function loadProjects() {
     renderPredictiveAlerts();
     renderDeliveryMetrics();
     if (activePage === 'calendar') renderCalendar();
-    if (activePage === 'schedules') renderBaseSchedule();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
   showLoading(false);
