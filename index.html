@@ -1063,6 +1063,100 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .page-tab svg { opacity: 0.7; }
 .page-tab.active svg { opacity: 1; }
 
+/* ===== MEETINGS CALENDAR WIDGET ===== */
+.meetings-section {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  box-shadow: var(--sh-sm); margin-bottom: 1.25rem; overflow: hidden;
+}
+.meetings-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 1.25rem; cursor: pointer; user-select: none;
+  transition: background var(--t) var(--ease);
+}
+.meetings-header:hover { background: var(--bg-stripe); }
+.meetings-title {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.82rem; font-weight: 700; color: var(--text); letter-spacing: 0.01em;
+}
+.meetings-title svg { color: var(--gold); }
+.meetings-month-nav {
+  display: flex; align-items: center; gap: 0.4rem; margin-left: auto; margin-right: 1rem;
+}
+.meetings-month-nav button {
+  background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--r-xs);
+  padding: 0.15rem 0.35rem; cursor: pointer; color: var(--text-3); transition: all var(--t) var(--ease);
+  box-shadow: var(--sh-xs); line-height: 1;
+}
+.meetings-month-nav button:hover { border-color: var(--gold-ring); color: var(--text); }
+.meetings-month-label {
+  font-family: 'Fraunces', serif; font-size: 0.88rem; font-weight: 400;
+  color: var(--text); min-width: 130px; text-align: center;
+}
+.meetings-chevron { color: var(--text-3); transition: transform var(--t) var(--ease); }
+.meetings-body { padding: 0 1.25rem 1rem; }
+.meetings-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px;
+  background: var(--border); border-radius: var(--r-sm); overflow: hidden;
+  margin-bottom: 0.85rem;
+}
+.meetings-dow {
+  background: var(--bg-warm); padding: 0.3rem 0; text-align: center;
+  font-size: 0.6rem; font-weight: 700; color: var(--text-3); text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.meetings-day {
+  background: var(--bg-card); padding: 0.25rem; min-height: 52px;
+  position: relative; cursor: default; transition: background var(--t) var(--ease);
+}
+.meetings-day:hover { background: var(--bg-card-hover); }
+.meetings-day.outside { background: var(--bg-stripe); }
+.meetings-day.outside .meetings-day-num { color: var(--text-3); opacity: 0.4; }
+.meetings-day.today .meetings-day-num {
+  background: var(--gold); color: #fff; border-radius: 50%;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+}
+.meetings-day-num {
+  font-size: 0.65rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+}
+.meetings-day-events { display: flex; flex-direction: column; gap: 1px; }
+.meetings-evt {
+  font-size: 0.55rem; font-weight: 600; padding: 1px 3px; border-radius: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: var(--s-done-bg); color: var(--s-done); line-height: 1.4;
+}
+.meetings-evt.type-leadership { background: rgba(105, 93, 160, 0.1); color: var(--s-plan); }
+.meetings-evt.type-meeting { background: var(--s-done-bg); color: var(--s-done); }
+.meetings-evt-more {
+  font-size: 0.5rem; color: var(--text-3); font-weight: 600; padding: 0 3px;
+}
+.meetings-upcoming {
+  display: flex; flex-direction: column; gap: 0.45rem;
+}
+.meetings-upcoming-title {
+  font-size: 0.68rem; font-weight: 700; color: var(--text-3); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.15rem;
+}
+.meetings-upcoming-item {
+  display: flex; align-items: center; gap: 0.65rem; padding: 0.5rem 0.65rem;
+  background: var(--bg-stripe); border-radius: var(--r-sm); transition: background var(--t) var(--ease);
+}
+.meetings-upcoming-item:hover { background: var(--bg-warm); }
+.meetings-upcoming-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.meetings-upcoming-info { flex: 1; min-width: 0; }
+.meetings-upcoming-name {
+  font-size: 0.78rem; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.meetings-upcoming-meta {
+  font-size: 0.68rem; color: var(--text-3); margin-top: 1px;
+}
+.meetings-empty {
+  text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.78rem;
+}
+
 /* ===== CALENDAR ===== */
 .calendar-view { display: none; }
 .calendar-view.active { display: block; }
@@ -1481,22 +1575,28 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 </div>
 
 <!-- PAGE-LEVEL TABS -->
-<div class="page-tabs">
-  <div class="page-tabs-inner">
-    <button class="page-tab active" onclick="setPage('dashboard')" data-page="dashboard">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Project Tracker
-    </button>
-    <button class="page-tab" onclick="setPage('calendar')" data-page="calendar">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Calendar
-    </button>
-  </div>
-</div>
 
 <div class="app" id="dashboardView">
 
-  <!-- DOMAIN TOGGLE (removed — BizIQ merged into main list) -->
+  <!-- KEY MEETINGS CALENDAR -->
+  <div class="meetings-section anim a1" id="meetingsSection">
+    <div class="meetings-header" data-collapse-target="meetingsBody" onclick="toggleSection('meetingsBody')">
+      <div class="meetings-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Key Meetings
+      </div>
+      <div class="meetings-month-nav" onclick="event.stopPropagation()">
+        <button onclick="mtgNav(-1)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="meetings-month-label" id="mtgMonthLabel"></span>
+        <button onclick="mtgNav(1)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="meetings-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="meetingsBody" class="meetings-body section-collapse-body">
+      <div id="mtgGrid" class="meetings-grid"></div>
+      <div id="mtgUpcoming" class="meetings-upcoming"></div>
+    </div>
+  </div>
 
   <div class="stats-row anim a1">
     <div class="stat" onclick="statFilter('total')" id="statCard0">
@@ -2359,6 +2459,146 @@ function sortProjects(list) {
     return 0;
   });
   return sorted;
+}
+
+// ===== KEY MEETINGS CALENDAR =====
+let mtgYear, mtgMonth;
+const KEY_MEETINGS = [
+  { title: 'Staff Leadership | Weekly', day: 'monday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' }
+];
+
+(function() {
+  const now = new Date();
+  mtgYear = now.getFullYear();
+  mtgMonth = now.getMonth();
+})();
+
+function mtgNav(dir) {
+  mtgMonth += dir;
+  if (mtgMonth > 11) { mtgMonth = 0; mtgYear++; }
+  if (mtgMonth < 0) { mtgMonth = 11; mtgYear--; }
+  renderMeetingsCalendar();
+}
+
+function getMeetingsForMonth(year, month) {
+  const meetings = [];
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+
+  KEY_MEETINGS.forEach(function(mtg) {
+    if (mtg.recurring === 'weekly') {
+      const targetDow = dayNames.indexOf(mtg.day.toLowerCase());
+      if (targetDow < 0) return;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dt = new Date(year, month, d);
+        if (dt.getDay() === targetDow) {
+          meetings.push({
+            title: mtg.title,
+            date: year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0'),
+            time: mtg.time,
+            type: mtg.type,
+            dayNum: d
+          });
+        }
+      }
+    }
+  });
+
+  return meetings.sort(function(a,b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+}
+
+function renderMeetingsCalendar() {
+  const grid = document.getElementById('mtgGrid');
+  const upcoming = document.getElementById('mtgUpcoming');
+  const label = document.getElementById('mtgMonthLabel');
+  if (!grid || !label) return;
+
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent = monthNames[mtgMonth] + ' ' + mtgYear;
+
+  const firstDay = new Date(mtgYear, mtgMonth, 1);
+  const lastDay = new Date(mtgYear, mtgMonth + 1, 0);
+  const startDow = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const meetings = getMeetingsForMonth(mtgYear, mtgMonth);
+  const meetingsByDay = {};
+  meetings.forEach(function(m) { if (!meetingsByDay[m.dayNum]) meetingsByDay[m.dayNum] = []; meetingsByDay[m.dayNum].push(m); });
+
+  // Day-of-week headers
+  var html = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(d) { return '<div class="meetings-dow">' + d + '</div>'; }).join('');
+
+  // Leading empty cells
+  var prevMonth = new Date(mtgYear, mtgMonth, 0);
+  for (var i = startDow - 1; i >= 0; i--) {
+    var pd = prevMonth.getDate() - i;
+    html += '<div class="meetings-day outside"><div class="meetings-day-num">' + pd + '</div></div>';
+  }
+
+  // Days
+  for (var d = 1; d <= daysInMonth; d++) {
+    var isToday = today.getFullYear() === mtgYear && today.getMonth() === mtgMonth && today.getDate() === d;
+    var dayMtgs = meetingsByDay[d] || [];
+    var maxShow = 2;
+
+    var evtsHtml = dayMtgs.slice(0, maxShow).map(function(m) {
+      return '<div class="meetings-evt type-' + m.type + '" title="' + esc(m.title) + ' — ' + m.time + '">' + esc(m.title.split('|')[0].trim()) + '</div>';
+    }).join('');
+
+    if (dayMtgs.length > maxShow) {
+      evtsHtml += '<div class="meetings-evt-more">+' + (dayMtgs.length - maxShow) + ' more</div>';
+    }
+
+    html += '<div class="meetings-day' + (isToday ? ' today' : '') + '">' +
+      '<div class="meetings-day-num">' + d + '</div>' +
+      '<div class="meetings-day-events">' + evtsHtml + '</div>' +
+      '</div>';
+  }
+
+  // Trailing empty cells
+  var endDow = lastDay.getDay();
+  for (var ti = 1; ti <= 6 - endDow; ti++) {
+    html += '<div class="meetings-day outside"><div class="meetings-day-num">' + ti + '</div></div>';
+  }
+
+  grid.innerHTML = html;
+
+  // Upcoming meetings list (next 4 from today)
+  var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  var allUpcoming = [];
+
+  // Get meetings for this month and next month
+  var thisMonthMtgs = getMeetingsForMonth(mtgYear, mtgMonth);
+  allUpcoming = allUpcoming.concat(thisMonthMtgs);
+
+  var nextM = mtgMonth + 1, nextY = mtgYear;
+  if (nextM > 11) { nextM = 0; nextY++; }
+  allUpcoming = allUpcoming.concat(getMeetingsForMonth(nextY, nextM));
+
+  // Filter to upcoming only
+  allUpcoming = allUpcoming.filter(function(m) { return m.date >= todayStr; }).slice(0, 4);
+
+  if (allUpcoming.length > 0) {
+    var upHtml = '<div class="meetings-upcoming-title">Upcoming</div>';
+    allUpcoming.forEach(function(m) {
+      var dt = new Date(m.date + 'T12:00:00');
+      var dayLabel = dt.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+      var dotColor = m.type === 'leadership' ? 'var(--s-plan)' : 'var(--s-done)';
+      upHtml += '<div class="meetings-upcoming-item">' +
+        '<div class="meetings-upcoming-dot" style="background:' + dotColor + '"></div>' +
+        '<div class="meetings-upcoming-info">' +
+          '<div class="meetings-upcoming-name">' + esc(m.title) + '</div>' +
+          '<div class="meetings-upcoming-meta">' + dayLabel + ' &middot; ' + m.time + '</div>' +
+        '</div>' +
+        '</div>';
+    });
+    upcoming.innerHTML = upHtml;
+  } else {
+    upcoming.innerHTML = '<div class="meetings-empty">No upcoming meetings this month</div>';
+  }
 }
 
 // ===== PAGE TABS =====
@@ -3525,6 +3765,7 @@ async function loadProjects() {
     renderDeliveryMetrics();
     renderUpcomingWeek();
     renderWorkload30();
+    renderMeetingsCalendar();
     if (activePage === 'calendar') renderCalendar();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
@@ -3904,6 +4145,9 @@ function startResize(e){
   document.addEventListener('mousemove',onMove);
   document.addEventListener('mouseup',onUp);
 }
+
+// Render meetings calendar immediately (doesn't depend on fetched data)
+renderMeetingsCalendar();
 </script>
 </body>
 </html>
