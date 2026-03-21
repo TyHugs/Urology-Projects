@@ -1882,7 +1882,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
           <th style="width:95px" onclick="sortBy('Start Date')">Start<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
           <th style="width:95px" onclick="sortBy('Due Date')">Due<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
           <th style="width:155px" onclick="sortBy('Notes')">Notes<span class="sort-arrow"></span><span class="col-resize" onmousedown="startResize(event)"></span></th>
-          <th style="width:42px" onclick="sortBy('AI Potential')" title="AI Potential"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg><span class="sort-arrow"></span></th>
+          <th style="width:42px" onclick="sortBy('AI Potential?')" title="AI Potential"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg><span class="sort-arrow"></span></th>
           <th style="width:32px"></th>
         </tr></thead>
         <tbody id="projectsBody">
@@ -2268,7 +2268,7 @@ function openDetail(id) {
         <span class="detail-pill" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
         ${p['Category']?`<span class="detail-pill" style="background:rgba(61,108,180,0.06);color:var(--s-prog)">${esc(p['Category'])}</span>`:''}
         ${p['Est. Time']?`<span class="detail-pill" style="background:var(--gold-badge);color:var(--gold)">${esc(p['Est. Time'])}</span>`:''}
-        <span class="ai-badge-toggle ${((p['AI Potential']||'').toString().toLowerCase()==='yes'||(p['AI Potential']||'').toString().toLowerCase()==='true'||(p['AI Potential']||'').toString()==='1')?'':'inactive'}" onclick="toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="Toggle AI Potential">
+        <span class="ai-badge-toggle ${((p['AI Potential?']||'').toString().toLowerCase()==='yes'||(p['AI Potential?']||'').toString().toLowerCase()==='true'||(p['AI Potential?']||'').toString()==='1')?'':'inactive'}" onclick="toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="Toggle AI Potential">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg>
           AI Potential
         </span>
@@ -3754,10 +3754,10 @@ async function updateCell(row, col, val) {
 function toggleAIPotential(row, id) {
   const p = projects.find(x => x._row === row);
   if (!p) return;
-  const cur = (p['AI Potential'] || '').toString().toLowerCase();
+  const cur = (p['AI Potential?'] || '').toString().toLowerCase();
   const isOn = cur === 'yes' || cur === 'true' || cur === '1';
   const newVal = isOn ? '' : 'Yes';
-  updateCell(row, 'AI Potential', newVal);
+  updateCell(row, 'AI Potential?', newVal);
   // Re-render detail panel if open
   if (id) setTimeout(function() { openDetail(id); }, 300);
 }
@@ -3787,7 +3787,7 @@ async function addProject() {
     'Est. Time':document.getElementById('newEstTime').value,
     'Start Date':document.getElementById('newStartDate').value,
     'Due Date':document.getElementById('newDueDate').value,
-    'AI Potential':document.getElementById('newAIPotential').checked ? 'Yes' : '',
+    'AI Potential?':document.getElementById('newAIPotential').checked ? 'Yes' : '',
   };
   showLoading(true);
   try {
@@ -3854,7 +3854,7 @@ function renderTable() {
       <td><input type="date" class="date-input" value="${esc(p['Start Date']?String(p['Start Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Start Date" onchange="onDate(this)"/></td>
       <td><input type="date" class="date-input${dueCls?' '+dueCls:''}" value="${esc(p['Due Date']?String(p['Due Date']).slice(0,10):'')}" data-row="${p._row}" data-col="Due Date" onchange="onDate(this)" title="${dueCls==='date-overdue'?'Overdue':dueCls==='date-due-soon'?'Due within 3 days':''}"/></td>
       <td><span class="cell-notes editable" contenteditable="true" data-row="${p._row}" data-col="Notes" onblur="onEdit(this)">${esc(p['Notes']||'')}</span></td>
-      <td style="text-align:center">${((p['AI Potential']||'').toString().toLowerCase()==='yes'||(p['AI Potential']||'').toString().toLowerCase()==='true'||(p['AI Potential']||'').toString()==='1') ? `<span class="ai-badge-table" onclick="event.stopPropagation();toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="AI Potential — click to remove"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg> AI</span>` : `<span class="ai-badge-table" style="background:none;border-color:var(--border);color:var(--text-3);opacity:0.3" onclick="event.stopPropagation();toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="Click to mark AI Potential"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg></span>`}</td>
+      <td style="text-align:center">${((p['AI Potential?']||'').toString().toLowerCase()==='yes'||(p['AI Potential?']||'').toString().toLowerCase()==='true'||(p['AI Potential?']||'').toString()==='1') ? `<span class="ai-badge-table" onclick="event.stopPropagation();toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="AI Potential — click to remove"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg> AI</span>` : `<span class="ai-badge-table" style="background:none;border-color:var(--border);color:var(--text-3);opacity:0.3" onclick="event.stopPropagation();toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="Click to mark AI Potential"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg></span>`}</td>
       <td><button class="btn-delete" onclick="event.stopPropagation();deleteProject(${p._row})" title="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></td>
     </tr>
   `;}).join('');
@@ -4076,7 +4076,7 @@ function renderKanban() {
           const isOverdue = dueDate && dueDate < today && status !== 'Complete';
           const dueStr = dueDate ? dueDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
 
-          const hasAI = (p['AI Potential'] || '').toString().toLowerCase();
+          const hasAI = (p['AI Potential?'] || '').toString().toLowerCase();
           const isAI = hasAI === 'yes' || hasAI === 'true' || hasAI === '1';
 
           return `<div class="kanban-card" onclick="openDetail('${esc(p['ID']||'')}')">
