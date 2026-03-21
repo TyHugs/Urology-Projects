@@ -1718,14 +1718,14 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <select id="goalDomain">
         <option value="">Global (all domains)</option>
         <option value="Finance">Finance</option>
-        <option value="Analytics">Analytics</option>
-        <option value="Operations">Operations</option>
         <option value="Faculty">Faculty</option>
-        <option value="Education">Education</option>
-        <option value="Research">Research</option>
-        <option value="Strategy">Strategy</option>
-        <option value="Digital">Digital</option>
+        <option value="Operations">Operations</option>
         <option value="Administrative">Administrative</option>
+        <option value="Strategy">Strategy</option>
+        <option value="Analytics">Analytics</option>
+        <option value="PCC">PCC</option>
+        <option value="BizIQ">BizIQ</option>
+        <option value="Perioperative">Perioperative</option>
       </select>
       <label>Status</label>
       <select id="goalStatus">
@@ -1801,9 +1801,9 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </select>
       <select class="filter-select" id="filterCategory" onchange="applyFilters()">
         <option value="">Category</option>
-        <option>Finance</option><option>Analytics</option><option>Operations</option>
-        <option>Faculty</option><option>Education</option><option>Research</option>
-        <option>Strategy</option><option>Digital</option><option>Administrative</option><option>BizIQ</option>
+        <option>Finance</option><option>Faculty</option><option>Operations</option>
+        <option>Administrative</option><option>Strategy</option><option>Analytics</option>
+        <option>PCC</option><option>BizIQ</option><option>Perioperative</option>
       </select>
       <select class="filter-select" id="filterOwner" onchange="applyFilters()"><option value="">Owner</option></select>
       <select class="filter-select" id="filterStakeholder" onchange="applyFilters()"><option value="">Stakeholder</option></select>
@@ -1975,7 +1975,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div class="modal-row">
       <div class="modal-field"><label>Category</label>
-        <select id="newCategory"><option value="">Select...</option><option>Finance</option><option>Analytics</option><option>Operations</option><option>Faculty</option><option>Education</option><option>Research</option><option>Strategy</option><option>Digital</option><option>Administrative</option><option>BizIQ</option></select>
+        <select id="newCategory"><option value="">Select...</option><option>Finance</option><option>Faculty</option><option>Operations</option><option>Administrative</option><option>Strategy</option><option>Analytics</option><option>PCC</option><option>BizIQ</option><option>Perioperative</option></select>
       </div>
       <div class="modal-field"><label>Owner</label><input type="text" id="newOwner" placeholder="e.g., Tyler Hughes" /></div>
     </div>
@@ -2033,7 +2033,7 @@ const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mr
 
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
 const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
-const CATEGORY_OPTIONS = ['Finance','Analytics','Operations','Faculty','Education','Research','Strategy','Digital','Administrative','BizIQ'];
+const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
 const TIME_OPTIONS = ['1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting
