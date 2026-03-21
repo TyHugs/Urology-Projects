@@ -3598,6 +3598,9 @@ function exportPDF() {
   setTimeout(() => window.print(), 300);
 }
 
+// ===== BOOTSTRAP =====
+(function(){ loadProjects(); })();
+
 // Column resize
 function startResize(e){
   e.stopPropagation();
