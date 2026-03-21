@@ -365,8 +365,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .pill-select[data-type="status"][data-value="In Progress"]::before { content: '\25B6 '; }
 .pill-select[data-type="status"][data-value="In Review"]::before { content: '\25C9 '; }
 .pill-select[data-type="status"][data-value="Complete"]::before { content: '\2713 '; }
-.pill-select[data-type="status"][data-value="Blocked"]::before { content: '\2716 '; }
-.pill-select[data-type="status"][data-value="On Hold"]::before { content: '\23F8 '; }
+.pill-select[data-type="status"][data-value="Delayed"]::before { content: '\23F8 '; }
 .pill-select[data-type="priority"][data-value="Critical"]::before { content: '\26A0 '; }
 .pill-select[data-type="priority"][data-value="High"]::before { content: '\2191 '; }
 .pill-select[data-type="priority"][data-value="Medium"]::before { content: '\2500 '; }
@@ -390,8 +389,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .pill-select[data-type="status"][data-value="In Progress"]{background-color:var(--s-prog-bg);color:var(--s-prog)}
 .pill-select[data-type="status"][data-value="In Review"]{background-color:var(--s-rev-bg);color:var(--s-rev)}
 .pill-select[data-type="status"][data-value="Complete"]{background-color:var(--s-done-bg);color:var(--s-done)}
-.pill-select[data-type="status"][data-value="Blocked"]{background-color:var(--s-block-bg);color:var(--s-block)}
-.pill-select[data-type="status"][data-value="On Hold"]{background-color:var(--s-hold-bg);color:var(--s-hold)}
+.pill-select[data-type="status"][data-value="Delayed"]{background-color:var(--s-hold-bg);color:var(--s-hold)}
 
 .pill-select[data-type="priority"][data-value="Critical"]{background-color:var(--p-crit-bg);color:var(--p-crit)}
 .pill-select[data-type="priority"][data-value="High"]{background-color:var(--p-high-bg);color:var(--p-high)}
@@ -751,7 +749,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .changelog-icon.updated { background: var(--s-prog-bg); color: var(--s-prog); }
 .changelog-icon.completed { background: var(--s-done-bg); color: var(--s-done); }
 .changelog-icon.created { background: var(--gold-badge); color: var(--gold); }
-.changelog-icon.blocked { background: var(--s-block-bg); color: var(--s-block); }
 .changelog-text { flex: 1; line-height: 1.4; }
 .changelog-text strong { font-weight: 600; color: var(--text); }
 .changelog-time { font-size: 0.68rem; color: var(--text-3); white-space: nowrap; margin-top: 0.15rem; }
@@ -1343,6 +1340,121 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   .cal-day{min-height:60px}
   .cal-event{font-size:0.5rem}
   .page-tabs-inner{padding:0 1rem}
+  .dash-upcoming-grid{grid-template-columns:1fr}
+  .dash-workload-chart{min-height:200px}
+}
+
+/* ===== UPCOMING THIS WEEK DASHBOARD ===== */
+.dash-section {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  box-shadow: var(--sh-sm); margin-bottom: 0.75rem; overflow: hidden;
+}
+.dash-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+  cursor: pointer; user-select: none; transition: background var(--t) var(--ease);
+}
+.dash-section-header:hover { background: var(--bg-stripe); }
+.dash-section-title {
+  display: flex; align-items: center; gap: 0.45rem;
+  font-size: 0.82rem; font-weight: 700; color: var(--text);
+}
+.dash-section-title svg { color: var(--gold); flex-shrink: 0; }
+.dash-section-count {
+  font-size: 0.62rem; font-weight: 700; color: var(--text-inv-1);
+  background: var(--gold); padding: 0.1rem 0.45rem; border-radius: var(--r-full);
+  min-width: 18px; text-align: center;
+}
+.dash-section-chevron { color: var(--text-3); transition: transform var(--t) var(--ease); }
+.dash-section-body { padding: 0.8rem 1rem; }
+
+/* Upcoming by team member */
+.dash-upcoming-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.65rem;
+}
+.dash-member-card {
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  overflow: hidden; background: var(--bg);
+}
+.dash-member-header {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 0.75rem; background: var(--bg-warm);
+  border-bottom: 1px solid var(--border);
+}
+.dash-member-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: var(--text-inv-1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; font-weight: 700; flex-shrink: 0;
+}
+.dash-member-name { font-weight: 600; font-size: 0.82rem; color: var(--text); }
+.dash-member-meta { font-size: 0.68rem; color: var(--text-3); }
+.dash-member-projects { padding: 0.35rem 0; }
+.dash-member-project {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.75rem; font-size: 0.78rem; color: var(--text);
+  cursor: pointer; transition: background var(--t) var(--ease);
+  border-bottom: 1px solid var(--border);
+}
+.dash-member-project:last-child { border-bottom: none; }
+.dash-member-project:hover { background: var(--gold-glow); }
+.dash-member-project .proj-name { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-member-project .proj-due {
+  font-size: 0.7rem; color: var(--text-3); white-space: nowrap; font-weight: 500;
+}
+.dash-member-project .proj-due.overdue { color: var(--p-crit); font-weight: 600; }
+.dash-member-project .proj-due.due-soon { color: var(--p-high); font-weight: 600; }
+.dash-member-project .proj-priority {
+  font-size: 0.62rem; font-weight: 700; padding: 0.08rem 0.35rem;
+  border-radius: var(--r-xs); white-space: nowrap;
+}
+.dash-member-empty {
+  padding: 0.5rem 0.75rem; font-size: 0.75rem; color: var(--text-3); font-style: italic;
+}
+
+/* 30-day workload by project */
+.dash-workload-chart {
+  min-height: 240px; position: relative;
+}
+.dash-wl-bar-group {
+  display: flex; flex-direction: column; gap: 0.45rem; padding: 0.3rem 0;
+}
+.dash-wl-row {
+  display: flex; align-items: center; gap: 0.6rem; cursor: pointer;
+  padding: 0.3rem 0; transition: background var(--t) var(--ease);
+  border-radius: var(--r-xs);
+}
+.dash-wl-row:hover { background: var(--gold-glow); }
+.dash-wl-label {
+  width: 200px; flex-shrink: 0; font-size: 0.78rem; font-weight: 500;
+  color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dash-wl-bar-wrap {
+  flex: 1; height: 22px; background: var(--bg); border-radius: var(--r-xs);
+  overflow: hidden; position: relative; border: 1px solid var(--border);
+}
+.dash-wl-bar {
+  height: 100%; border-radius: var(--r-xs); transition: width 0.5s var(--ease-out);
+  display: flex; align-items: center; padding-left: 0.4rem;
+  font-size: 0.62rem; font-weight: 700; color: #fff; white-space: nowrap;
+}
+.dash-wl-bar.past { background: var(--s-prog); opacity: 0.65; }
+.dash-wl-bar.remaining { background: var(--gold); }
+.dash-wl-bar.overdue { background: var(--p-crit); }
+.dash-wl-days {
+  width: 70px; text-align: right; flex-shrink: 0;
+  font-size: 0.7rem; color: var(--text-3); font-weight: 500;
+}
+.dash-wl-legend {
+  display: flex; gap: 1rem; padding: 0.5rem 0 0.2rem;
+  font-size: 0.68rem; color: var(--text-3); font-weight: 500;
+}
+.dash-wl-legend-dot {
+  width: 8px; height: 8px; border-radius: 2px; display: inline-block;
+  margin-right: 0.25rem; vertical-align: middle;
+}
+.dash-empty-state {
+  text-align: center; padding: 1.5rem; color: var(--text-3); font-size: 0.82rem;
 }
 </style>
 </head>
@@ -1384,12 +1496,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 <div class="app" id="dashboardView">
 
-  <!-- DOMAIN TOGGLE -->
-  <div class="domain-bar anim a1">
-    <span class="domain-bar-label">View:</span>
-    <button class="domain-pill active" onclick="setDomain('all')" data-domain="all">All Domains</button>
-    <button class="domain-pill" onclick="setDomain('BizIQ')" data-domain="BizIQ">BizIQ</button>
-  </div>
+  <!-- DOMAIN TOGGLE (removed — BizIQ merged into main list) -->
 
   <div class="stats-row anim a1">
     <div class="stat" onclick="statFilter('total')" id="statCard0">
@@ -1412,10 +1519,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="stat-num" id="statOverdue">&mdash;</div>
       <div class="stat-sub" id="statOverdueSub"></div>
     </div>
-    <div class="stat" onclick="statFilter('Blocked')" id="statCard4">
-      <div class="stat-label">Blocked</div>
-      <div class="stat-num" id="statBlocked">&mdash;</div>
-    </div>
     <div class="stat" onclick="statFilter('total')" id="statCard5">
       <div class="stat-label">Complete</div>
       <div class="stat-num" id="statPct">&mdash;</div>
@@ -1423,7 +1526,37 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
   </div>
 
-  <!-- CHAIR ACTION ITEMS (blocked & stale projects) -->
+  <!-- UPCOMING THIS WEEK BY TEAM MEMBER -->
+  <div class="dash-section anim a1" id="upcomingWeekSection">
+    <div class="dash-section-header" onclick="toggleSection('upcomingWeekBody')">
+      <div class="dash-section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Upcoming This Week
+        <span class="dash-section-count" id="upcomingWeekCount">0</span>
+      </div>
+      <div class="dash-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="upcomingWeekBody" class="dash-section-body section-collapse-body">
+      <div id="upcomingWeekGrid" class="dash-upcoming-grid"></div>
+    </div>
+  </div>
+
+  <!-- 30-DAY WORKLOAD BY PROJECT -->
+  <div class="dash-section anim a1" id="workload30Section">
+    <div class="dash-section-header" onclick="toggleSection('workload30Body')">
+      <div class="dash-section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+        30-Day Workload by Project
+        <span class="dash-section-count" id="workload30Count">0</span>
+      </div>
+      <div class="dash-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="workload30Body" class="dash-section-body section-collapse-body">
+      <div id="workload30Chart" class="dash-workload-chart"></div>
+    </div>
+  </div>
+
+  <!-- CHAIR ACTION ITEMS (stale projects) -->
   <div class="action-items-section anim a1" id="actionItemsSection">
     <div class="section-collapse-header" data-collapse-target="actionItemsBody" onclick="toggleSection('actionItemsBody')">
       <div class="action-items-title">
@@ -1480,7 +1613,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <label>Domain</label>
       <select id="goalDomain">
         <option value="">Global (all domains)</option>
-        <option value="BizIQ">BizIQ</option>
         <option value="Finance">Finance</option>
         <option value="Analytics">Analytics</option>
         <option value="Operations">Operations</option>
@@ -1557,7 +1689,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <select class="filter-select" id="filterStatus" onchange="applyFilters()">
         <option value="">Status</option>
         <option>Not Started</option><option>Planning</option><option>In Progress</option>
-        <option>In Review</option><option>Complete</option><option>Blocked</option><option>On Hold</option>
+        <option>In Review</option><option>Complete</option><option>Delayed</option>
       </select>
       <select class="filter-select" id="filterPriority" onchange="applyFilters()">
         <option value="">Priority</option>
@@ -1884,44 +2016,23 @@ window._customFilter = null;
 let activeDomain = 'all';
 
 function setDomain(domain) {
-  activeDomain = domain;
-  document.querySelectorAll('.domain-pill').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-domain') === domain);
-  });
-  // Update header to reflect domain
-  document.getElementById('domainTitle').textContent =
-    domain === 'all' ? 'Department of Urology Administration' : 'BizIQ Analytics Platform';
-  document.getElementById('domainSub').textContent =
-    domain === 'all' ? 'University of Michigan Health' : 'Business Intelligence for Michigan Medicine';
-
-  // Re-render everything
-  buildDynamicFilters();
-  renderTable();
-  updateStats();
-  renderSpotlight();
-  renderWorkload();
-  renderChangelog();
-  renderGoals();
-  renderActionItems();
-  renderPredictiveAlerts();
-  renderDeliveryMetrics();
-  if (currentView === 'kanban') renderKanban();
+  // Domain toggle removed — all projects shown together
+  activeDomain = 'all';
 }
 
 function getDomainProjects() {
-  if (activeDomain === 'all') return projects.filter(p => (p['Category'] || '') !== 'BizIQ');
-  return projects.filter(p => (p['Category'] || '') === activeDomain);
+  return projects;
 }
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
-const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Blocked','On Hold'];
+const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
 const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
 const CATEGORY_OPTIONS = ['Finance','Analytics','Operations','Faculty','Education','Research','Strategy','Digital','Administrative','BizIQ'];
 const TIME_OPTIONS = ['1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting
 const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
-const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, Blocked:4, 'On Hold':5, Complete:6};
+const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, 'Delayed':4, Complete:5};
 const TIME_RANK = {'1 hour':1, '2 hours':2, '4 hours':4, '8 hours':8, 'Multi-day':16};
 
 // ===== KEY PROJECTS (localStorage) =====
@@ -1950,7 +2061,7 @@ function renderSpotlight() {
     return;
   }
 
-  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Blocked':['s-block-bg','s-block'],'On Hold':['s-hold-bg','s-hold']};
+  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
 
   grid.innerHTML = keyProjects.map(p => {
@@ -2016,9 +2127,6 @@ function renderChangelog() {
     if (status === 'Complete') {
       iconClass = 'completed';
       iconSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>';
-    } else if (status === 'Blocked') {
-      iconClass = 'blocked';
-      iconSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
     }
 
     const updatedAt = new Date(p['Last Updated']);
@@ -2105,7 +2213,7 @@ function openDetail(id) {
   const p = projects.find(x => x['ID'] === id);
   if (!p) return;
 
-  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Blocked':['s-block-bg','s-block'],'On Hold':['s-hold-bg','s-hold']};
+  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
   const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
   const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
@@ -2705,7 +2813,7 @@ async function cycleGoalStatus(row, id, current) {
 
 
 
-// ===== CHAIR ACTION ITEMS (Blocked + Stale projects) =====
+// ===== CHAIR ACTION ITEMS (Stale projects) =====
 function renderActionItems() {
   var dp = getDomainProjects();
   var today = new Date(); today.setHours(0,0,0,0);
@@ -2713,11 +2821,6 @@ function renderActionItems() {
 
   dp.forEach(function(p) {
     if (p['Status'] === 'Complete') return;
-    // Blocked projects
-    if (p['Status'] === 'Blocked') {
-      items.push({ project: p, reason: 'Blocked', type: 'blocked' });
-      return;
-    }
     // Overdue > 7 days
     if (p['Due Date']) {
       var due = new Date(String(p['Due Date']).slice(0,10));
@@ -2748,8 +2851,8 @@ function renderActionItems() {
     return;
   }
 
-  // Sort: blocked first, then by days overdue/stale
-  items.sort(function(a,b) { return a.type === 'blocked' ? -1 : b.type === 'blocked' ? 1 : 0; });
+  // Sort by days overdue/stale
+  items.sort(function(a,b) { return 0; });
 
   grid.innerHTML = items.map(function(item) {
     var p = item.project;
@@ -3146,7 +3249,7 @@ function renderPredictiveAlerts() {
   var alerts = [];
 
   dp.forEach(function(p) {
-    if (p['Status'] === 'Complete' || p['Status'] === 'On Hold') return;
+    if (p['Status'] === 'Complete' || p['Status'] === 'Delayed') return;
     if (!p['Due Date']) return;
 
     var due = new Date(String(p['Due Date']).slice(0,10));
@@ -3164,9 +3267,8 @@ function renderPredictiveAlerts() {
     if (totalPlanned <= 0 || elapsed <= 0) return;
 
     // Estimate completion % based on status
-    var statusPct = { 'Not Started': 0, 'Planning': 15, 'In Progress': 50, 'In Review': 85, 'Blocked': -1 };
+    var statusPct = { 'Not Started': 0, 'Planning': 15, 'In Progress': 50, 'In Review': 85 };
     var pctDone = statusPct[p['Status']] !== undefined ? statusPct[p['Status']] : 30;
-    if (pctDone < 0) return; // Blocked handled elsewhere
 
     var pctElapsed = (elapsed / totalPlanned) * 100;
 
@@ -3213,6 +3315,190 @@ function renderPredictiveAlerts() {
 }
 
 
+// ===== UPCOMING THIS WEEK BY TEAM MEMBER =====
+function renderUpcomingWeek() {
+  const grid = document.getElementById('upcomingWeekGrid');
+  const countEl = document.getElementById('upcomingWeekCount');
+  const dp = getDomainProjects();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const endOfWeek = new Date(today);
+  endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+
+  // Find active (non-complete) projects due this week or currently in progress
+  const upcoming = dp.filter(p => {
+    if (p['Status'] === 'Complete') return false;
+    const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    // Include: due this week, overdue, or actively in progress
+    if (due && due <= endOfWeek) return true;
+    if (p['Status'] === 'In Progress' || p['Status'] === 'In Review') return true;
+    return false;
+  });
+
+  countEl.textContent = upcoming.length;
+
+  if (upcoming.length === 0) {
+    grid.innerHTML = '<div class="dash-empty-state">No projects due or active this week</div>';
+    return;
+  }
+
+  // Group by owner
+  const byOwner = {};
+  upcoming.forEach(p => {
+    const owner = p['Owner'] || 'Unassigned';
+    if (!byOwner[owner]) byOwner[owner] = [];
+    byOwner[owner].push(p);
+  });
+
+  // Sort owners by number of projects (desc)
+  const owners = Object.entries(byOwner).sort((a,b) => b[1].length - a[1].length);
+
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const STATUS_ICONS = {
+    'In Progress': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-prog)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+    'In Review': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-rev)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>',
+    'Not Started': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-nostart)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg>',
+    'Planning': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-plan)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/></svg>',
+    'Delayed': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-hold)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>',
+  };
+
+  grid.innerHTML = owners.map(([owner, projs]) => {
+    const initials = owner.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    // Sort projects: overdue first, then by due date
+    projs.sort((a,b) => {
+      const da = a['Due Date'] ? new Date(String(a['Due Date']).slice(0,10)) : new Date(9999,0);
+      const db = b['Due Date'] ? new Date(String(b['Due Date']).slice(0,10)) : new Date(9999,0);
+      return da - db;
+    });
+
+    const projRows = projs.map(p => {
+      const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+      const isOverdue = due && due < today;
+      const isDueSoon = due && !isOverdue && due <= new Date(today.getTime() + 3*86400000);
+      const dueCls = isOverdue ? 'overdue' : isDueSoon ? 'due-soon' : '';
+      const dueLabel = due ? due.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'No date';
+      const dueExtra = isOverdue ? ' — Overdue' : isDueSoon ? ' — Soon' : '';
+      const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
+      const statusIcon = STATUS_ICONS[p['Status']] || '';
+
+      return `<div class="dash-member-project" onclick="openDetail('${esc(p['ID']||'')}')">
+        <span style="flex-shrink:0">${statusIcon}</span>
+        <span class="proj-name">${esc(p['Project']||'')}</span>
+        <span class="proj-priority" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
+        <span class="proj-due ${dueCls}">${dueLabel}${dueExtra}</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="dash-member-card">
+      <div class="dash-member-header">
+        <div class="dash-member-avatar">${initials}</div>
+        <div>
+          <div class="dash-member-name">${esc(owner)}</div>
+          <div class="dash-member-meta">${projs.length} project${projs.length!==1?'s':''} this week</div>
+        </div>
+      </div>
+      <div class="dash-member-projects">${projRows}</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== 30-DAY WORKLOAD BY PROJECT =====
+function renderWorkload30() {
+  const chart = document.getElementById('workload30Chart');
+  const countEl = document.getElementById('workload30Count');
+  const dp = getDomainProjects();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const in30 = new Date(today); in30.setDate(today.getDate() + 30);
+
+  // Find active projects that overlap the next 30 days
+  const active = dp.filter(p => {
+    if (p['Status'] === 'Complete') return false;
+    const start = p['Start Date'] ? new Date(String(p['Start Date']).slice(0,10)) : null;
+    const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    // Include if: has a due date within 30 days, or is in progress, or starts within 30 days
+    if (due && due <= in30) return true;
+    if (start && start <= in30 && (!due || due >= today)) return true;
+    if ((p['Status'] === 'In Progress' || p['Status'] === 'In Review') && (!due || due >= today)) return true;
+    // Overdue projects still count
+    if (due && due < today && p['Status'] !== 'Complete') return true;
+    return false;
+  });
+
+  countEl.textContent = active.length;
+
+  if (active.length === 0) {
+    chart.innerHTML = '<div class="dash-empty-state">No active projects in the next 30 days</div>';
+    return;
+  }
+
+  // Sort by due date (soonest first), then overdue
+  active.sort((a,b) => {
+    const da = a['Due Date'] ? new Date(String(a['Due Date']).slice(0,10)) : new Date(9999,0);
+    const db = b['Due Date'] ? new Date(String(b['Due Date']).slice(0,10)) : new Date(9999,0);
+    return da - db;
+  });
+
+  // Calculate max span for bar scaling
+  const maxSpan = 30;
+
+  const rows = active.map(p => {
+    const start = p['Start Date'] ? new Date(String(p['Start Date']).slice(0,10)) : null;
+    const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    const isOverdue = due && due < today;
+
+    let daysRemaining = 0;
+    let daysElapsed = 0;
+    let totalDays = 0;
+    let dueLabel = '';
+
+    if (due) {
+      if (isOverdue) {
+        daysRemaining = 0;
+        daysElapsed = start ? Math.max(0, Math.ceil((today - start) / 86400000)) : 0;
+        totalDays = daysElapsed || 1;
+        const overdueDays = Math.ceil((today - due) / 86400000);
+        dueLabel = `${overdueDays}d overdue`;
+      } else {
+        daysRemaining = Math.ceil((due - today) / 86400000);
+        daysElapsed = start ? Math.max(0, Math.ceil((today - start) / 86400000)) : 0;
+        totalDays = daysElapsed + daysRemaining;
+        dueLabel = `${daysRemaining}d left`;
+      }
+    } else {
+      // No due date — show as ongoing
+      daysElapsed = start ? Math.max(0, Math.ceil((today - start) / 86400000)) : 0;
+      totalDays = Math.max(daysElapsed, 14);
+      daysRemaining = totalDays - daysElapsed;
+      dueLabel = 'No due date';
+    }
+
+    const elapsedPct = Math.min((daysElapsed / maxSpan) * 100, 100);
+    const remainPct = Math.min((daysRemaining / maxSpan) * 100, 100 - elapsedPct);
+
+    const owner = p['Owner'] || 'Unassigned';
+    const barClass = isOverdue ? 'overdue' : 'remaining';
+
+    return `<div class="dash-wl-row" onclick="openDetail('${esc(p['ID']||'')}')">
+      <div class="dash-wl-label" title="${esc(p['Project']||'')}">${esc(p['Project']||'')}</div>
+      <div class="dash-wl-bar-wrap">
+        ${daysElapsed > 0 ? `<div class="dash-wl-bar past" style="width:${elapsedPct}%;position:absolute;left:0;top:0;bottom:0;"></div>` : ''}
+        <div class="dash-wl-bar ${barClass}" style="width:${isOverdue ? elapsedPct : remainPct}%;position:absolute;${isOverdue?'left:0':'left:'+elapsedPct+'%'};top:0;bottom:0;">
+          ${(isOverdue ? elapsedPct : remainPct) > 12 ? esc(owner) : ''}
+        </div>
+      </div>
+      <div class="dash-wl-days" style="${isOverdue?'color:var(--p-crit);font-weight:600':''}">${dueLabel}</div>
+    </div>`;
+  }).join('');
+
+  chart.innerHTML = `
+    <div class="dash-wl-legend">
+      <span><span class="dash-wl-legend-dot" style="background:var(--s-prog);opacity:0.65"></span> Elapsed</span>
+      <span><span class="dash-wl-legend-dot" style="background:var(--gold)"></span> Remaining</span>
+      <span><span class="dash-wl-legend-dot" style="background:var(--p-crit)"></span> Overdue</span>
+    </div>
+    <div class="dash-wl-bar-group">${rows}</div>
+  `;
+}
+
 async function loadProjects() {
   showLoading(true);
   try {
@@ -3237,6 +3523,8 @@ async function loadProjects() {
     renderActionItems();
     renderPredictiveAlerts();
     renderDeliveryMetrics();
+    renderUpcomingWeek();
+    renderWorkload30();
     if (activePage === 'calendar') renderCalendar();
     updateSyncTime();
   } catch(e) { console.error(e); showToast('Failed to load projects','error'); }
@@ -3408,11 +3696,11 @@ function statFilter(type){
     document.getElementById('statCard3').classList.add('clickable-active');
     return;
   }
-  if(['In Progress','Complete','Blocked'].includes(type)){
+  if(['In Progress','Complete'].includes(type)){
     document.getElementById('filterStatus').value=type;
   }
   applyFilters();
-  const idx = type==='In Progress'?1:type==='Blocked'?4:0;
+  const idx = type==='In Progress'?1:0;
   document.getElementById(`statCard${idx}`).classList.add('clickable-active');
 }
 
@@ -3463,7 +3751,6 @@ function updateStats(){
   const total = dp.length;
   const inProg = dp.filter(p=>p['Status']==='In Progress').length;
   const complete = dp.filter(p=>p['Status']==='Complete').length;
-  const blocked = dp.filter(p=>p['Status']==='Blocked').length;
   const owners = [...new Set(dp.map(p=>p['Owner']).filter(Boolean))].length;
 
   // Due this week
@@ -3494,7 +3781,6 @@ function updateStats(){
   document.getElementById('statOverdue').textContent = overdue.length;
   const oSub = document.getElementById('statOverdueSub');
   if(overdue.length > 0) { oSub.innerHTML = `<span class="stat-warn">Needs attention</span>`; } else { oSub.textContent = 'On track'; }
-  document.getElementById('statBlocked').textContent = blocked;
   document.getElementById('statPct').textContent = `${pct}%`;
   document.getElementById('statPctSub').textContent = `${complete} of ${total}`;
 }
@@ -3551,12 +3837,11 @@ function renderKanban() {
     'In Progress':['s-prog-bg','s-prog','var(--s-prog)'],
     'In Review':['s-rev-bg','s-rev','var(--s-rev)'],
     'Complete':['s-done-bg','s-done','var(--s-done)'],
-    'Blocked':['s-block-bg','s-block','var(--s-block)'],
-    'On Hold':['s-hold-bg','s-hold','var(--s-hold)']
+    'Delayed':['s-hold-bg','s-hold','var(--s-hold)']
   };
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
 
-  const columns = ['Not Started','Planning','In Progress','In Review','Blocked','Complete'];
+  const columns = ['Not Started','Planning','In Progress','In Review','Delayed','Complete'];
 
   board.innerHTML = columns.map(status => {
     const items = filtered.filter(p => (p['Status'] || 'Not Started') === status);
