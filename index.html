@@ -4383,6 +4383,8 @@ async function loadProjects() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     projects = data.projects || [];
+    if (projects.length > 0) console.log('[Dashboard] Headers from sheet:', Object.keys(projects[0]).filter(k => k !== '_row').join(', '));
+    if (projects.length > 0 && !('Leadership Status' in projects[0])) console.warn('[Dashboard] "Leadership Status" column not found in sheet. Add a column with that exact header in Row 1.');
     recurringItems = data.recurring || [];
     recurringHistory = data.history || [];
     calendarEvents = data.calendarEvents || [];
