@@ -49,9 +49,12 @@
   --s-hold-bg:#ECEBE8; --s-hold:#76716A;
 
   --p-crit-bg:#F8E1DE; --p-crit:#B04840;
-  --p-high-bg:#FAE4D0; --p-high:#B06C2E;
+  --p-urg-bg:#FAE4D0; --p-urg:#B06C2E;
+  --p-imp-bg:#FFF3DC; --p-imp:#9A7B2E;
   --p-med-bg:#F9EEDB; --p-med:#96782C;
-  --p-low-bg:#ECEBE8; --p-low:#76716A;
+  --p-low-bg:#E8EDE8; --p-low:#5A7A5A;
+  --p-non-bg:#ECEBE8; --p-non:#76716A;
+  --p-high-bg:#FAE4D0; --p-high:#B06C2E;
 
   --r: 10px; --r-sm: 7px; --r-xs: 4px; --r-full: 999px;
   --ease: cubic-bezier(0.4,0,0.2,1);
@@ -392,9 +395,12 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .pill-select[data-type="status"][data-value="Delayed"]{background-color:var(--s-hold-bg);color:var(--s-hold)}
 
 .pill-select[data-type="priority"][data-value="Critical"]{background-color:var(--p-crit-bg);color:var(--p-crit)}
-.pill-select[data-type="priority"][data-value="High"]{background-color:var(--p-high-bg);color:var(--p-high)}
+.pill-select[data-type="priority"][data-value="Urgent"]{background-color:var(--p-urg-bg);color:var(--p-urg)}
+.pill-select[data-type="priority"][data-value="Important"]{background-color:var(--p-imp-bg);color:var(--p-imp)}
 .pill-select[data-type="priority"][data-value="Medium"]{background-color:var(--p-med-bg);color:var(--p-med)}
 .pill-select[data-type="priority"][data-value="Low"]{background-color:var(--p-low-bg);color:var(--p-low)}
+.pill-select[data-type="priority"][data-value="Non-Urgent"]{background-color:var(--p-non-bg);color:var(--p-non)}
+.pill-select[data-type="priority"][data-value="High"]{background-color:var(--p-high-bg);color:var(--p-high)}
 
 .pill-select[data-type="category"]{background-color:rgba(61,108,180,0.06);color:var(--s-prog)}
 
@@ -1910,8 +1916,25 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 </div>
 
 <!-- PAGE-LEVEL TABS -->
+<div class="page-tabs">
+  <div class="page-tabs-inner">
+    <button class="page-tab active" data-page="chair" onclick="setPage('chair')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Chair View
+    </button>
+    <button class="page-tab" data-page="admin" onclick="setPage('admin')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      Admin Leadership
+    </button>
+    <button class="page-tab" data-page="calendar" onclick="setPage('calendar')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Calendar
+    </button>
+  </div>
+</div>
 
-<div class="app" id="dashboardView">
+<!-- ===== CHAIR VIEW (Landing Page) ===== -->
+<div class="app" id="chairView">
 
   <!-- EXECUTIVE SUMMARY BAR -->
   <div class="exec-bar anim a1" id="execBar">
@@ -1946,6 +1969,35 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         </div>
         <div class="exec-health-label">Portfolio<br>Health</div>
       </div>
+    </div>
+  </div>
+
+  <!-- NEEDS ATTENTION (overdue + stale projects) -->
+  <div class="action-items-section anim a1" id="actionItemsSection">
+    <div class="section-collapse-header" data-collapse-target="actionItemsBody" onclick="toggleSection('actionItemsBody')">
+      <div class="action-items-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Needs Attention <span class="action-items-count" id="actionItemsCount">0</span>
+      </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="actionItemsBody" class="section-collapse-body">
+      <div id="actionItemsGrid" class="action-items-grid"></div>
+    </div>
+  </div>
+
+  <!-- KEY PROJECTS SPOTLIGHT -->
+  <div class="spotlight anim a1" id="spotlightSection">
+    <div class="section-collapse-header" data-collapse-target="spotlightBody" onclick="toggleSection('spotlightBody')">
+      <div class="spotlight-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Key Projects
+        <span class="spotlight-count" id="spotlightCount">0</span>
+      </div>
+      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div id="spotlightBody" class="section-collapse-body">
+      <div id="spotlightGrid" class="spotlight-grid"></div>
     </div>
   </div>
 
@@ -2005,71 +2057,84 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
   </div><!-- end .dual-panel-row -->
 
+  <div class="footer">
+    <div class="footer-left">Michigan Medicine &middot; Department of Urology</div>
+    <div class="footer-right" id="footerSyncChair"></div>
+  </div>
+</div>
 
-  <!-- CHAIR ACTION ITEMS (stale projects) -->
-  <div class="action-items-section anim a1" id="actionItemsSection">
-    <div class="section-collapse-header" data-collapse-target="actionItemsBody" onclick="toggleSection('actionItemsBody')">
-      <div class="action-items-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        Needs Attention <span class="action-items-count" id="actionItemsCount">0</span>
-      </div>
-      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-    </div>
-    <div id="actionItemsBody" class="section-collapse-body">
-      <div id="actionItemsGrid" class="action-items-grid"></div>
+<!-- Goal Add/Edit Modal (global) -->
+<div class="goal-modal-overlay" id="goalModalOverlay">
+  <div class="goal-modal">
+    <h3 id="goalModalTitle">Add Goal</h3>
+    <label>Title</label>
+    <input type="text" id="goalTitle" placeholder="e.g., Complete 10 hours of leadership volunteering">
+    <label>Domain</label>
+    <select id="goalDomain">
+      <option value="">Global (all domains)</option>
+      <option value="Finance">Finance</option>
+      <option value="Faculty">Faculty</option>
+      <option value="Operations">Operations</option>
+      <option value="Administrative">Administrative</option>
+      <option value="Strategy">Strategy</option>
+      <option value="Analytics">Analytics</option>
+      <option value="PCC">PCC</option>
+      <option value="BizIQ">BizIQ</option>
+      <option value="Perioperative">Perioperative</option>
+    </select>
+    <label>Status</label>
+    <select id="goalStatus">
+      <option value="Not Started">Not Started</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Complete">Complete</option>
+    </select>
+    <label>Notes</label>
+    <textarea id="goalNotes" placeholder="Optional details or context"></textarea>
+    <input type="hidden" id="goalEditRow" value="">
+    <input type="hidden" id="goalEditId" value="">
+    <div class="goal-modal-btns">
+      <button class="goal-btn-cancel" onclick="closeGoalModal()">Cancel</button>
+      <button class="goal-btn-save" onclick="saveGoal()">Save Goal</button>
     </div>
   </div>
+</div>
 
+<!-- ===== ADMIN LEADERSHIP VIEW ===== -->
+<div class="app" id="adminView" style="display:none">
 
-
-  <!-- Goal Add/Edit Modal -->
-  <div class="goal-modal-overlay" id="goalModalOverlay">
-    <div class="goal-modal">
-      <h3 id="goalModalTitle">Add Goal</h3>
-      <label>Title</label>
-      <input type="text" id="goalTitle" placeholder="e.g., Complete 10 hours of leadership volunteering">
-      <label>Domain</label>
-      <select id="goalDomain">
-        <option value="">Global (all domains)</option>
-        <option value="Finance">Finance</option>
-        <option value="Faculty">Faculty</option>
-        <option value="Operations">Operations</option>
-        <option value="Administrative">Administrative</option>
-        <option value="Strategy">Strategy</option>
-        <option value="Analytics">Analytics</option>
-        <option value="PCC">PCC</option>
-        <option value="BizIQ">BizIQ</option>
-        <option value="Perioperative">Perioperative</option>
-      </select>
-      <label>Status</label>
-      <select id="goalStatus">
-        <option value="Not Started">Not Started</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Complete">Complete</option>
-      </select>
-      <label>Notes</label>
-      <textarea id="goalNotes" placeholder="Optional details or context"></textarea>
-      <input type="hidden" id="goalEditRow" value="">
-      <input type="hidden" id="goalEditId" value="">
-      <div class="goal-modal-btns">
-        <button class="goal-btn-cancel" onclick="closeGoalModal()">Cancel</button>
-        <button class="goal-btn-save" onclick="saveGoal()">Save Goal</button>
+  <!-- Exec bar duplicated for admin context -->
+  <div class="exec-bar anim a1" id="execBarAdmin">
+    <div class="exec-bar-inner">
+      <div class="exec-metric" id="execOnTrackAdmin">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">On Track</div>
       </div>
-    </div>
-  </div>
-
-  <!-- KEY PROJECTS SPOTLIGHT -->
-  <div class="spotlight anim a1" id="spotlightSection">
-    <div class="section-collapse-header" data-collapse-target="spotlightBody" onclick="toggleSection('spotlightBody')">
-      <div class="spotlight-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Key Projects
-        <span class="spotlight-count" id="spotlightCount">0</span>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execOverdueAdmin">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Overdue</div>
       </div>
-      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-    </div>
-    <div id="spotlightBody" class="section-collapse-body">
-      <div id="spotlightGrid" class="spotlight-grid"></div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execStaleAdmin">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Stale</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execCompleteAdmin">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Complete</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-health" id="execHealthAdmin">
+        <div class="exec-health-ring">
+          <svg viewBox="0 0 36 36">
+            <circle class="exec-ring-bg" cx="18" cy="18" r="15.9"/>
+            <circle class="exec-ring-fg" id="execHealthRingAdmin" cx="18" cy="18" r="15.9" stroke-dasharray="0 100"/>
+          </svg>
+          <div class="exec-ring-text" id="execHealthPctAdmin">—</div>
+        </div>
+        <div class="exec-health-label">Portfolio<br>Health</div>
+      </div>
     </div>
   </div>
 
@@ -2082,7 +2147,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </select>
       <select class="filter-select" id="filterPriority" onchange="applyFilters()">
         <option value="">Priority</option>
-        <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+        <option>Critical</option><option>Urgent</option><option>Important</option><option>Medium</option><option>Low</option><option>Non-Urgent</option>
       </select>
       <select class="filter-select" id="filterCategory" onchange="applyFilters()">
         <option value="">Category</option>
@@ -2167,7 +2232,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
   <div class="footer">
     <div class="footer-left">Michigan Medicine &middot; Department of Urology</div>
-    <div class="footer-right" id="footerSync"></div>
+    <div class="footer-right" id="footerSyncAdmin"></div>
   </div>
 </div>
 
@@ -2325,12 +2390,12 @@ function getDomainProjects() {
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
-const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
+const PRIORITY_OPTIONS = ['Critical','Urgent','Important','Medium','Low','Non-Urgent'];
 const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
 const TIME_OPTIONS = ['< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months','1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
-// Priority and Status rank maps for smart sorting
-const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
+// Priority and Status rank maps for smart sorting (lower = higher priority)
+const PRIORITY_RANK = {'Critical':0, 'Urgent':1, 'Important':2, 'Medium':3, 'Low':4, 'Non-Urgent':5, 'High':1};
 const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, 'Delayed':4, Complete:5};
 const TIME_RANK = {'< 1 Week':1, '1-2 Weeks':2, '2-4 Weeks':4, '1-3 Months':8, '3+ Months':16, '1 hour':0.1, '2 hours':0.2, '4 hours':0.4, '8 hours':0.8, 'Multi-day':1};
 
@@ -2364,7 +2429,7 @@ function renderProjectList() {
   });
 
   const statusOrder = {'In Progress':0,'Planning':1,'Not Started':2,'In Review':3,'Delayed':4,'Complete':5};
-  const prioOrder = {'Critical':0,'High':1,'Medium':2,'Low':3};
+  const prioOrder = {'Critical':0,'Urgent':1,'Important':2,'Medium':3,'Low':4,'Non-Urgent':5,'High':1};
   if (sortBy === 'status') list.sort((a,b) => (statusOrder[a['Status']]??9) - (statusOrder[b['Status']]??9));
   else if (sortBy === 'priority') list.sort((a,b) => (prioOrder[a['Priority']]??9) - (prioOrder[b['Priority']]??9));
   else if (sortBy === 'category') list.sort((a,b) => (a['Category']||'').localeCompare(b['Category']||''));
@@ -2419,7 +2484,7 @@ function renderSpotlight() {
   }
 
   const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
-  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
 
   grid.innerHTML = keyProjects.map(p => {
     const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
@@ -2512,7 +2577,7 @@ function toggleSection(sectionId) {
 
 function restoreCollapseStates() {
   // Sections that should be OPEN by default (leader needs to see these immediately)
-  const defaultOpen = ['actionItemsBody'];
+  const defaultOpen = ['actionItemsBody', 'spotlightBody'];
   document.querySelectorAll('.section-collapse-body').forEach(body => {
     try {
       const saved = localStorage.getItem('collapse_' + body.id);
@@ -2585,7 +2650,7 @@ function openDetail(id) {
   if (!p) return;
 
   const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
-  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
   const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
   const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
 
@@ -3027,14 +3092,16 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ===== PAGE TABS =====
-let activePage = 'dashboard';
+let activePage = 'chair';
 
 function setPage(page) {
   activePage = page;
   document.querySelectorAll('.page-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-page') === page));
-  document.getElementById('dashboardView').style.display = page === 'dashboard' ? '' : 'none';
+  document.getElementById('chairView').style.display = page === 'chair' ? '' : 'none';
+  document.getElementById('adminView').style.display = page === 'admin' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
   if (page === 'calendar') renderCalendar();
+  if (page === 'admin') { renderTable(); setView(currentView); }
 }
 
 // ===== CALENDAR =====
@@ -3699,7 +3766,7 @@ function renderRecurringCards() {
     return;
   }
 
-  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
   const tiers = { action: [], upcoming: [], ontrack: [] };
 
   recurringItems.forEach(item => {
@@ -4030,7 +4097,7 @@ function renderUpcomingWeek() {
   // Sort owners by number of projects (desc)
   const owners = Object.entries(byOwner).sort((a,b) => b[1].length - a[1].length);
 
-  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
   const STATUS_ICONS = {
     'In Progress': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-prog)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
     'In Review': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--s-rev)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>',
@@ -4477,14 +4544,15 @@ function updateStats(){
   if (el = document.getElementById('statProgress')) el.textContent = inProg;
   if (el = document.getElementById('statProgressSub')) el.textContent = total > 0 ? `${Math.round((inProg/total)*100)}% of portfolio` : '';
   if (el = document.getElementById('statDueWeek')) el.textContent = dueThisWeek.length;
-  if (el = document.getElementById('statDueWeekSub')) el.textContent = dueThisWeek.length > 0 ? `${dueThisWeek.filter(p=>p['Priority']==='Critical'||p['Priority']==='High').length} high priority` : 'Clear';
+  if (el = document.getElementById('statDueWeekSub')) el.textContent = dueThisWeek.length > 0 ? `${dueThisWeek.filter(p=>['Critical','Urgent','Important','High'].includes(p['Priority'])).length} high priority` : 'Clear';
   if (el = document.getElementById('statOverdue')) el.textContent = overdue.length;
   if (el = document.getElementById('statOverdueSub')) { if(overdue.length > 0) { el.innerHTML = `<span class="stat-warn">Needs attention</span>`; } else { el.textContent = 'On track'; } }
   if (el = document.getElementById('statPct')) el.textContent = `${pct}%`;
   if (el = document.getElementById('statPctSub')) el.textContent = `${complete} of ${total}`;
 }
 
-function renderExecBar() {
+function _populateExecBar(suffix) {
+  const s = suffix || '';
   const dp = getDomainProjects();
   const total = dp.length;
   if (total === 0) return;
@@ -4502,37 +4570,31 @@ function renderExecBar() {
   const onTrack = active.length - overdue - stale;
   const healthPct = total > 0 ? Math.round(((onTrack + complete) / total) * 100) : 0;
 
-  // On Track
-  const otEl = document.getElementById('execOnTrack');
+  const otEl = document.getElementById('execOnTrack' + s);
   if (otEl) {
     otEl.querySelector('.exec-metric-value').textContent = onTrack;
     otEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (onTrack > 0 ? ' good' : ' neutral');
   }
-  // Overdue
-  const ovEl = document.getElementById('execOverdue');
+  const ovEl = document.getElementById('execOverdue' + s);
   if (ovEl) {
     ovEl.querySelector('.exec-metric-value').textContent = overdue;
     ovEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (overdue > 0 ? ' bad' : ' good');
   }
-  // Stale
-  const stEl = document.getElementById('execStale');
+  const stEl = document.getElementById('execStale' + s);
   if (stEl) {
     stEl.querySelector('.exec-metric-value').textContent = stale;
     stEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (stale > 0 ? ' warn' : ' good');
   }
-  // Complete
-  const cpEl = document.getElementById('execComplete');
+  const cpEl = document.getElementById('execComplete' + s);
   if (cpEl) {
     cpEl.querySelector('.exec-metric-value').textContent = complete;
     cpEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
     cpEl.querySelector('.exec-metric-label').textContent = 'Complete (' + Math.round((complete/total)*100) + '%)';
   }
-  // Health ring
-  const ringEl = document.getElementById('execHealthRing');
-  const pctEl = document.getElementById('execHealthPct');
+  const ringEl = document.getElementById('execHealthRing' + s);
+  const pctEl = document.getElementById('execHealthPct' + s);
   if (ringEl) ringEl.setAttribute('stroke-dasharray', healthPct + ' ' + (100 - healthPct));
   if (pctEl) pctEl.textContent = healthPct + '%';
-  // Color the ring
   if (ringEl) {
     if (healthPct >= 75) ringEl.style.stroke = 'var(--s-done)';
     else if (healthPct >= 50) ringEl.style.stroke = 'var(--gold)';
@@ -4540,11 +4602,19 @@ function renderExecBar() {
   }
 }
 
+function renderExecBar() {
+  _populateExecBar('');
+  _populateExecBar('Admin');
+}
+
 function updateSyncTime(){
   if(!lastSyncTime) return;
   const t = lastSyncTime.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
-  document.getElementById('footerSync').innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Last synced ${t}`;
-  document.getElementById('lastSync').textContent = `Synced ${t}`;
+  const syncHtml = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Last synced ${t}`;
+  var el;
+  if (el = document.getElementById('footerSyncChair')) el.innerHTML = syncHtml;
+  if (el = document.getElementById('footerSyncAdmin')) el.innerHTML = syncHtml;
+  if (el = document.getElementById('lastSync')) el.textContent = `Synced ${t}`;
 }
 
 function openAddModal(){document.getElementById('addModal').classList.add('active');}
@@ -4595,7 +4665,7 @@ function renderKanban() {
     'Complete':['s-done-bg','s-done','var(--s-done)'],
     'Delayed':['s-hold-bg','s-hold','var(--s-hold)']
   };
-  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'High':['p-high-bg','p-high'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low']};
+  const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
 
   const columns = ['Not Started','Planning','In Progress','In Review','Delayed','Complete'];
 
