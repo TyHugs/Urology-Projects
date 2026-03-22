@@ -1340,6 +1340,43 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   font-size: 0.64rem; font-weight: 700; color: rgba(255,255,255,0.45);
   text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.4;
 }
+.exec-metric-hoverable { cursor: pointer; border-radius: var(--r-sm); transition: background 0.2s ease; }
+.exec-metric-hoverable:hover { background: rgba(255,255,255,0.05); }
+
+/* KPI Hover Tooltip */
+.kpi-tooltip {
+  position: fixed; z-index: 300; min-width: 260px; max-width: 340px;
+  background: var(--bg-card); border: 1px solid var(--border-warm);
+  border-radius: var(--r); box-shadow: var(--sh-lg);
+  opacity: 0; pointer-events: none; transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(4px); overflow: hidden;
+}
+.kpi-tooltip.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+.kpi-tooltip-header {
+  padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border);
+  font-size: 0.72rem; font-weight: 700; color: var(--text);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.kpi-tooltip-body { padding: 0.3rem 0; max-height: 280px; overflow-y: auto; }
+.kpi-tooltip-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.45rem 0.85rem; transition: background var(--t) var(--ease);
+  cursor: pointer;
+}
+.kpi-tooltip-item:hover { background: var(--bg-stripe); }
+.kpi-tooltip-item-name {
+  font-size: 0.78rem; font-weight: 600; color: var(--text);
+  flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.kpi-tooltip-item-meta {
+  font-size: 0.66rem; color: var(--text-3); flex-shrink: 0; white-space: nowrap;
+}
+.kpi-tooltip-item-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.kpi-tooltip-empty {
+  padding: 0.85rem; text-align: center; font-size: 0.76rem; color: var(--text-3);
+}
 @media(max-width:700px){
   .exec-bar-inner{flex-wrap:wrap;gap:0.5rem;padding:0.85rem 1rem}
   .exec-metric{min-width:70px}
@@ -1968,40 +2005,34 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 <!-- ===== CHAIR VIEW (Landing Page) ===== -->
 <div class="app" id="chairView">
 
-  <!-- EXECUTIVE SUMMARY BAR -->
+  <!-- EXECUTIVE KPI BAR -->
   <div class="exec-bar anim a1" id="execBar">
     <div class="exec-bar-inner">
-      <div class="exec-metric" id="execOnTrack">
+      <div class="exec-metric exec-metric-hoverable" id="execTotal" onmouseenter="showKpiTooltip(event,'total')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">On Track</div>
+        <div class="exec-metric-label">Total Projects</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execOverdue">
+      <div class="exec-metric exec-metric-hoverable" id="execPriorities" onmouseenter="showKpiTooltip(event,'priority')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Overdue</div>
+        <div class="exec-metric-label">Priorities</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execStale">
+      <div class="exec-metric exec-metric-hoverable" id="execActive" onmouseenter="showKpiTooltip(event,'active')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Stale</div>
+        <div class="exec-metric-label">Actively Managed</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execComplete">
+      <div class="exec-metric exec-metric-hoverable" id="execIdeas" onmouseenter="showKpiTooltip(event,'idea')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Complete</div>
-      </div>
-      <div class="exec-metric-divider"></div>
-      <div class="exec-health" id="execHealth">
-        <div class="exec-health-ring">
-          <svg viewBox="0 0 36 36">
-            <circle class="exec-ring-bg" cx="18" cy="18" r="15.9"/>
-            <circle class="exec-ring-fg" id="execHealthRing" cx="18" cy="18" r="15.9" stroke-dasharray="0 100"/>
-          </svg>
-          <div class="exec-ring-text" id="execHealthPct">—</div>
-        </div>
-        <div class="exec-health-label">Portfolio<br>Health</div>
+        <div class="exec-metric-label">Ideas</div>
       </div>
     </div>
+  </div>
+  <!-- KPI Hover Tooltip -->
+  <div class="kpi-tooltip" id="kpiTooltip">
+    <div class="kpi-tooltip-header" id="kpiTooltipHeader"></div>
+    <div class="kpi-tooltip-body" id="kpiTooltipBody"></div>
   </div>
 
   <!-- NEEDS ATTENTION (overdue + stale projects) -->
@@ -2134,38 +2165,27 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 <!-- ===== ADMIN LEADERSHIP VIEW ===== -->
 <div class="app" id="adminView" style="display:none">
 
-  <!-- Exec bar duplicated for admin context -->
+  <!-- Admin KPI Bar -->
   <div class="exec-bar anim a1" id="execBarAdmin">
     <div class="exec-bar-inner">
-      <div class="exec-metric" id="execOnTrackAdmin">
+      <div class="exec-metric exec-metric-hoverable" id="execTotalAdmin" onmouseenter="showKpiTooltip(event,'total')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">On Track</div>
+        <div class="exec-metric-label">Total Projects</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execOverdueAdmin">
+      <div class="exec-metric exec-metric-hoverable" id="execPrioritiesAdmin" onmouseenter="showKpiTooltip(event,'priority')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Overdue</div>
+        <div class="exec-metric-label">Priorities</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execStaleAdmin">
+      <div class="exec-metric exec-metric-hoverable" id="execActiveAdmin" onmouseenter="showKpiTooltip(event,'active')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Stale</div>
+        <div class="exec-metric-label">Actively Managed</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric" id="execCompleteAdmin">
+      <div class="exec-metric exec-metric-hoverable" id="execIdeasAdmin" onmouseenter="showKpiTooltip(event,'idea')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Complete</div>
-      </div>
-      <div class="exec-metric-divider"></div>
-      <div class="exec-health" id="execHealthAdmin">
-        <div class="exec-health-ring">
-          <svg viewBox="0 0 36 36">
-            <circle class="exec-ring-bg" cx="18" cy="18" r="15.9"/>
-            <circle class="exec-ring-fg" id="execHealthRingAdmin" cx="18" cy="18" r="15.9" stroke-dasharray="0 100"/>
-          </svg>
-          <div class="exec-ring-text" id="execHealthPctAdmin">—</div>
-        </div>
-        <div class="exec-health-label">Portfolio<br>Health</div>
+        <div class="exec-metric-label">Ideas</div>
       </div>
     </div>
   </div>
@@ -2186,6 +2206,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <option>Finance</option><option>Faculty</option><option>Operations</option>
         <option>Administrative</option><option>Strategy</option><option>Analytics</option>
         <option>PCC</option><option>BizIQ</option><option>Perioperative</option>
+      </select>
+      <select class="filter-select" id="filterLeadership" onchange="applyFilters()">
+        <option value="">Leadership</option>
+        <option>Priority</option><option>Actively Managed</option><option>Idea</option>
       </select>
       <select class="filter-select" id="filterOwner" onchange="applyFilters()"><option value="">Owner</option></select>
       <select class="filter-select" id="filterStakeholder" onchange="applyFilters()"><option value="">Stakeholder</option></select>
@@ -2365,8 +2389,14 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <div class="modal-row">
       <div class="modal-field"><label>Key Stakeholder</label><input type="text" id="newStakeholder" placeholder="e.g., Dr. Palapattu" /></div>
       <div class="modal-field"><label>Priority</label>
-        <select id="newPriority"><option value="Medium">Medium</option><option value="Critical">Critical</option><option value="High">High</option><option value="Low">Low</option></select>
+        <select id="newPriority"><option value="Medium">Medium</option><option value="Critical">Critical</option><option value="Urgent">Urgent</option><option value="Important">Important</option><option value="Low">Low</option><option value="Non-Urgent">Non-Urgent</option></select>
       </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Leadership Status</label>
+        <select id="newLeadershipStatus"><option value="Idea">Idea</option><option value="Actively Managed">Actively Managed</option><option value="Priority">Priority</option></select>
+      </div>
+      <div class="modal-field"></div>
     </div>
     <div class="modal-row-3">
       <div class="modal-field"><label>Est. Time</label>
@@ -2424,6 +2454,7 @@ const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mr
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
 const PRIORITY_OPTIONS = ['Critical','Urgent','Important','Medium','Low','Non-Urgent'];
 const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
+const LEADERSHIP_STATUS_OPTIONS = ['Priority','Actively Managed','Idea'];
 const TIME_OPTIONS = ['< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months','1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting (lower = higher priority)
@@ -2782,11 +2813,21 @@ function openDetail(id) {
     <div class="detail-field">
       <div class="detail-row">
         <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">Leadership Status</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'Leadership Status',this.value,'${esc(p['ID'])}')">
+            <option value="">—</option>${LEADERSHIP_STATUS_OPTIONS.map(o=>`<option${p['Leadership Status']===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="detail-field" style="flex:1">
           <div class="detail-field-label">Category</div>
           <select class="detail-edit-select" onchange="detailEdit(${p._row},'Category',this.value,'${esc(p['ID'])}')">
             <option value="">—</option>${CATEGORY_OPTIONS.map(o=>`<option${p['Category']===o?' selected':''}>${o}</option>`).join('')}
           </select>
         </div>
+      </div>
+    </div>
+    <div class="detail-field">
+      <div class="detail-row">
         <div class="detail-field" style="flex:1">
           <div class="detail-field-label">% Complete</div>
           <select class="detail-edit-select" onchange="detailEdit(${p._row},'% Complete',this.value,'${esc(p['ID'])}')">
@@ -4432,6 +4473,7 @@ async function addProject() {
     'Start Date':document.getElementById('newStartDate').value,
     'Due Date':document.getElementById('newDueDate').value,
     'AI Potential?':document.getElementById('newAIPotential').checked ? 'AI Candidate' : '',
+    'Leadership Status':document.getElementById('newLeadershipStatus').value,
   };
   showLoading(true);
   try {
@@ -4524,6 +4566,8 @@ function clearFilters(){
   document.getElementById('filterCategory').value='';
   document.getElementById('filterOwner').value='';
   document.getElementById('filterStakeholder').value='';
+  var flEl = document.getElementById('filterLeadership');
+  if (flEl) flEl.value = '';
   document.getElementById('searchInput').value='';
   document.querySelectorAll('.filter-select').forEach(el=>el.classList.remove('active-filter'));
   document.querySelectorAll('.stat').forEach(s=>s.classList.remove('clickable-active'));
@@ -4561,7 +4605,7 @@ function statFilter(type){
 
 function countActiveFilters(){
   let c=0;
-  ['filterStatus','filterPriority','filterCategory','filterOwner','filterStakeholder'].forEach(id=>{if(document.getElementById(id).value)c++;});
+  ['filterStatus','filterPriority','filterCategory','filterOwner','filterStakeholder','filterLeadership'].forEach(id=>{var el=document.getElementById(id);if(el&&el.value)c++;});
   if(document.getElementById('searchInput').value.trim())c++;
   if(window._customFilter) c++;
   return c;
@@ -4573,6 +4617,7 @@ function getFilteredProjects(){
   const c=document.getElementById('filterCategory').value;
   const o=document.getElementById('filterOwner').value;
   const sk=document.getElementById('filterStakeholder').value;
+  const ls=(document.getElementById('filterLeadership')||{}).value||'';
   const q=document.getElementById('searchInput').value.toLowerCase();
   const today = new Date(); today.setHours(0,0,0,0);
 
@@ -4596,6 +4641,11 @@ function getFilteredProjects(){
     if(c&&p['Category']!==c)return false;
     if(o&&p['Owner']!==o)return false;
     if(sk&&p['Key Stakeholder']!==sk)return false;
+    if(ls){
+      const pls=(p['Leadership Status']||'').toLowerCase();
+      if(ls==='Idea'){ if(pls!=='idea'&&pls!=='')return false; }
+      else { if(pls!==ls.toLowerCase())return false; }
+    }
     if(q&&!Object.values(p).join(' ').toLowerCase().includes(q))return false;
     return true;
   });
@@ -4641,54 +4691,51 @@ function updateStats(){
   if (el = document.getElementById('statPctSub')) el.textContent = `${complete} of ${total}`;
 }
 
+// Get active (non-archived) projects — filters out Complete
+function getActiveProjects() {
+  return getDomainProjects().filter(p => p['Status'] !== 'Complete');
+}
+
+// Get archived (completed) projects
+function getArchivedProjects() {
+  return getDomainProjects().filter(p => p['Status'] === 'Complete');
+}
+
+// Categorize by Leadership Status
+function getLeadershipBuckets() {
+  const active = getActiveProjects();
+  const priorities = active.filter(p => (p['Leadership Status'] || '').toLowerCase() === 'priority');
+  const managed = active.filter(p => (p['Leadership Status'] || '').toLowerCase() === 'actively managed');
+  const ideas = active.filter(p => {
+    const ls = (p['Leadership Status'] || '').toLowerCase();
+    return ls === 'idea' || ls === '' || !ls;
+  });
+  return { all: active, priorities, managed, ideas };
+}
+
 function _populateExecBar(suffix) {
   const s = suffix || '';
-  const dp = getDomainProjects();
-  const total = dp.length;
-  if (total === 0) return;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const complete = dp.filter(p => p['Status'] === 'Complete').length;
-  const active = dp.filter(p => p['Status'] !== 'Complete');
-  const overdue = active.filter(p => {
-    const d = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
-    return d && d < today;
-  }).length;
-  const stale = active.filter(p => {
-    if (!p['Last Updated'] || (p['Status'] !== 'In Progress' && p['Status'] !== 'Planning')) return false;
-    return Math.floor((today - new Date(p['Last Updated'])) / 86400000) >= 14;
-  }).length;
-  const onTrack = active.length - overdue - stale;
-  const healthPct = total > 0 ? Math.round(((onTrack + complete) / total) * 100) : 0;
+  const b = getLeadershipBuckets();
 
-  const otEl = document.getElementById('execOnTrack' + s);
-  if (otEl) {
-    otEl.querySelector('.exec-metric-value').textContent = onTrack;
-    otEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (onTrack > 0 ? ' good' : ' neutral');
+  const totalEl = document.getElementById('execTotal' + s);
+  if (totalEl) {
+    totalEl.querySelector('.exec-metric-value').textContent = b.all.length;
+    totalEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
   }
-  const ovEl = document.getElementById('execOverdue' + s);
-  if (ovEl) {
-    ovEl.querySelector('.exec-metric-value').textContent = overdue;
-    ovEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (overdue > 0 ? ' bad' : ' good');
+  const prioEl = document.getElementById('execPriorities' + s);
+  if (prioEl) {
+    prioEl.querySelector('.exec-metric-value').textContent = b.priorities.length;
+    prioEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.priorities.length > 0 ? ' bad' : ' neutral');
   }
-  const stEl = document.getElementById('execStale' + s);
-  if (stEl) {
-    stEl.querySelector('.exec-metric-value').textContent = stale;
-    stEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (stale > 0 ? ' warn' : ' good');
+  const actEl = document.getElementById('execActive' + s);
+  if (actEl) {
+    actEl.querySelector('.exec-metric-value').textContent = b.managed.length;
+    actEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.managed.length > 0 ? ' good' : ' neutral');
   }
-  const cpEl = document.getElementById('execComplete' + s);
-  if (cpEl) {
-    cpEl.querySelector('.exec-metric-value').textContent = complete;
-    cpEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
-    cpEl.querySelector('.exec-metric-label').textContent = 'Complete (' + Math.round((complete/total)*100) + '%)';
-  }
-  const ringEl = document.getElementById('execHealthRing' + s);
-  const pctEl = document.getElementById('execHealthPct' + s);
-  if (ringEl) ringEl.setAttribute('stroke-dasharray', healthPct + ' ' + (100 - healthPct));
-  if (pctEl) pctEl.textContent = healthPct + '%';
-  if (ringEl) {
-    if (healthPct >= 75) ringEl.style.stroke = 'var(--s-done)';
-    else if (healthPct >= 50) ringEl.style.stroke = 'var(--gold)';
-    else ringEl.style.stroke = 'var(--p-crit)';
+  const ideaEl = document.getElementById('execIdeas' + s);
+  if (ideaEl) {
+    ideaEl.querySelector('.exec-metric-value').textContent = b.ideas.length;
+    ideaEl.querySelector('.exec-metric-value').className = 'exec-metric-value warn';
   }
 }
 
@@ -4696,6 +4743,66 @@ function renderExecBar() {
   _populateExecBar('');
   _populateExecBar('Admin');
 }
+
+// ===== KPI HOVER TOOLTIP =====
+let _kpiTooltipTimeout = null;
+
+function showKpiTooltip(event, type) {
+  clearTimeout(_kpiTooltipTimeout);
+  const tooltip = document.getElementById('kpiTooltip');
+  const header = document.getElementById('kpiTooltipHeader');
+  const body = document.getElementById('kpiTooltipBody');
+  if (!tooltip) return;
+
+  const b = getLeadershipBuckets();
+  const STATUS_COLORS = {'Not Started':'s-nostart','Planning':'s-plan','In Progress':'s-prog','In Review':'s-rev','Delayed':'s-hold','Complete':'s-done'};
+  let list, title;
+  if (type === 'total') { list = b.all; title = 'All Active Projects'; }
+  else if (type === 'priority') { list = b.priorities; title = 'Priorities'; }
+  else if (type === 'active') { list = b.managed; title = 'Actively Managed'; }
+  else if (type === 'idea') { list = b.ideas; title = 'Ideas'; }
+  else { list = []; title = ''; }
+
+  header.textContent = title + ' (' + list.length + ')';
+
+  if (list.length === 0) {
+    body.innerHTML = '<div class="kpi-tooltip-empty">No projects in this category</div>';
+  } else {
+    body.innerHTML = list.map(p => {
+      const sc = STATUS_COLORS[p['Status']] || 's-nostart';
+      const owner = p['Owner'] || '—';
+      return `<div class="kpi-tooltip-item" onclick="openDetail('${esc(p['ID'])}');hideKpiTooltip();">
+        <div class="kpi-tooltip-item-dot" style="background:var(--${sc})"></div>
+        <div class="kpi-tooltip-item-name">${esc(p['Project'] || p['Project Name'] || 'Untitled')}</div>
+        <div class="kpi-tooltip-item-meta">${esc(owner)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Position below the hovered metric
+  const rect = event.currentTarget.getBoundingClientRect();
+  const left = Math.max(16, Math.min(rect.left + rect.width / 2 - 150, window.innerWidth - 356));
+  const top = rect.bottom + 8;
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  tooltip.classList.add('active');
+}
+
+function hideKpiTooltip() {
+  _kpiTooltipTimeout = setTimeout(() => {
+    const tooltip = document.getElementById('kpiTooltip');
+    if (tooltip) tooltip.classList.remove('active');
+  }, 200);
+}
+
+// Keep tooltip open when mouse moves into it
+(function() {
+  const tt = document.getElementById('kpiTooltip');
+  if (tt) {
+    tt.addEventListener('mouseenter', () => clearTimeout(_kpiTooltipTimeout));
+    tt.addEventListener('mouseleave', () => hideKpiTooltip());
+  }
+})();
 
 function updateSyncTime(){
   if(!lastSyncTime) return;
