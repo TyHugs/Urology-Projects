@@ -2462,18 +2462,55 @@ const PRIORITY_RANK = {'Critical':0, 'Urgent':1, 'Important':2, 'Medium':3, 'Low
 const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, 'Delayed':4, Complete:5};
 const TIME_RANK = {'< 1 Week':1, '1-2 Weeks':2, '2-4 Weeks':4, '1-3 Months':8, '3+ Months':16, '1 hour':0.1, '2 hours':0.2, '4 hours':0.4, '8 hours':0.8, 'Multi-day':1};
 
-// ===== KEY PROJECTS (localStorage) =====
+// ===== KEY PROJECTS (backed by Leadership Status column in Google Sheet) =====
 function getKeyProjectIds() {
-  try { return JSON.parse(localStorage.getItem('uro_keyProjects') || '[]'); } catch { return []; }
+  // Key Projects = projects with Leadership Status "Priority"
+  // Use localStorage only for ORDERING; membership comes from the Sheet data
+  const priorityIds = getActiveProjects()
+    .filter(p => {
+      const ls = (p['Leadership Status'] || '').toLowerCase().trim();
+      return ls === 'priority' || ls === 'priorities';
+    })
+    .map(p => p['ID']);
+  // Merge with localStorage order (preserves drag-and-drop ranking)
+  try {
+    const savedOrder = JSON.parse(localStorage.getItem('uro_keyProjects') || '[]');
+    // Return saved-order IDs that are still priorities, then append any new priorities
+    const ordered = savedOrder.filter(id => priorityIds.includes(id));
+    priorityIds.forEach(id => { if (!ordered.includes(id)) ordered.push(id); });
+    return ordered;
+  } catch { return priorityIds; }
 }
 
-function toggleKeyProject(id) {
-  let keys = getKeyProjectIds();
-  if (keys.includes(id)) { keys = keys.filter(k => k !== id); }
-  else { keys.push(id); }
+async function toggleKeyProject(id) {
+  const p = projects.find(x => x['ID'] === id);
+  if (!p) return;
+  const currentLS = (p['Leadership Status'] || '').toLowerCase().trim();
+  const isPriority = currentLS === 'priority' || currentLS === 'priorities';
+  const newVal = isPriority ? 'Actively Managed' : 'Priority';
+
+  // Optimistic local update
+  p['Leadership Status'] = newVal;
+
+  // Update localStorage ordering
+  let keys = [];
+  try { keys = JSON.parse(localStorage.getItem('uro_keyProjects') || '[]'); } catch {}
+  if (isPriority) {
+    keys = keys.filter(k => k !== id);
+  } else {
+    if (!keys.includes(id)) keys.push(id);
+  }
   localStorage.setItem('uro_keyProjects', JSON.stringify(keys));
+
+  // Re-render everything that depends on stars/priorities
   renderTable();
   renderSpotlight();
+  renderExecBar();
+  renderActionItems();
+
+  // Persist to Google Sheet
+  await updateCell(p._row, 'Leadership Status', newVal);
+  renderExecBar(); // refresh again after server confirms
 }
 
 function renderProjectList() {
@@ -4448,6 +4485,8 @@ async function updateCell(row, col, val) {
     const p = projects.find(x=>x._row===row);
     if(p){p[col]=val;p['Last Updated']=new Date().toISOString();}
     updateStats();
+    renderExecBar();
+    if (col === 'Leadership Status' || col === 'Status') { renderSpotlight(); renderActionItems(); }
     showToast(`Updated ${col}`);
   } catch(e) { showToast('Update failed','error'); setTimeout(()=>loadProjects(),1500); }
 }
@@ -4658,8 +4697,10 @@ function getFilteredProjects(){
     if(o&&p['Owner']!==o)return false;
     if(sk&&p['Key Stakeholder']!==sk)return false;
     if(ls){
-      const pls=(p['Leadership Status']||'').toLowerCase();
-      if(ls==='Idea'){ if(pls!=='idea'&&pls!=='')return false; }
+      const pls=(p['Leadership Status']||'').toLowerCase().trim();
+      if(ls==='Idea'){ if(pls!=='idea'&&pls!=='ideas'&&pls!=='')return false; }
+      else if(ls==='Priority'){ if(pls!=='priority'&&pls!=='priorities')return false; }
+      else if(ls==='Actively Managed'){ if(pls!=='actively managed'&&pls!=='actvely managed')return false; }
       else { if(pls!==ls.toLowerCase())return false; }
     }
     if(q&&!Object.values(p).join(' ').toLowerCase().includes(q))return false;
@@ -4720,11 +4761,17 @@ function getArchivedProjects() {
 // Categorize by Leadership Status
 function getLeadershipBuckets() {
   const active = getActiveProjects();
-  const priorities = active.filter(p => (p['Leadership Status'] || '').toLowerCase() === 'priority');
-  const managed = active.filter(p => (p['Leadership Status'] || '').toLowerCase() === 'actively managed');
+  const priorities = active.filter(p => {
+    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
+    return ls === 'priority' || ls === 'priorities';
+  });
+  const managed = active.filter(p => {
+    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
+    return ls === 'actively managed' || ls === 'actvely managed';
+  });
   const ideas = active.filter(p => {
-    const ls = (p['Leadership Status'] || '').toLowerCase();
-    return ls === 'idea' || ls === '' || !ls;
+    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
+    return ls === 'idea' || ls === 'ideas' || ls === '' || !ls;
   });
   return { all: active, priorities, managed, ideas };
 }
