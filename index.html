@@ -2467,10 +2467,7 @@ function getKeyProjectIds() {
   // Key Projects = projects with Leadership Status "Priority"
   // Use localStorage only for ORDERING; membership comes from the Sheet data
   const priorityIds = getActiveProjects()
-    .filter(p => {
-      const ls = (p['Leadership Status'] || '').toLowerCase().trim();
-      return ls === 'priority' || ls === 'priorities';
-    })
+    .filter(p => p['Leadership Status'] === 'Priority')
     .map(p => p['ID']);
   // Merge with localStorage order (preserves drag-and-drop ranking)
   try {
@@ -2485,8 +2482,7 @@ function getKeyProjectIds() {
 async function toggleKeyProject(id) {
   const p = projects.find(x => x['ID'] === id);
   if (!p) return;
-  const currentLS = (p['Leadership Status'] || '').toLowerCase().trim();
-  const isPriority = currentLS === 'priority' || currentLS === 'priorities';
+  const isPriority = p['Leadership Status'] === 'Priority';
   const newVal = isPriority ? 'Actively Managed' : 'Priority';
 
   // Optimistic local update
@@ -4420,20 +4416,35 @@ async function loadProjects() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     projects = data.projects || [];
+
+    // ── Normalize Leadership Status values (fix typos/plurals from sheet) ──
+    const LS_NORMALIZE = {
+      'priorities': 'Priority', 'priority': 'Priority',
+      'actively managed': 'Actively Managed', 'actvely managed': 'Actively Managed',
+      'ideas': 'Idea', 'idea': 'Idea'
+    };
+    let _lsFixed = 0;
+    projects.forEach(p => {
+      if ('Leadership Status' in p) {
+        const raw = (p['Leadership Status'] || '').trim();
+        const key = raw.toLowerCase();
+        if (key && LS_NORMALIZE[key] && LS_NORMALIZE[key] !== raw) {
+          p['Leadership Status'] = LS_NORMALIZE[key];
+          _lsFixed++;
+        }
+      }
+    });
+
     if (projects.length > 0) {
       const hdrs = Object.keys(projects[0]).filter(k => k !== '_row');
       console.log('[Dashboard] Headers from sheet:', hdrs.join(', '));
       if (!('Leadership Status' in projects[0])) {
-        console.warn('[Dashboard] ⚠️ "Leadership Status" column NOT FOUND in sheet. Available headers:', hdrs.join(', '));
-        console.warn('[Dashboard] → Add a column with the EXACT header "Leadership Status" (case-sensitive) in Row 1 of your Projects sheet.');
+        console.warn('[Dashboard] ⚠️ "Leadership Status" column NOT FOUND. Available headers:', hdrs.join(', '));
       } else {
-        const lsValues = projects.map(p => p['Leadership Status']).filter(Boolean);
         const lsCounts = {};
         projects.forEach(p => { const v = p['Leadership Status'] || '(empty)'; lsCounts[v] = (lsCounts[v]||0)+1; });
-        console.log('[Dashboard] Leadership Status values:', JSON.stringify(lsCounts));
-        if (lsValues.length === 0) {
-          console.warn('[Dashboard] ⚠️ Leadership Status column exists but ALL values are EMPTY. Populate with: Priority, Actively Managed, or Idea');
-        }
+        console.log('[Dashboard] Leadership Status breakdown:', JSON.stringify(lsCounts));
+        if (_lsFixed > 0) console.log('[Dashboard] Auto-corrected ' + _lsFixed + ' Leadership Status value(s) from sheet typos.');
       }
     }
     recurringItems = data.recurring || [];
@@ -4697,11 +4708,9 @@ function getFilteredProjects(){
     if(o&&p['Owner']!==o)return false;
     if(sk&&p['Key Stakeholder']!==sk)return false;
     if(ls){
-      const pls=(p['Leadership Status']||'').toLowerCase().trim();
-      if(ls==='Idea'){ if(pls!=='idea'&&pls!=='ideas'&&pls!=='')return false; }
-      else if(ls==='Priority'){ if(pls!=='priority'&&pls!=='priorities')return false; }
-      else if(ls==='Actively Managed'){ if(pls!=='actively managed'&&pls!=='actvely managed')return false; }
-      else { if(pls!==ls.toLowerCase())return false; }
+      const pls = p['Leadership Status'] || '';
+      if(ls==='Idea'){ if(pls!=='Idea'&&pls!=='')return false; }
+      else { if(pls!==ls)return false; }
     }
     if(q&&!Object.values(p).join(' ').toLowerCase().includes(q))return false;
     return true;
@@ -4758,20 +4767,14 @@ function getArchivedProjects() {
   return getDomainProjects().filter(p => p['Status'] === 'Complete');
 }
 
-// Categorize by Leadership Status
+// Categorize by Leadership Status (values are normalized on load)
 function getLeadershipBuckets() {
   const active = getActiveProjects();
-  const priorities = active.filter(p => {
-    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
-    return ls === 'priority' || ls === 'priorities';
-  });
-  const managed = active.filter(p => {
-    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
-    return ls === 'actively managed' || ls === 'actvely managed';
-  });
+  const priorities = active.filter(p => p['Leadership Status'] === 'Priority');
+  const managed = active.filter(p => p['Leadership Status'] === 'Actively Managed');
   const ideas = active.filter(p => {
-    const ls = (p['Leadership Status'] || '').toLowerCase().trim();
-    return ls === 'idea' || ls === 'ideas' || ls === '' || !ls;
+    const ls = p['Leadership Status'] || '';
+    return ls === 'Idea' || ls === '';
   });
   return { all: active, priorities, managed, ideas };
 }
