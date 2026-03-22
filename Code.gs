@@ -165,8 +165,9 @@ function doPost(e) {
       const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
       const newRow = headers.map(h => {
         if (h === 'ID') return generateId(sheet);
-        if (h === 'Status') return 'Not Started';
-        if (h === 'Priority') return 'Medium';
+        if (h === 'Status') return payload['Status'] || 'Not Started';
+        if (h === 'Priority') return payload['Priority'] || 'Medium';
+        if (h === 'Leadership Status') return payload['Leadership Status'] || 'Idea';
         if (h === 'Last Updated') return new Date().toISOString();
         return payload[h] || '';
       });
@@ -479,7 +480,9 @@ function setupSheet() {
 
   const headers = [
     'ID', 'Project', 'Description', 'Category', 'Owner',
-    'Key Stakeholder', 'Priority', 'Status', 'Est. Time', 'Start Date', 'Due Date', 'Notes', 'Last Updated'
+    'Key Stakeholder', 'Priority', 'Status', 'Leadership Status',
+    'Est. Time', 'Start Date', 'Due Date', '% Complete',
+    'AI Potential?', 'Last Updated', 'Notes'
   ];
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -497,21 +500,48 @@ function setupSheet() {
   sheet.setColumnWidth(6, 160);  // Key Stakeholder
   sheet.setColumnWidth(7, 100);  // Priority
   sheet.setColumnWidth(8, 130);  // Status
-  sheet.setColumnWidth(9, 100);  // Est. Time
-  sheet.setColumnWidth(10, 120); // Start Date
-  sheet.setColumnWidth(11, 120); // Due Date
-  sheet.setColumnWidth(12, 300); // Notes
-  sheet.setColumnWidth(13, 180); // Last Updated
+  sheet.setColumnWidth(9, 160);  // Leadership Status
+  sheet.setColumnWidth(10, 100); // Est. Time
+  sheet.setColumnWidth(11, 120); // Start Date
+  sheet.setColumnWidth(12, 120); // Due Date
+  sheet.setColumnWidth(13, 100); // % Complete
+  sheet.setColumnWidth(14, 120); // AI Potential?
+  sheet.setColumnWidth(15, 180); // Last Updated
+  sheet.setColumnWidth(16, 300); // Notes
+
+  // Data validation for Priority
+  const prioRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Critical', 'Urgent', 'Important', 'Medium', 'Low', 'Non-Urgent'])
+    .build();
+  sheet.getRange(2, 7, 500, 1).setDataValidation(prioRule);
+
+  // Data validation for Status
+  const statusRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Not Started', 'Planning', 'In Progress', 'In Review', 'Complete', 'Delayed'])
+    .build();
+  sheet.getRange(2, 8, 500, 1).setDataValidation(statusRule);
+
+  // Data validation for Leadership Status
+  const lsRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Priority', 'Actively Managed', 'Idea'])
+    .build();
+  sheet.getRange(2, 9, 500, 1).setDataValidation(lsRule);
+
+  // Data validation for AI Potential?
+  const aiRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Yes', 'No', 'Maybe'])
+    .build();
+  sheet.getRange(2, 14, 500, 1).setDataValidation(aiRule);
 
   sheet.setFrozenRows(1);
 
-  // Add sample data
+  // Add sample data — columns: ID, Project, Description, Category, Owner, Key Stakeholder, Priority, Status, Leadership Status, Est. Time, Start Date, Due Date, % Complete, AI Potential?, Last Updated, Notes
   const sampleData = [
-    ['PRJ-001', 'FY27 Budget Narrative', 'Final review and Dean\'s Office submission', 'Finance', 'Tyler Hughes', 'Dr. Palapattu', 'Critical', 'In Progress', '8 hours', '2026-03-12', '2026-04-01', 'Final stretch — all sections complete', new Date().toISOString()],
-    ['PRJ-002', 'BizIQ Platform Expansion', 'Scale to surgical departments with new dashboards', 'Analytics', 'Tyler Hughes', 'Dr. Palapattu', 'High', 'In Progress', 'Multi-day', '2026-03-12', '2026-06-30', '75+ dashboards, 280+ providers served', new Date().toISOString()],
-    ['PRJ-003', 'New Physician Onboarding Analytics', 'wRVU projections and P&L modeling for new hires', 'Faculty', 'Tyler Hughes', '', 'High', 'In Progress', '4 hours', '2026-03-12', '2026-05-15', 'Dr. Koh visiting faculty arrangement', new Date().toISOString()],
-    ['PRJ-004', 'OR Block Reallocation', 'Analyze and optimize OR block allocation across sites', 'Operations', 'Tyler Hughes', '', 'Medium', 'Planning', 'Multi-day', '2026-04-13', '2026-07-01', 'UH, BCSC, Brighton, Chelsea', new Date().toISOString()],
-    ['PRJ-005', 'Fellowship Onboarding Comms', 'Coordinate fellowship onboarding/offboarding communications', 'Education', '', '', 'Medium', 'Not Started', '2 hours', '2026-04-20', '2026-06-01', '', new Date().toISOString()],
+    ['PRJ-001', 'FY27 Budget Narrative', 'Final review and Dean\'s Office submission', 'Finance', 'Tyler Hughes', 'Dr. Palapattu', 'Critical', 'In Progress', 'Priority', '8 hours', '2026-03-12', '2026-04-01', 75, 'No', new Date().toISOString(), 'Final stretch — all sections complete'],
+    ['PRJ-002', 'BizIQ Platform Expansion', 'Scale to surgical departments with new dashboards', 'Analytics', 'Tyler Hughes', 'Dr. Palapattu', 'Urgent', 'In Progress', 'Priority', 'Multi-day', '2026-03-12', '2026-06-30', 40, 'Yes', new Date().toISOString(), '75+ dashboards, 280+ providers served'],
+    ['PRJ-003', 'New Physician Onboarding Analytics', 'wRVU projections and P&L modeling for new hires', 'Faculty', 'Tyler Hughes', '', 'Urgent', 'In Progress', 'Actively Managed', '4 hours', '2026-03-12', '2026-05-15', 55, 'No', new Date().toISOString(), 'Dr. Koh visiting faculty arrangement'],
+    ['PRJ-004', 'OR Block Reallocation', 'Analyze and optimize OR block allocation across sites', 'Operations', 'Tyler Hughes', '', 'Medium', 'Planning', 'Actively Managed', 'Multi-day', '2026-04-13', '2026-07-01', 10, 'Yes', new Date().toISOString(), 'UH, BCSC, Brighton, Chelsea'],
+    ['PRJ-005', 'Fellowship Onboarding Comms', 'Coordinate fellowship onboarding/offboarding communications', 'Education', '', '', 'Medium', 'Not Started', 'Idea', '2 hours', '2026-04-20', '2026-06-01', 0, 'No', new Date().toISOString(), ''],
   ];
 
   if (sheet.getLastRow() < 2) {

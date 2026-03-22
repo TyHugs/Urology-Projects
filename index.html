@@ -4383,8 +4383,22 @@ async function loadProjects() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     projects = data.projects || [];
-    if (projects.length > 0) console.log('[Dashboard] Headers from sheet:', Object.keys(projects[0]).filter(k => k !== '_row').join(', '));
-    if (projects.length > 0 && !('Leadership Status' in projects[0])) console.warn('[Dashboard] "Leadership Status" column not found in sheet. Add a column with that exact header in Row 1.');
+    if (projects.length > 0) {
+      const hdrs = Object.keys(projects[0]).filter(k => k !== '_row');
+      console.log('[Dashboard] Headers from sheet:', hdrs.join(', '));
+      if (!('Leadership Status' in projects[0])) {
+        console.warn('[Dashboard] ⚠️ "Leadership Status" column NOT FOUND in sheet. Available headers:', hdrs.join(', '));
+        console.warn('[Dashboard] → Add a column with the EXACT header "Leadership Status" (case-sensitive) in Row 1 of your Projects sheet.');
+      } else {
+        const lsValues = projects.map(p => p['Leadership Status']).filter(Boolean);
+        const lsCounts = {};
+        projects.forEach(p => { const v = p['Leadership Status'] || '(empty)'; lsCounts[v] = (lsCounts[v]||0)+1; });
+        console.log('[Dashboard] Leadership Status values:', JSON.stringify(lsCounts));
+        if (lsValues.length === 0) {
+          console.warn('[Dashboard] ⚠️ Leadership Status column exists but ALL values are EMPTY. Populate with: Priority, Actively Managed, or Idea');
+        }
+      }
+    }
     recurringItems = data.recurring || [];
     recurringHistory = data.history || [];
     calendarEvents = data.calendarEvents || [];
