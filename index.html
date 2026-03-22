@@ -1273,63 +1273,81 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 /* ===== EXECUTIVE SUMMARY BAR ===== */
 .exec-bar {
-  background: var(--navy); border-radius: var(--r); padding: 0;
-  margin-bottom: 1.25rem; box-shadow: var(--sh-md); overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(135deg, var(--navy) 0%, #1a2640 50%, #152035 100%);
+  border-radius: var(--r); padding: 0;
+  margin-bottom: 1.25rem; box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12);
+  overflow: hidden; border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+}
+.exec-bar::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 30% 50%, rgba(183,149,72,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 50%, rgba(100,140,200,0.04) 0%, transparent 50%);
 }
 .exec-bar-inner {
   display: flex; align-items: center; justify-content: center;
-  gap: 0; padding: 0.85rem 1.5rem;
+  gap: 0; padding: 1.1rem 1.8rem; position: relative; z-index: 1;
 }
 .exec-metric {
-  flex: 1; text-align: center; padding: 0.25rem 0.5rem;
+  flex: 1; text-align: center; padding: 0.35rem 0.75rem;
 }
 .exec-metric-value {
-  font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600;
-  color: #fff; line-height: 1; letter-spacing: -0.02em;
+  font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700;
+  color: #fff; line-height: 1; letter-spacing: -0.03em;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+  transition: color 0.4s ease, transform 0.3s ease;
 }
-.exec-metric-value.good { color: var(--s-done); }
-.exec-metric-value.warn { color: var(--p-high); }
-.exec-metric-value.bad { color: var(--p-crit); }
-.exec-metric-value.neutral { color: rgba(255,255,255,0.7); }
+.exec-metric:hover .exec-metric-value { transform: scale(1.08); }
+.exec-metric-value.good { color: #5CB87A; text-shadow: 0 0 16px rgba(92,184,122,0.3); }
+.exec-metric-value.warn { color: #E8A838; text-shadow: 0 0 16px rgba(232,168,56,0.3); }
+.exec-metric-value.bad { color: #E05A52; text-shadow: 0 0 16px rgba(224,90,82,0.35); }
+.exec-metric-value.neutral { color: rgba(255,255,255,0.8); }
 .exec-metric-label {
-  font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.4);
-  text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;
+  font-size: 0.64rem; font-weight: 700; color: rgba(255,255,255,0.45);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.4rem;
+  transition: color 0.3s ease;
 }
+.exec-metric:hover .exec-metric-label { color: rgba(255,255,255,0.65); }
 .exec-metric-trend {
   font-size: 0.6rem; font-weight: 600; margin-top: 0.15rem;
 }
-.exec-metric-trend.up { color: var(--s-done); }
-.exec-metric-trend.down { color: var(--p-crit); }
+.exec-metric-trend.up { color: #5CB87A; }
+.exec-metric-trend.down { color: #E05A52; }
 .exec-metric-trend.flat { color: rgba(255,255,255,0.3); }
 .exec-metric-divider {
-  width: 1px; height: 36px; background: rgba(255,255,255,0.08); flex-shrink: 0;
+  width: 1px; height: 44px; flex-shrink: 0;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent);
 }
 .exec-health {
-  display: flex; align-items: center; gap: 0.6rem; padding: 0 0.5rem 0 1rem;
+  display: flex; align-items: center; gap: 0.75rem; padding: 0 0.75rem 0 1.25rem;
 }
 .exec-health-ring {
-  width: 48px; height: 48px; position: relative; flex-shrink: 0;
+  width: 56px; height: 56px; position: relative; flex-shrink: 0;
 }
-.exec-health-ring svg { width: 48px; height: 48px; transform: rotate(-90deg); }
-.exec-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 3; }
+.exec-health-ring svg { width: 56px; height: 56px; transform: rotate(-90deg); }
+.exec-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 3.5; }
 .exec-ring-fg {
-  fill: none; stroke: var(--gold); stroke-width: 3; stroke-linecap: round;
+  fill: none; stroke: var(--gold); stroke-width: 3.5; stroke-linecap: round;
   transition: stroke-dasharray 0.8s ease;
+  filter: drop-shadow(0 0 6px rgba(183,149,72,0.4));
 }
 .exec-ring-text {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'Fraunces', serif; font-size: 0.78rem; font-weight: 600; color: #fff;
+  font-family: 'Fraunces', serif; font-size: 0.88rem; font-weight: 700; color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 .exec-health-label {
-  font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.4);
-  text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4;
+  font-size: 0.64rem; font-weight: 700; color: rgba(255,255,255,0.45);
+  text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.4;
 }
 @media(max-width:700px){
-  .exec-bar-inner{flex-wrap:wrap;gap:0.5rem}
+  .exec-bar-inner{flex-wrap:wrap;gap:0.5rem;padding:0.85rem 1rem}
   .exec-metric{min-width:70px}
+  .exec-metric-value{font-size:1.6rem}
   .exec-metric-divider{display:none}
   .exec-health{width:100%;justify-content:center;padding:0.5rem 0 0}
+  .exec-health-ring{width:48px;height:48px}
+  .exec-health-ring svg{width:48px;height:48px}
 }
 
 /* ===== ANIMATIONS ===== */
