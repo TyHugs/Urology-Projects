@@ -487,7 +487,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 /* ===== DEPARTMENT GOALS (Redesigned) ===== */
 .dept-goals {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  box-shadow: var(--sh-sm); margin-bottom: 1.25rem; overflow: hidden;
+  box-shadow: var(--sh-sm); overflow: hidden;
 }
 .dept-goals-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -765,6 +765,29 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   font-size: 0.86rem; color: var(--text-2); line-height: 1.55;
   min-height: 60px; white-space: pre-wrap;
 }
+.detail-edit-select {
+  width: 100%; padding: 0.4rem 0.55rem; border-radius: var(--r-xs);
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-family: inherit; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all var(--t) var(--ease);
+}
+.detail-edit-select:hover { border-color: var(--border-warm); }
+.detail-edit-select:focus { outline: none; border-color: var(--gold-ring); box-shadow: 0 0 0 2px var(--gold-glow); }
+.detail-edit-input {
+  width: 100%; padding: 0.4rem 0.55rem; border-radius: var(--r-xs);
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-family: inherit; font-size: 0.82rem; transition: all var(--t) var(--ease);
+}
+.detail-edit-input:hover { border-color: var(--border-warm); }
+.detail-edit-input:focus { outline: none; border-color: var(--gold-ring); box-shadow: 0 0 0 2px var(--gold-glow); background: #fff; }
+.detail-edit-textarea {
+  width: 100%; padding: 0.55rem 0.65rem; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--bg); color: var(--text-2);
+  font-family: inherit; font-size: 0.84rem; line-height: 1.55;
+  min-height: 80px; resize: vertical; transition: all var(--t) var(--ease);
+}
+.detail-edit-textarea:hover { border-color: var(--border-warm); }
+.detail-edit-textarea:focus { outline: none; border-color: var(--gold-ring); box-shadow: 0 0 0 2px var(--gold-glow); background: #fff; }
 
 /* ===== CHANGELOG ===== */
 .changelog { margin-bottom: 1rem; }
@@ -860,6 +883,105 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .workload-bar-fill.med { background: var(--s-prog); }
 .workload-bar-fill.high { background: var(--p-high); }
 .workload-bar-fill.overloaded { background: var(--p-crit); }
+
+/* All Projects List */
+.project-list-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.project-list-title svg { color: var(--gold); }
+.project-list-count {
+  font-size: 0.65rem; font-weight: 700; background: var(--gold); color: #fff;
+  border-radius: 99px; padding: 0.1rem 0.45rem; margin-left: 0.1rem;
+}
+.project-list-controls {
+  display: flex; gap: 0.5rem; margin-bottom: 0.6rem; align-items: center;
+}
+.project-list-search {
+  flex: 1; padding: 0.45rem 0.7rem; border: 1px solid var(--border);
+  border-radius: var(--r-xs); font-size: 0.78rem; background: var(--bg);
+  color: var(--text); outline: none; transition: border-color var(--t) var(--ease);
+}
+.project-list-search:focus { border-color: var(--gold); }
+.project-list-sort {
+  padding: 0.45rem 0.6rem; border: 1px solid var(--border);
+  border-radius: var(--r-xs); font-size: 0.75rem; background: var(--bg);
+  color: var(--text); cursor: pointer;
+}
+.project-list-grid {
+  display: flex; flex-direction: column; gap: 0.35rem;
+}
+.pl-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) 100px 80px 100px 100px 60px 36px;
+  align-items: center; gap: 0.5rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-xs); padding: 0.55rem 0.75rem;
+  transition: all var(--t) var(--ease); cursor: default;
+}
+.pl-row:hover { border-color: var(--gold-light); box-shadow: var(--sh-sm); }
+.pl-name {
+  font-size: 0.82rem; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  cursor: pointer;
+}
+.pl-name:hover { color: var(--gold); }
+.pl-cell {
+  font-size: 0.73rem; color: var(--text-2);
+}
+.pl-select {
+  font-size: 0.72rem; padding: 0.2rem 0.3rem; border: 1px solid transparent;
+  border-radius: var(--r-xs); background: transparent; color: var(--text-2);
+  cursor: pointer; transition: all var(--t) var(--ease); width: 100%;
+  -webkit-appearance: none; appearance: none;
+}
+.pl-select:hover, .pl-select:focus {
+  border-color: var(--border-strong); background: var(--bg); outline: none;
+}
+.pl-status-badge {
+  font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.45rem;
+  border-radius: 99px; text-align: center; white-space: nowrap;
+  display: inline-block;
+}
+.pl-status-badge.s-ns { background: var(--s-ns-bg, #f0f0f0); color: var(--s-ns, #888); }
+.pl-status-badge.s-plan { background: #e8f0fe; color: #1a73e8; }
+.pl-status-badge.s-prog { background: #e6f4ea; color: var(--s-prog); }
+.pl-status-badge.s-rev { background: #fef7e0; color: #e8a800; }
+.pl-status-badge.s-done { background: #e6f4ea; color: var(--s-done); }
+.pl-status-badge.s-delay { background: #fce8e6; color: var(--p-high); }
+.pl-ai {
+  display: flex; align-items: center; justify-content: center;
+}
+.pl-ai-btn {
+  background: none; border: 1px solid transparent; border-radius: var(--r-xs);
+  cursor: pointer; font-size: 0.85rem; padding: 0.15rem 0.35rem;
+  transition: all var(--t) var(--ease); line-height: 1;
+}
+.pl-ai-btn:hover { border-color: var(--border-strong); background: var(--bg); }
+.pl-ai-btn.active { color: #8b5cf6; }
+.pl-ai-btn.inactive { color: var(--text-3); opacity: 0.4; }
+.pl-edit-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.2rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+  display: flex; align-items: center; justify-content: center;
+}
+.pl-edit-btn:hover { color: var(--gold); background: var(--bg); }
+.pl-header {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) 100px 80px 100px 100px 60px 36px;
+  gap: 0.5rem; padding: 0 0.75rem 0.35rem;
+  font-size: 0.65rem; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+@media (max-width: 768px) {
+  .pl-row, .pl-header {
+    grid-template-columns: 1fr 80px 70px 36px;
+  }
+  .pl-row > :nth-child(4),
+  .pl-row > :nth-child(5),
+  .pl-header > :nth-child(4),
+  .pl-header > :nth-child(5) { display: none; }
+}
 
 /* Star toggle in table */
 .star-toggle {
@@ -1129,6 +1251,67 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   .pill-inline, .detail-pill, .spotlight-card-meta span { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
+/* ===== EXECUTIVE SUMMARY BAR ===== */
+.exec-bar {
+  background: var(--navy); border-radius: var(--r); padding: 0;
+  margin-bottom: 1.25rem; box-shadow: var(--sh-md); overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.exec-bar-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; padding: 0.85rem 1.5rem;
+}
+.exec-metric {
+  flex: 1; text-align: center; padding: 0.25rem 0.5rem;
+}
+.exec-metric-value {
+  font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600;
+  color: #fff; line-height: 1; letter-spacing: -0.02em;
+}
+.exec-metric-value.good { color: var(--s-done); }
+.exec-metric-value.warn { color: var(--p-high); }
+.exec-metric-value.bad { color: var(--p-crit); }
+.exec-metric-value.neutral { color: rgba(255,255,255,0.7); }
+.exec-metric-label {
+  font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;
+}
+.exec-metric-trend {
+  font-size: 0.6rem; font-weight: 600; margin-top: 0.15rem;
+}
+.exec-metric-trend.up { color: var(--s-done); }
+.exec-metric-trend.down { color: var(--p-crit); }
+.exec-metric-trend.flat { color: rgba(255,255,255,0.3); }
+.exec-metric-divider {
+  width: 1px; height: 36px; background: rgba(255,255,255,0.08); flex-shrink: 0;
+}
+.exec-health {
+  display: flex; align-items: center; gap: 0.6rem; padding: 0 0.5rem 0 1rem;
+}
+.exec-health-ring {
+  width: 48px; height: 48px; position: relative; flex-shrink: 0;
+}
+.exec-health-ring svg { width: 48px; height: 48px; transform: rotate(-90deg); }
+.exec-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 3; }
+.exec-ring-fg {
+  fill: none; stroke: var(--gold); stroke-width: 3; stroke-linecap: round;
+  transition: stroke-dasharray 0.8s ease;
+}
+.exec-ring-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 0.78rem; font-weight: 600; color: #fff;
+}
+.exec-health-label {
+  font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4;
+}
+@media(max-width:700px){
+  .exec-bar-inner{flex-wrap:wrap;gap:0.5rem}
+  .exec-metric{min-width:70px}
+  .exec-metric-divider{display:none}
+  .exec-health{width:100%;justify-content:center;padding:0.5rem 0 0}
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 .anim { animation: fadeUp 0.35s var(--ease-out) forwards; opacity: 0; }
@@ -1158,9 +1341,21 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .page-tab.active svg { opacity: 1; }
 
 /* ===== MEETINGS CALENDAR WIDGET ===== */
+/* Dual-panel row layout (Meetings + Goals side by side) */
+.dual-panel-row {
+  display: flex; gap: 1.25rem; align-items: stretch; margin-bottom: 1.25rem;
+}
+.dual-panel-col {
+  flex: 1; min-width: 0; margin-bottom: 0 !important;
+}
+@media (max-width: 900px) {
+  .dual-panel-row { flex-direction: column; }
+  .dual-panel-col { width: 100%; }
+}
+
 .meetings-section {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
-  box-shadow: var(--sh-sm); margin-bottom: 1.25rem; overflow: hidden;
+  box-shadow: var(--sh-sm); overflow: hidden;
 }
 .meetings-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -1187,33 +1382,78 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   color: var(--text); min-width: 130px; text-align: center;
 }
 .meetings-chevron { color: var(--text-3); transition: transform var(--t) var(--ease); }
-.meetings-body { padding: 0 1.25rem 1rem; }
+.meetings-body { padding: 0 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.meetings-left { width: 100%; }
+.meetings-right { width: 100%; }
 .meetings-grid {
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px;
   background: var(--border); border-radius: var(--r-sm); overflow: hidden;
-  margin-bottom: 0.85rem;
 }
 .meetings-dow {
-  background: var(--bg-warm); padding: 0.3rem 0; text-align: center;
-  font-size: 0.6rem; font-weight: 700; color: var(--text-3); text-transform: uppercase;
+  background: var(--bg-warm); padding: 0.2rem 0; text-align: center;
+  font-size: 0.55rem; font-weight: 700; color: var(--text-3); text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 .meetings-day {
-  background: var(--bg-card); padding: 0.25rem; min-height: 52px;
-  position: relative; cursor: default; transition: background var(--t) var(--ease);
+  background: var(--bg-card); padding: 0.15rem; min-height: 32px;
+  position: relative; cursor: pointer; transition: all var(--t) var(--ease);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
 }
 .meetings-day:hover { background: var(--bg-card-hover); }
-.meetings-day.outside { background: var(--bg-stripe); }
+.meetings-day.outside { background: var(--bg-stripe); cursor: default; }
 .meetings-day.outside .meetings-day-num { color: var(--text-3); opacity: 0.4; }
+.meetings-day.mtg-selected { background: var(--gold-glow); box-shadow: inset 0 0 0 1.5px var(--gold); }
 .meetings-day.today .meetings-day-num {
   background: var(--gold); color: #fff; border-radius: 50%;
-  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem;
 }
 .meetings-day-num {
-  font-size: 0.65rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px;
-  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 600; color: var(--text-2);
+  width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+  line-height: 1;
 }
-.meetings-day-events { display: flex; flex-direction: column; gap: 1px; }
+.meetings-day-dots {
+  display: flex; gap: 2px; margin-top: 1px;
+}
+.meetings-day-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+}
+.meetings-day-events { display: none; }
+
+/* Tooltip popover */
+.mtg-tooltip {
+  position: fixed; z-index: 200; min-width: 220px; max-width: 300px;
+  background: var(--bg-card); border: 1px solid var(--border-warm);
+  border-radius: var(--r); box-shadow: var(--sh-lg);
+  padding: 0; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(4px);
+}
+.mtg-tooltip.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+.mtg-tooltip-header {
+  padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border);
+  font-size: 0.72rem; font-weight: 700; color: var(--text);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mtg-tooltip-close {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.1rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+  line-height: 1;
+}
+.mtg-tooltip-close:hover { color: var(--text); background: var(--bg-warm); }
+.mtg-tooltip-body { padding: 0.4rem 0; max-height: 220px; overflow-y: auto; }
+.mtg-tooltip-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.75rem; transition: background var(--t) var(--ease);
+}
+.mtg-tooltip-item:hover { background: var(--bg-stripe); }
+.mtg-tooltip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.mtg-tooltip-info { flex: 1; min-width: 0; }
+.mtg-tooltip-name { font-size: 0.76rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mtg-tooltip-meta { font-size: 0.64rem; color: var(--text-3); }
+.mtg-tooltip-empty { padding: 0.75rem; text-align: center; font-size: 0.74rem; color: var(--text-3); }
+
 .meetings-evt {
   font-size: 0.55rem; font-weight: 600; padding: 1px 3px; border-radius: 2px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -1496,7 +1736,8 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .section-collapse-header .spotlight-title,
 .section-collapse-header .recurring-section-title,
 .section-collapse-header .workload-title,
-.section-collapse-header .changelog-title {
+.section-collapse-header .changelog-title,
+.section-collapse-header .project-list-title {
   margin-bottom: 0;
 }
 
@@ -1672,8 +1913,47 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 <div class="app" id="dashboardView">
 
+  <!-- EXECUTIVE SUMMARY BAR -->
+  <div class="exec-bar anim a1" id="execBar">
+    <div class="exec-bar-inner">
+      <div class="exec-metric" id="execOnTrack">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">On Track</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execOverdue">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Overdue</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execStale">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Stale</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="execComplete">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Complete</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-health" id="execHealth">
+        <div class="exec-health-ring">
+          <svg viewBox="0 0 36 36">
+            <circle class="exec-ring-bg" cx="18" cy="18" r="15.9"/>
+            <circle class="exec-ring-fg" id="execHealthRing" cx="18" cy="18" r="15.9" stroke-dasharray="0 100"/>
+          </svg>
+          <div class="exec-ring-text" id="execHealthPct">—</div>
+        </div>
+        <div class="exec-health-label">Portfolio<br>Health</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEETINGS + GOALS ROW -->
+  <div class="dual-panel-row anim a1">
+
   <!-- KEY MEETINGS CALENDAR -->
-  <div class="meetings-section anim a1" id="meetingsSection">
+  <div class="meetings-section dual-panel-col" id="meetingsSection">
     <div class="meetings-header" data-collapse-target="meetingsBody" onclick="toggleSection('meetingsBody')">
       <div class="meetings-title">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -1687,14 +1967,26 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="meetings-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
     <div id="meetingsBody" class="meetings-body section-collapse-body">
-      <div id="mtgGrid" class="meetings-grid"></div>
-      <div id="mtgUpcoming" class="meetings-upcoming"></div>
+      <div class="meetings-left">
+        <div id="mtgGrid" class="meetings-grid"></div>
+      </div>
+      <div class="meetings-right">
+        <div id="mtgUpcoming" class="meetings-upcoming"></div>
+      </div>
+    </div>
+    <!-- Tableau-style tooltip popover -->
+    <div class="mtg-tooltip" id="mtgTooltip">
+      <div class="mtg-tooltip-header">
+        <span id="mtgTooltipDate"></span>
+        <button class="mtg-tooltip-close" onclick="closeMtgTooltip()">&times;</button>
+      </div>
+      <div class="mtg-tooltip-body" id="mtgTooltipBody"></div>
     </div>
   </div>
 
 
   <!-- DEPARTMENT GOALS -->
-  <div class="dept-goals anim a1" id="deptGoalsSection">
+  <div class="dept-goals dual-panel-col" id="deptGoalsSection">
     <div class="dept-goals-header">
       <div class="dept-goals-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
@@ -1711,6 +2003,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
   </div>
 
+  </div><!-- end .dual-panel-row -->
 
 
   <!-- CHAIR ACTION ITEMS (stale projects) -->
@@ -1777,35 +2070,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div id="spotlightBody" class="section-collapse-body">
       <div id="spotlightGrid" class="spotlight-grid"></div>
-    </div>
-  </div>
-
-  <!-- OWNER WORKLOAD -->
-  <div class="workload anim a1" id="workloadSection">
-    <div class="section-collapse-header" data-collapse-target="workloadBody" onclick="toggleSection('workloadBody')">
-      <div class="workload-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Team Workload
-      </div>
-      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-    </div>
-    <div id="workloadBody" class="section-collapse-body">
-      <div id="workloadGrid" class="workload-grid"></div>
-    </div>
-  </div>
-
-  <!-- WEEKLY CHANGELOG -->
-  <div class="changelog anim a1" id="changelogSection">
-    <div class="section-collapse-header" data-collapse-target="changelogBody2" onclick="toggleSection('changelogBody2')">
-      <div class="changelog-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        This Week's Activity
-        <span class="changelog-count" id="changelogCount">0</span>
-      </div>
-      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-    </div>
-    <div id="changelogBody2" class="section-collapse-body">
-      <div id="changelogBody" class="changelog-body"></div>
     </div>
   </div>
 
@@ -2009,7 +2273,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div class="modal-row-3">
       <div class="modal-field"><label>Est. Time</label>
-        <select id="newEstTime"><option value="">—</option><option>1 hour</option><option>2 hours</option><option>4 hours</option><option>8 hours</option><option>Multi-day</option></select>
+        <select id="newEstTime"><option value="">—</option><option>< 1 Week</option><option>1-2 Weeks</option><option>2-4 Weeks</option><option>1-3 Months</option><option>3+ Months</option></select>
       </div>
       <div class="modal-field"><label>Start Date</label><input type="date" id="newStartDate" /></div>
       <div class="modal-field"><label>Due Date</label><input type="date" id="newDueDate" /></div>
@@ -2063,12 +2327,12 @@ const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mr
 const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
 const PRIORITY_OPTIONS = ['Critical','High','Medium','Low'];
 const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
-const TIME_OPTIONS = ['1 hour','2 hours','4 hours','8 hours','Multi-day'];
+const TIME_OPTIONS = ['< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months','1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting
 const PRIORITY_RANK = {Critical:0, High:1, Medium:2, Low:3};
 const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, 'Delayed':4, Complete:5};
-const TIME_RANK = {'1 hour':1, '2 hours':2, '4 hours':4, '8 hours':8, 'Multi-day':16};
+const TIME_RANK = {'< 1 Week':1, '1-2 Weeks':2, '2-4 Weeks':4, '1-3 Months':8, '3+ Months':16, '1 hour':0.1, '2 hours':0.2, '4 hours':0.4, '8 hours':0.8, 'Multi-day':1};
 
 // ===== KEY PROJECTS (localStorage) =====
 function getKeyProjectIds() {
@@ -2082,6 +2346,64 @@ function toggleKeyProject(id) {
   localStorage.setItem('uro_keyProjects', JSON.stringify(keys));
   renderTable();
   renderSpotlight();
+}
+
+function renderProjectList() {
+  const grid = document.getElementById('projectListGrid');
+  const countEl = document.getElementById('projectListCount');
+  if (!grid) return;
+  const searchVal = (document.getElementById('projectListSearch')?.value || '').toLowerCase();
+  const sortBy = document.getElementById('projectListSort')?.value || 'status';
+
+  let list = getDomainProjects().filter(p => {
+    if (!searchVal) return true;
+    const name = (p['Project Name'] || '').toLowerCase();
+    const owner = (p['Owner'] || '').toLowerCase();
+    const cat = (p['Category'] || '').toLowerCase();
+    return name.includes(searchVal) || owner.includes(searchVal) || cat.includes(searchVal);
+  });
+
+  const statusOrder = {'In Progress':0,'Planning':1,'Not Started':2,'In Review':3,'Delayed':4,'Complete':5};
+  const prioOrder = {'Critical':0,'High':1,'Medium':2,'Low':3};
+  if (sortBy === 'status') list.sort((a,b) => (statusOrder[a['Status']]??9) - (statusOrder[b['Status']]??9));
+  else if (sortBy === 'priority') list.sort((a,b) => (prioOrder[a['Priority']]??9) - (prioOrder[b['Priority']]??9));
+  else if (sortBy === 'category') list.sort((a,b) => (a['Category']||'').localeCompare(b['Category']||''));
+  else if (sortBy === 'owner') list.sort((a,b) => (a['Owner']||'').localeCompare(b['Owner']||''));
+  else if (sortBy === 'name') list.sort((a,b) => (a['Project Name']||'').localeCompare(b['Project Name']||''));
+
+  if (countEl) countEl.textContent = list.length;
+
+  function statusClass(s) {
+    if (s === 'Not Started') return 's-ns';
+    if (s === 'Planning') return 's-plan';
+    if (s === 'In Progress') return 's-prog';
+    if (s === 'In Review') return 's-rev';
+    if (s === 'Complete') return 's-done';
+    if (s === 'Delayed') return 's-delay';
+    return 's-ns';
+  }
+
+  let html = `<div class="pl-header"><span>Project</span><span>Status</span><span>Priority</span><span>Category</span><span>Owner</span><span>AI</span><span></span></div>`;
+
+  list.forEach(p => {
+    const hasAI = (p['AI Potential?'] || '').toString().toLowerCase();
+    const isAI = hasAI === 'yes' || hasAI === 'true' || hasAI === '1';
+    html += `<div class="pl-row">
+      <div class="pl-name" onclick="openDetail('${esc(p['ID'])}')" title="${esc(p['Project Name']||'')}">${esc(p['Project Name']||'Untitled')}</div>
+      <div class="pl-cell"><select class="pl-select" data-row="${p._row}" data-col="Status" onchange="onDrop(this)">${STATUS_OPTIONS.map(o=>`<option${p['Status']===o?' selected':''}>${o}</option>`).join('')}</select></div>
+      <div class="pl-cell"><select class="pl-select" data-row="${p._row}" data-col="Priority" onchange="onDrop(this)">${PRIORITY_OPTIONS.map(o=>`<option${p['Priority']===o?' selected':''}>${o}</option>`).join('')}</select></div>
+      <div class="pl-cell"><select class="pl-select" data-row="${p._row}" data-col="Category" onchange="onDrop(this)"><option value="">—</option>${CATEGORY_OPTIONS.map(o=>`<option${p['Category']===o?' selected':''}>${o}</option>`).join('')}</select></div>
+      <div class="pl-cell" style="font-size:0.73rem;color:var(--text-2)">${esc(p['Owner']||'—')}</div>
+      <div class="pl-ai"><button class="pl-ai-btn ${isAI?'active':'inactive'}" onclick="toggleAIPotential(${p._row},'${esc(p['ID'])}')" title="Toggle AI Potential">${isAI?'✦':'○'}</button></div>
+      <div><button class="pl-edit-btn" onclick="openDetail('${esc(p['ID'])}')" title="Edit project"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></div>
+    </div>`;
+  });
+
+  if (list.length === 0) {
+    html += `<div style="text-align:center;padding:1.5rem;color:var(--text-3);font-size:0.8rem;">No projects found</div>`;
+  }
+
+  grid.innerHTML = html;
 }
 
 function renderSpotlight() {
@@ -2139,6 +2461,7 @@ function getLastMonday() {
 function renderChangelog() {
   const since = getLastMonday();
   const body = document.getElementById('changelogBody');
+  if (!body) return;
 
   // Find projects updated since last Monday
   const recent = getDomainProjects().filter(p => {
@@ -2188,13 +2511,25 @@ function toggleSection(sectionId) {
 }
 
 function restoreCollapseStates() {
+  // Sections that should be OPEN by default (leader needs to see these immediately)
+  const defaultOpen = ['actionItemsBody'];
   document.querySelectorAll('.section-collapse-body').forEach(body => {
     try {
       const saved = localStorage.getItem('collapse_' + body.id);
-      if (saved === '1') {
-        body.classList.add('collapsed');
-        const header = document.querySelector('[data-collapse-target="' + body.id + '"]');
-        if (header) header.classList.add('collapsed');
+      if (defaultOpen.includes(body.id)) {
+        // Default open unless user explicitly collapsed
+        if (saved === '1') {
+          body.classList.add('collapsed');
+          const header = document.querySelector('[data-collapse-target="' + body.id + '"]');
+          if (header) header.classList.add('collapsed');
+        }
+      } else {
+        // Default collapsed unless user explicitly opened
+        if (saved !== '0') {
+          body.classList.add('collapsed');
+          const header = document.querySelector('[data-collapse-target="' + body.id + '"]');
+          if (header) header.classList.add('collapsed');
+        }
       }
     } catch(e) {}
   });
@@ -2209,6 +2544,8 @@ function toggleChangelog() {
 
 // ===== WORKLOAD BAR =====
 function renderWorkload() {
+  const grid = document.getElementById('workloadGrid');
+  if (!grid) return;
   const active = getDomainProjects().filter(p => p['Status'] !== 'Complete');
   const ownerMap = {};
   active.forEach(p => {
@@ -2217,7 +2554,6 @@ function renderWorkload() {
   });
   const entries = Object.entries(ownerMap).sort((a,b) => b[1] - a[1]);
   const max = entries.length > 0 ? entries[0][1] : 1;
-  const grid = document.getElementById('workloadGrid');
 
   if (entries.length === 0) {
     grid.innerHTML = '<div style="font-size:0.82rem;color:var(--text-3);text-align:center;padding:0.5rem">No active projects</div>';
@@ -2261,50 +2597,97 @@ function openDetail(id) {
 
   document.getElementById('detailTitle').textContent = p['Project'] || 'Project Details';
 
+  const AI_STAGE_OPTIONS = ['','AI Candidate','AI Pilot','AI Implemented'];
+  const curAI = (p['AI Potential?'] || '').toString();
+  const isAIOld = curAI.toLowerCase() === 'yes' || curAI.toLowerCase() === 'true' || curAI === '1';
+  const aiVal = isAIOld ? 'AI Candidate' : curAI;
+
+  const TIME_OPTS = ['','< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months','1 hour','2 hours','4 hours','8 hours','Multi-day'];
+  const PROGRESS_OPTS = ['','0%','25%','50%','75%','100%'];
+  const curProgress = p['% Complete'] || '';
+
   document.getElementById('detailBody').innerHTML = `
     <div class="detail-field">
-      <div class="detail-pills">
-        <span class="detail-pill" style="background:var(--${sc[0]});color:var(--${sc[1]})">${esc(p['Status']||'—')}</span>
-        <span class="detail-pill" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
-        ${p['Category']?`<span class="detail-pill" style="background:rgba(61,108,180,0.06);color:var(--s-prog)">${esc(p['Category'])}</span>`:''}
-        ${p['Est. Time']?`<span class="detail-pill" style="background:var(--gold-badge);color:var(--gold)">${esc(p['Est. Time'])}</span>`:''}
-        <span class="ai-badge-toggle ${((p['AI Potential?']||'').toString().toLowerCase()==='yes'||(p['AI Potential?']||'').toString().toLowerCase()==='true'||(p['AI Potential?']||'').toString()==='1')?'':'inactive'}" onclick="toggleAIPotential(${p._row},'${esc(p['ID']||'')}')" title="Toggle AI Potential">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg>
-          AI Potential
-        </span>
+      <div class="detail-row">
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">Status</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'Status',this.value,'${esc(p['ID'])}')">
+            ${STATUS_OPTIONS.map(o=>`<option${p['Status']===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">Priority</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'Priority',this.value,'${esc(p['ID'])}')">
+            ${PRIORITY_OPTIONS.map(o=>`<option${p['Priority']===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-field">
+      <div class="detail-row">
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">Category</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'Category',this.value,'${esc(p['ID'])}')">
+            <option value="">—</option>${CATEGORY_OPTIONS.map(o=>`<option${p['Category']===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">% Complete</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'% Complete',this.value,'${esc(p['ID'])}')">
+            ${PROGRESS_OPTS.map(o=>`<option value="${o}"${curProgress===o?' selected':''}>${o||'—'}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-field">
+      <div class="detail-row">
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">AI Stage</div>
+          <select class="detail-edit-select" style="color:#7c3aed" onchange="detailEdit(${p._row},'AI Potential?',this.value,'${esc(p['ID'])}')">
+            ${AI_STAGE_OPTIONS.map(o=>`<option value="${o}"${aiVal===o?' selected':''}>${o||'None'}</option>`).join('')}
+          </select>
+        </div>
+        <div class="detail-field" style="flex:1">
+          <div class="detail-field-label">Timeline</div>
+          <select class="detail-edit-select" onchange="detailEdit(${p._row},'Est. Time',this.value,'${esc(p['ID'])}')">
+            ${TIME_OPTS.map(o=>`<option value="${o}"${p['Est. Time']===o?' selected':''}>${o||'—'}</option>`).join('')}
+          </select>
+        </div>
       </div>
     </div>
 
     <div class="detail-field">
       <div class="detail-field-label">Description</div>
-      <div class="detail-field-value${p['Description']?'':' empty'}">${esc(p['Description']||'No description')}</div>
+      <div class="detail-notes-box editable" contenteditable="true" onblur="detailEditText(${p._row},'Description',this.textContent,'${esc(p['ID'])}')">${esc(p['Description']||'')}</div>
     </div>
 
     <div class="detail-row">
       <div class="detail-field">
         <div class="detail-field-label">Owner</div>
-        <div class="detail-field-value${p['Owner']?'':' empty'}">${esc(p['Owner']||'Unassigned')}</div>
+        <input class="detail-edit-input" value="${esc(p['Owner']||'')}" placeholder="Assign owner..." onblur="detailEditText(${p._row},'Owner',this.value,'${esc(p['ID'])}')"/>
       </div>
       <div class="detail-field">
         <div class="detail-field-label">Key Stakeholder</div>
-        <div class="detail-field-value${p['Key Stakeholder']?'':' empty'}">${esc(p['Key Stakeholder']||'None')}</div>
+        <input class="detail-edit-input" value="${esc(p['Key Stakeholder']||'')}" placeholder="Stakeholder..." onblur="detailEditText(${p._row},'Key Stakeholder',this.value,'${esc(p['ID'])}')"/>
       </div>
     </div>
 
     <div class="detail-row">
       <div class="detail-field">
         <div class="detail-field-label">Start Date</div>
-        <div class="detail-field-value${p['Start Date']?'':' empty'}">${fmtDate(p['Start Date'])||'Not set'}</div>
+        <input type="date" class="detail-edit-input" value="${p['Start Date']?String(p['Start Date']).slice(0,10):''}" onchange="detailEdit(${p._row},'Start Date',this.value,'${esc(p['ID'])}')"/>
       </div>
       <div class="detail-field">
         <div class="detail-field-label">Due Date</div>
-        <div class="detail-field-value" style="${isOverdue?'color:var(--p-crit);font-weight:600':isDueSoon?'color:var(--p-high);font-weight:600':''}">${fmtDate(p['Due Date'])||'<span class="empty">Not set</span>'}${isOverdue?' — Overdue':isDueSoon?' — Due soon':''}</div>
+        <input type="date" class="detail-edit-input" value="${p['Due Date']?String(p['Due Date']).slice(0,10):''}" onchange="detailEdit(${p._row},'Due Date',this.value,'${esc(p['ID'])}')" style="${isOverdue?'color:var(--p-crit);font-weight:600':isDueSoon?'color:var(--p-high);font-weight:600':''}"/>
       </div>
     </div>
 
     <div class="detail-field">
       <div class="detail-field-label">Notes</div>
-      <div class="detail-notes-box">${esc(p['Notes']||'No notes yet.')}</div>
+      <textarea class="detail-edit-textarea" onblur="detailEditText(${p._row},'Notes',this.value,'${esc(p['ID'])}')" placeholder="Add notes...">${esc(p['Notes']||'')}</textarea>
     </div>
 
     <div class="detail-row" style="margin-top:0.5rem">
@@ -2326,6 +2709,18 @@ function openDetail(id) {
 function closeDetail() {
   document.getElementById('detailOverlay').classList.remove('active');
   document.getElementById('detailPanel').classList.remove('active');
+}
+
+function detailEdit(row, col, val, id) {
+  updateCell(row, col, val);
+  // Refresh other views
+  setTimeout(function() { renderTable(); renderKanban(); renderExecBar(); renderActionItems(); renderSpotlight(); }, 350);
+}
+
+function detailEditText(row, col, val, id) {
+  const p = projects.find(x => x._row === row);
+  if (p && p[col] === val) return; // No change
+  updateCell(row, col, val);
 }
 
 // Row-click guard is handled inline on the <tr> onclick — no capture-phase listener needed.
@@ -2413,6 +2808,7 @@ const KEY_MEETINGS = [
 })();
 
 function mtgNav(dir) {
+  closeMtgTooltip();
   mtgMonth += dir;
   if (mtgMonth > 11) { mtgMonth = 0; mtgYear++; }
   if (mtgMonth < 0) { mtgMonth = 11; mtgYear--; }
@@ -2481,19 +2877,23 @@ function renderMeetingsCalendar() {
   for (var d = 1; d <= daysInMonth; d++) {
     var isToday = today.getFullYear() === mtgYear && today.getMonth() === mtgMonth && today.getDate() === d;
     var dayMtgs = meetingsByDay[d] || [];
-    var maxShow = 2;
 
-    var evtsHtml = dayMtgs.slice(0, maxShow).map(function(m) {
-      return '<div class="meetings-evt type-' + m.type + '" title="' + esc(m.title) + ' — ' + m.time + '">' + esc(m.title.split('|')[0].trim()) + '</div>';
-    }).join('');
-
-    if (dayMtgs.length > maxShow) {
-      evtsHtml += '<div class="meetings-evt-more">+' + (dayMtgs.length - maxShow) + ' more</div>';
+    // Render colored dots for compact view
+    var dotsHtml = '';
+    if (dayMtgs.length > 0) {
+      dotsHtml = '<div class="meetings-day-dots">';
+      dayMtgs.forEach(function(m) {
+        var dotColor = m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
+        dotsHtml += '<div class="meetings-day-dot" style="background:' + dotColor + '"></div>';
+      });
+      dotsHtml += '</div>';
     }
 
-    html += '<div class="meetings-day' + (isToday ? ' today' : '') + '">' +
+    html += '<div class="meetings-day' + (isToday ? ' today' : '') + (dayMtgs.length > 0 ? ' has-meetings' : '') + '" ' +
+      (dayMtgs.length > 0 ? 'onclick="openMtgTooltip(event,' + d + ')" ' : '') +
+      '>' +
       '<div class="meetings-day-num">' + d + '</div>' +
-      '<div class="meetings-day-events">' + evtsHtml + '</div>' +
+      dotsHtml +
       '</div>';
   }
 
@@ -2539,6 +2939,92 @@ function renderMeetingsCalendar() {
     upcoming.innerHTML = '<div class="meetings-empty">No upcoming meetings this month</div>';
   }
 }
+
+// ===== MEETINGS TOOLTIP =====
+function openMtgTooltip(event, dayNum) {
+  event.stopPropagation();
+  var tooltip = document.getElementById('mtgTooltip');
+  var dateLabel = document.getElementById('mtgTooltipDate');
+  var body = document.getElementById('mtgTooltipBody');
+  if (!tooltip || !dateLabel || !body) return;
+
+  var meetings = getMeetingsForMonth(mtgYear, mtgMonth);
+  var dayMtgs = meetings.filter(function(m) { return m.dayNum === dayNum; });
+
+  // Format date header
+  var dt = new Date(mtgYear, mtgMonth, dayNum);
+  dateLabel.textContent = dt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+  // Populate body
+  if (dayMtgs.length === 0) {
+    body.innerHTML = '<div class="mtg-tooltip-empty">No meetings scheduled</div>';
+  } else {
+    var html = '';
+    dayMtgs.forEach(function(m) {
+      var typeColor = m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
+      var typeLabel = m.type ? m.type.charAt(0).toUpperCase() + m.type.slice(1) : 'Meeting';
+      html += '<div class="mtg-tooltip-item">' +
+        '<div class="mtg-tooltip-dot" style="background:' + typeColor + '"></div>' +
+        '<div class="mtg-tooltip-info">' +
+          '<div class="mtg-tooltip-name">' + esc(m.title) + '</div>' +
+          '<div class="mtg-tooltip-meta">' + m.time + ' &middot; ' + typeLabel + '</div>' +
+        '</div>' +
+      '</div>';
+    });
+    body.innerHTML = html;
+  }
+
+  // Remove any previous selected state
+  document.querySelectorAll('.meetings-day.mtg-selected').forEach(function(el) { el.classList.remove('mtg-selected'); });
+
+  // Add selected state to clicked day
+  var clickedDay = event.currentTarget;
+  clickedDay.classList.add('mtg-selected');
+
+  // Position tooltip near the clicked cell
+  var rect = clickedDay.getBoundingClientRect();
+  var section = document.getElementById('meetingsSection');
+  var sectionRect = section ? section.getBoundingClientRect() : { left: 0, top: 0 };
+
+  // Calculate position — try to show right of the cell, fallback left
+  var tooltipWidth = 300;
+  var viewportWidth = window.innerWidth;
+  var left = rect.right + 8;
+  if (left + tooltipWidth > viewportWidth - 16) {
+    left = rect.left - tooltipWidth - 8;
+  }
+  if (left < 16) left = 16;
+
+  var top = rect.top - 20;
+  if (top + 250 > window.innerHeight) {
+    top = window.innerHeight - 260;
+  }
+  if (top < 16) top = 16;
+
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  tooltip.classList.add('active');
+}
+
+function closeMtgTooltip() {
+  var tooltip = document.getElementById('mtgTooltip');
+  if (tooltip) tooltip.classList.remove('active');
+  document.querySelectorAll('.meetings-day.mtg-selected').forEach(function(el) { el.classList.remove('mtg-selected'); });
+}
+
+// Close tooltip on click outside
+document.addEventListener('click', function(e) {
+  var tooltip = document.getElementById('mtgTooltip');
+  if (!tooltip || !tooltip.classList.contains('active')) return;
+  if (!tooltip.contains(e.target) && !e.target.closest('.meetings-day')) {
+    closeMtgTooltip();
+  }
+});
+
+// Close tooltip on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeMtgTooltip();
+});
 
 // ===== PAGE TABS =====
 let activePage = 'dashboard';
@@ -3708,6 +4194,7 @@ async function loadProjects() {
     renderTable();
     setView(currentView);
     updateStats();
+    renderExecBar();
     renderSpotlight();
     renderWorkload();
     renderChangelog();
@@ -3787,7 +4274,7 @@ async function addProject() {
     'Est. Time':document.getElementById('newEstTime').value,
     'Start Date':document.getElementById('newStartDate').value,
     'Due Date':document.getElementById('newDueDate').value,
-    'AI Potential?':document.getElementById('newAIPotential').checked ? 'Yes' : '',
+    'AI Potential?':document.getElementById('newAIPotential').checked ? 'AI Candidate' : '',
   };
   showLoading(true);
   try {
@@ -3997,6 +4484,62 @@ function updateStats(){
   if (el = document.getElementById('statPctSub')) el.textContent = `${complete} of ${total}`;
 }
 
+function renderExecBar() {
+  const dp = getDomainProjects();
+  const total = dp.length;
+  if (total === 0) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const complete = dp.filter(p => p['Status'] === 'Complete').length;
+  const active = dp.filter(p => p['Status'] !== 'Complete');
+  const overdue = active.filter(p => {
+    const d = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+    return d && d < today;
+  }).length;
+  const stale = active.filter(p => {
+    if (!p['Last Updated'] || (p['Status'] !== 'In Progress' && p['Status'] !== 'Planning')) return false;
+    return Math.floor((today - new Date(p['Last Updated'])) / 86400000) >= 14;
+  }).length;
+  const onTrack = active.length - overdue - stale;
+  const healthPct = total > 0 ? Math.round(((onTrack + complete) / total) * 100) : 0;
+
+  // On Track
+  const otEl = document.getElementById('execOnTrack');
+  if (otEl) {
+    otEl.querySelector('.exec-metric-value').textContent = onTrack;
+    otEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (onTrack > 0 ? ' good' : ' neutral');
+  }
+  // Overdue
+  const ovEl = document.getElementById('execOverdue');
+  if (ovEl) {
+    ovEl.querySelector('.exec-metric-value').textContent = overdue;
+    ovEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (overdue > 0 ? ' bad' : ' good');
+  }
+  // Stale
+  const stEl = document.getElementById('execStale');
+  if (stEl) {
+    stEl.querySelector('.exec-metric-value').textContent = stale;
+    stEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (stale > 0 ? ' warn' : ' good');
+  }
+  // Complete
+  const cpEl = document.getElementById('execComplete');
+  if (cpEl) {
+    cpEl.querySelector('.exec-metric-value').textContent = complete;
+    cpEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
+    cpEl.querySelector('.exec-metric-label').textContent = 'Complete (' + Math.round((complete/total)*100) + '%)';
+  }
+  // Health ring
+  const ringEl = document.getElementById('execHealthRing');
+  const pctEl = document.getElementById('execHealthPct');
+  if (ringEl) ringEl.setAttribute('stroke-dasharray', healthPct + ' ' + (100 - healthPct));
+  if (pctEl) pctEl.textContent = healthPct + '%';
+  // Color the ring
+  if (ringEl) {
+    if (healthPct >= 75) ringEl.style.stroke = 'var(--s-done)';
+    else if (healthPct >= 50) ringEl.style.stroke = 'var(--gold)';
+    else ringEl.style.stroke = 'var(--p-crit)';
+  }
+}
+
 function updateSyncTime(){
   if(!lastSyncTime) return;
   const t = lastSyncTime.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
@@ -4076,18 +4619,21 @@ function renderKanban() {
           const isOverdue = dueDate && dueDate < today && status !== 'Complete';
           const dueStr = dueDate ? dueDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
 
-          const hasAI = (p['AI Potential?'] || '').toString().toLowerCase();
-          const isAI = hasAI === 'yes' || hasAI === 'true' || hasAI === '1';
+          const aiRaw = (p['AI Potential?'] || '').toString();
+          const aiLow = aiRaw.toLowerCase();
+          const aiStage = (aiLow === 'yes' || aiLow === 'true' || aiLow === '1') ? 'AI Candidate' : aiRaw;
+          const hasAIStage = aiStage && aiStage !== '';
 
           return `<div class="kanban-card" onclick="openDetail('${esc(p['ID']||'')}')">
             <div class="kanban-card-title">${esc(p['Project']||'')}</div>
             <div class="kanban-card-meta">
               <span class="k-pill" style="background:var(--${pc[0]});color:var(--${pc[1]})">${esc(p['Priority']||'—')}</span>
+              ${p['% Complete'] ? `<span class="k-pill" style="background:var(--gold-badge);color:var(--gold)">${esc(p['% Complete'])}</span>` : ''}
               ${dueStr ? `<span style="${isOverdue?'color:var(--p-crit);font-weight:600':''}">Due ${dueStr}</span>` : ''}
             </div>
             <div class="kanban-card-footer">
               ${p['Owner'] ? `<div class="kanban-card-owner" style="margin-top:0"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${esc(p['Owner'])}</div>` : '<div></div>'}
-              ${isAI ? `<span class="ai-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg> AI</span>` : ''}
+              ${hasAIStage ? `<span class="ai-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg> ${esc(aiStage)}</span>` : ''}
             </div>
           </div>`;
         }).join('')}
