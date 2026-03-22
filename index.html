@@ -392,7 +392,8 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .pill-select[data-type="status"][data-value="In Progress"]{background-color:var(--s-prog-bg);color:var(--s-prog)}
 .pill-select[data-type="status"][data-value="In Review"]{background-color:var(--s-rev-bg);color:var(--s-rev)}
 .pill-select[data-type="status"][data-value="Complete"]{background-color:var(--s-done-bg);color:var(--s-done)}
-.pill-select[data-type="status"][data-value="Delayed"]{background-color:var(--s-hold-bg);color:var(--s-hold)}
+.pill-select[data-type="status"][data-value="Delayed"]{background-color:var(--s-block-bg);color:var(--s-block)}
+.pill-select[data-type="status"][data-value="On Hold"]{background-color:var(--s-hold-bg);color:var(--s-hold)}
 
 .pill-select[data-type="priority"][data-value="Critical"]{background-color:var(--p-crit-bg);color:var(--p-crit)}
 .pill-select[data-type="priority"][data-value="Urgent"]{background-color:var(--p-urg-bg);color:var(--p-urg)}
@@ -2195,8 +2196,8 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <div class="toolbar-left">
       <select class="filter-select" id="filterStatus" onchange="applyFilters()">
         <option value="">Status</option>
-        <option>Not Started</option><option>Planning</option><option>In Progress</option>
-        <option>In Review</option><option>Complete</option><option>Delayed</option>
+        <option>Not Started</option><option>Delayed</option><option>Planning</option><option>In Progress</option>
+        <option>In Review</option><option>On Hold</option><option>Complete</option>
       </select>
       <select class="filter-select" id="filterPriority" onchange="applyFilters()">
         <option value="">Priority</option>
@@ -2452,7 +2453,7 @@ function getDomainProjects() {
 }
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
-const STATUS_OPTIONS = ['Not Started','Planning','In Progress','In Review','Complete','Delayed'];
+const STATUS_OPTIONS = ['Not Started','Delayed','Planning','In Progress','In Review','On Hold','Complete'];
 const PRIORITY_OPTIONS = ['Critical','Urgent','Important','Medium','Low','Non-Urgent'];
 const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
 const LEADERSHIP_STATUS_OPTIONS = ['Priority','Actively Managed','Idea'];
@@ -2460,7 +2461,7 @@ const TIME_OPTIONS = ['< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months
 
 // Priority and Status rank maps for smart sorting (lower = higher priority)
 const PRIORITY_RANK = {'Critical':0, 'Urgent':1, 'Important':2, 'Medium':3, 'Low':4, 'Non-Urgent':5, 'High':1};
-const STATUS_RANK = {'In Progress':0, Planning:1, 'In Review':2, 'Not Started':3, 'Delayed':4, Complete:5};
+const STATUS_RANK = {'Not Started':0, 'Delayed':1, 'Planning':2, 'In Progress':3, 'In Review':4, 'On Hold':5, 'Complete':6};
 const TIME_RANK = {'< 1 Week':1, '1-2 Weeks':2, '2-4 Weeks':4, '1-3 Months':8, '3+ Months':16, '1 hour':0.1, '2 hours':0.2, '4 hours':0.4, '8 hours':0.8, 'Multi-day':1};
 
 // ===== KEY PROJECTS (backed by Leadership Status column in Google Sheet) =====
@@ -2537,11 +2538,12 @@ function renderProjectList() {
 
   function statusClass(s) {
     if (s === 'Not Started') return 's-ns';
+    if (s === 'Delayed') return 's-block';
     if (s === 'Planning') return 's-plan';
     if (s === 'In Progress') return 's-prog';
     if (s === 'In Review') return 's-rev';
+    if (s === 'On Hold') return 's-hold';
     if (s === 'Complete') return 's-done';
-    if (s === 'Delayed') return 's-delay';
     return 's-ns';
   }
 
@@ -2794,7 +2796,7 @@ function openDetail(id) {
   const p = projects.find(x => x['ID'] === id);
   if (!p) return;
 
-  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
+  const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Delayed':['s-block-bg','s-block'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'On Hold':['s-hold-bg','s-hold'],'Complete':['s-done-bg','s-done']};
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
   const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
   const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
@@ -4823,7 +4825,7 @@ function showKpiTooltip(event, type) {
   if (!tooltip) return;
 
   const b = getLeadershipBuckets();
-  const STATUS_COLORS = {'Not Started':'s-nostart','Planning':'s-plan','In Progress':'s-prog','In Review':'s-rev','Delayed':'s-hold','Complete':'s-done'};
+  const STATUS_COLORS = {'Not Started':'s-nostart','Delayed':'s-block','Planning':'s-plan','In Progress':'s-prog','In Review':'s-rev','On Hold':'s-hold','Complete':'s-done'};
   let list, title;
   if (type === 'total') { list = b.all; title = 'All Active Projects'; }
   else if (type === 'priority') { list = b.priorities; title = 'Priorities'; }
@@ -4928,15 +4930,16 @@ function renderKanban() {
 
   const STATUS_COLORS = {
     'Not Started':['s-nostart-bg','s-nostart','var(--s-nostart)'],
+    'Delayed':['s-block-bg','s-block','var(--s-block)'],
     'Planning':['s-plan-bg','s-plan','var(--s-plan)'],
     'In Progress':['s-prog-bg','s-prog','var(--s-prog)'],
     'In Review':['s-rev-bg','s-rev','var(--s-rev)'],
-    'Complete':['s-done-bg','s-done','var(--s-done)'],
-    'Delayed':['s-hold-bg','s-hold','var(--s-hold)']
+    'On Hold':['s-hold-bg','s-hold','var(--s-hold)'],
+    'Complete':['s-done-bg','s-done','var(--s-done)']
   };
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
 
-  const columns = ['Not Started','Planning','In Progress','In Review','Delayed','Complete'];
+  const columns = ['Not Started','Delayed','Planning','In Progress','In Review','On Hold','Complete'];
 
   board.innerHTML = columns.map(status => {
     const items = filtered.filter(p => (p['Status'] || 'Not Started') === status);
