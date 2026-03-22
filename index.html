@@ -677,7 +677,21 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   padding: 0.85rem 1rem; box-shadow: var(--sh-sm);
   transition: all var(--t) var(--ease); position: relative;
 }
-.spotlight-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.spotlight-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); cursor: grab; }
+.spotlight-card.dragging { opacity: 0.35; transform: scale(0.97); box-shadow: none; }
+.spotlight-card.drag-over { border-top: 2.5px solid var(--gold); transform: translateY(2px); }
+.spotlight-card-rank {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--gold);
+  color: #fff; font-size: 0.68rem; font-weight: 700; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  margin-right: 0.55rem; line-height: 1;
+}
+.spotlight-card-drag-handle {
+  color: var(--text-3); opacity: 0; transition: opacity var(--t) var(--ease);
+  flex-shrink: 0; margin-right: 0.1rem; cursor: grab;
+}
+.spotlight-card:hover .spotlight-card-drag-handle { opacity: 0.5; }
+.spotlight-card:hover .spotlight-card-drag-handle:hover { opacity: 1; }
 .spotlight-card-top {
   display: flex; align-items: flex-start; justify-content: space-between;
   margin-bottom: 0.4rem;
@@ -2479,14 +2493,14 @@ function renderSpotlight() {
   document.getElementById('spotlightCount').textContent = keyProjects.length;
 
   if (keyProjects.length === 0) {
-    grid.innerHTML = `<div class="spotlight-empty"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Star projects in the table below to feature them here</div>`;
+    grid.innerHTML = `<div class="spotlight-empty"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Star projects in Admin Leadership to feature them here. Drag to reorder by priority.</div>`;
     return;
   }
 
   const STATUS_COLORS = {'Not Started':['s-nostart-bg','s-nostart'],'Planning':['s-plan-bg','s-plan'],'In Progress':['s-prog-bg','s-prog'],'In Review':['s-rev-bg','s-rev'],'Complete':['s-done-bg','s-done'],'Delayed':['s-hold-bg','s-hold']};
   const PRIORITY_COLORS = {'Critical':['p-crit-bg','p-crit'],'Urgent':['p-urg-bg','p-urg'],'Important':['p-imp-bg','p-imp'],'Medium':['p-med-bg','p-med'],'Low':['p-low-bg','p-low'],'Non-Urgent':['p-non-bg','p-non'],'High':['p-high-bg','p-high']};
 
-  grid.innerHTML = keyProjects.map(p => {
+  grid.innerHTML = keyProjects.map((p, idx) => {
     const sc = STATUS_COLORS[p['Status']] || ['s-nostart-bg','s-nostart'];
     const pc = PRIORITY_COLORS[p['Priority']] || ['p-low-bg','p-low'];
     const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '\u2014';
@@ -2495,9 +2509,12 @@ function renderSpotlight() {
     const isOverdue = dueDate && dueDate < today && p['Status'] !== 'Complete';
     const dueStyle = isOverdue ? 'color:var(--p-crit);font-weight:600' : '';
 
-    return `<div class="spotlight-card">
+    return `<div class="spotlight-card" draggable="true" data-spot-id="${esc(p['ID']||'')}"
+        ondragstart="spotDragStart(event)" ondragend="spotDragEnd(event)"
+        ondragover="spotDragOver(event)" ondrop="spotDrop(event)" ondragleave="spotDragLeave(event)">
       <div class="spotlight-card-top">
-        <div class="spotlight-card-name">${esc(p['Project']||'')}</div>
+        <div class="spotlight-card-rank">${idx + 1}</div>
+        <div class="spotlight-card-name" onclick="openDetail('${esc(p['ID'])}')" style="cursor:pointer">${esc(p['Project']||'')}</div>
         <button class="spotlight-card-unpin" onclick="toggleKeyProject('${esc(p['ID']||'')}')" title="Remove from key projects">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
@@ -2512,6 +2529,61 @@ function renderSpotlight() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ===== SPOTLIGHT DRAG-AND-DROP =====
+let _spotDragId = null;
+
+function spotDragStart(e) {
+  const card = e.target.closest('.spotlight-card');
+  if (!card) return;
+  _spotDragId = card.getAttribute('data-spot-id');
+  card.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', _spotDragId);
+}
+
+function spotDragEnd(e) {
+  _spotDragId = null;
+  document.querySelectorAll('.spotlight-card').forEach(c => {
+    c.classList.remove('dragging', 'drag-over');
+  });
+}
+
+function spotDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const card = e.target.closest('.spotlight-card');
+  if (!card || card.getAttribute('data-spot-id') === _spotDragId) return;
+  document.querySelectorAll('.spotlight-card.drag-over').forEach(c => c.classList.remove('drag-over'));
+  card.classList.add('drag-over');
+}
+
+function spotDragLeave(e) {
+  const card = e.target.closest('.spotlight-card');
+  if (card) card.classList.remove('drag-over');
+}
+
+function spotDrop(e) {
+  e.preventDefault();
+  const targetCard = e.target.closest('.spotlight-card');
+  if (!targetCard) return;
+  const targetId = targetCard.getAttribute('data-spot-id');
+  const dragId = _spotDragId;
+  if (!dragId || dragId === targetId) return;
+
+  // Reorder the keys array
+  let keys = getKeyProjectIds();
+  const fromIdx = keys.indexOf(dragId);
+  const toIdx = keys.indexOf(targetId);
+  if (fromIdx < 0 || toIdx < 0) return;
+
+  // Remove dragged item and insert at target position
+  keys.splice(fromIdx, 1);
+  keys.splice(toIdx, 0, dragId);
+
+  localStorage.setItem('uro_keyProjects', JSON.stringify(keys));
+  renderSpotlight();
 }
 
 // ===== CHANGELOG =====
