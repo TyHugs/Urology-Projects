@@ -1280,7 +1280,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   gap: 0; padding: 1.1rem 1.8rem; position: relative; z-index: 1;
 }
 .exec-metric {
-  flex: 1; text-align: center; padding: 0.35rem 0.75rem;
+  flex: 1; text-align: center; padding: 0.35rem 0.5rem; min-width: 0;
 }
 .exec-metric-value {
   font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700;
@@ -1309,6 +1309,19 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .exec-metric-divider {
   width: 1px; height: 44px; flex-shrink: 0;
   background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent);
+}
+.exec-bar-secondary {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0.3rem 1.8rem 0.6rem; gap: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.exec-secondary-label {
+  font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.35);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.exec-secondary-value {
+  font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700;
+  color: #7C6FE0; text-shadow: 0 0 12px rgba(124,111,224,0.3);
 }
 .exec-health {
   display: flex; align-items: center; gap: 0.75rem; padding: 0 0.75rem 0 1.25rem;
@@ -2010,20 +2023,29 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <div class="exec-metric-label">Priorities</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execActive" onmouseenter="showKpiTooltip(event,'active')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execStdWork" onmouseenter="showKpiTooltip(event,'stdwork')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Actively Managed</div>
+        <div class="exec-metric-label">Standard Work</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execIdeas" onmouseenter="showKpiTooltip(event,'idea')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execRequests" onmouseenter="showKpiTooltip(event,'requests')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Requests</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execIdeas" onmouseenter="showKpiTooltip(event,'ideas')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Ideas</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execAI" onmouseenter="showKpiTooltip(event,'ai')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execBizIQ" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">AI Capable</div>
+        <div class="exec-metric-label">BizIQ</div>
       </div>
+    </div>
+    <div class="exec-bar-secondary">
+      <span class="exec-secondary-label">AI Optimization Potential</span>
+      <span class="exec-secondary-value" id="execAIPct">—</span>
     </div>
   </div>
   <!-- KPI Hover Tooltip -->
@@ -2175,20 +2197,29 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <div class="exec-metric-label">Priorities</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execActiveAdmin" onmouseenter="showKpiTooltip(event,'active')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execStdWorkAdmin" onmouseenter="showKpiTooltip(event,'stdwork')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">Actively Managed</div>
+        <div class="exec-metric-label">Standard Work</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execIdeasAdmin" onmouseenter="showKpiTooltip(event,'idea')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execRequestsAdmin" onmouseenter="showKpiTooltip(event,'requests')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Requests</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execIdeasAdmin" onmouseenter="showKpiTooltip(event,'ideas')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Ideas</div>
       </div>
       <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execAIAdmin" onmouseenter="showKpiTooltip(event,'ai')" onmouseleave="hideKpiTooltip()">
+      <div class="exec-metric exec-metric-hoverable" id="execBizIQAdmin" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">AI Capable</div>
+        <div class="exec-metric-label">BizIQ</div>
       </div>
+    </div>
+    <div class="exec-bar-secondary">
+      <span class="exec-secondary-label">AI Optimization Potential</span>
+      <span class="exec-secondary-value" id="execAIPctAdmin">—</span>
     </div>
   </div>
 
@@ -2211,7 +2242,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       </select>
       <select class="filter-select" id="filterLeadership" onchange="applyFilters()">
         <option value="">Leadership</option>
-        <option>Priority</option><option>Actively Managed</option><option>Idea</option>
+        <option>Priority</option><option>Standard Work</option><option>Requests</option><option>Ideas</option><option>BizIQ</option>
       </select>
       <select class="filter-select" id="filterOwner" onchange="applyFilters()"><option value="">Owner</option></select>
       <select class="filter-select" id="filterStakeholder" onchange="applyFilters()"><option value="">Stakeholder</option></select>
@@ -2396,7 +2427,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div class="modal-row">
       <div class="modal-field"><label>Leadership Status</label>
-        <select id="newLeadershipStatus"><option value="Idea">Idea</option><option value="Actively Managed">Actively Managed</option><option value="Priority">Priority</option></select>
+        <select id="newLeadershipStatus"><option value="Ideas">Ideas</option><option value="Standard Work">Standard Work</option><option value="Requests">Requests</option><option value="BizIQ">BizIQ</option><option value="Priority">Priority</option></select>
       </div>
       <div class="modal-field"></div>
     </div>
@@ -2456,7 +2487,7 @@ const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mr
 const STATUS_OPTIONS = ['Not Started','Delayed','Planning','In Progress','In Review','On Hold','Complete'];
 const PRIORITY_OPTIONS = ['Critical','Urgent','Important','Medium','Low','Non-Urgent'];
 const CATEGORY_OPTIONS = ['Finance','Faculty','Operations','Administrative','Strategy','Analytics','PCC','BizIQ','Perioperative'];
-const LEADERSHIP_STATUS_OPTIONS = ['Priority','Actively Managed','Idea'];
+const LEADERSHIP_STATUS_OPTIONS = ['Priority','Standard Work','Requests','Ideas','BizIQ'];
 const TIME_OPTIONS = ['< 1 Week','1-2 Weeks','2-4 Weeks','1-3 Months','3+ Months','1 hour','2 hours','4 hours','8 hours','Multi-day'];
 
 // Priority and Status rank maps for smart sorting (lower = higher priority)
@@ -2485,7 +2516,7 @@ async function toggleKeyProject(id) {
   const p = projects.find(x => x['ID'] === id);
   if (!p) return;
   const isPriority = p['Leadership Status'] === 'Priority';
-  const newVal = isPriority ? 'Actively Managed' : 'Priority';
+  const newVal = isPriority ? 'Standard Work' : 'Priority';
 
   // Optimistic local update
   p['Leadership Status'] = newVal;
@@ -4413,8 +4444,11 @@ async function loadProjects() {
     // ── Normalize Leadership Status values (fix typos/plurals from sheet) ──
     const LS_NORMALIZE = {
       'priorities': 'Priority', 'priority': 'Priority',
-      'actively managed': 'Actively Managed', 'actvely managed': 'Actively Managed',
-      'ideas': 'Idea', 'idea': 'Idea'
+      'standard work': 'Standard Work', 'standardwork': 'Standard Work',
+      'actively managed': 'Standard Work', 'actvely managed': 'Standard Work',
+      'requests': 'Requests', 'request': 'Requests',
+      'ideas': 'Ideas', 'idea': 'Ideas',
+      'biziq': 'BizIQ', 'biz iq': 'BizIQ'
     };
     let _lsFixed = 0;
     projects.forEach(p => {
@@ -4702,7 +4736,7 @@ function getFilteredProjects(){
     if(sk&&p['Key Stakeholder']!==sk)return false;
     if(ls){
       const pls = p['Leadership Status'] || '';
-      if(ls==='Idea'){ if(pls!=='Idea'&&pls!=='')return false; }
+      if(ls==='Ideas'){ if(pls!=='Ideas'&&pls!=='')return false; }
       else { if(pls!==ls)return false; }
     }
     if(q&&!Object.values(p).join(' ').toLowerCase().includes(q))return false;
@@ -4764,12 +4798,19 @@ function getArchivedProjects() {
 function getLeadershipBuckets() {
   const active = getActiveProjects();
   const priorities = active.filter(p => p['Leadership Status'] === 'Priority');
-  const managed = active.filter(p => p['Leadership Status'] === 'Actively Managed');
+  const stdwork = active.filter(p => p['Leadership Status'] === 'Standard Work');
+  const requests = active.filter(p => p['Leadership Status'] === 'Requests');
   const ideas = active.filter(p => {
     const ls = p['Leadership Status'] || '';
-    return ls === 'Idea' || ls === '';
+    return ls === 'Ideas' || ls === '';
   });
-  return { all: active, priorities, managed, ideas };
+  const biziq = active.filter(p => p['Leadership Status'] === 'BizIQ');
+  const aiCapable = active.filter(p => {
+    const v = (p['AI Potential?'] || '').toString().toLowerCase();
+    return v === 'yes' || v === 'true' || v === '1';
+  });
+  const aiPct = active.length > 0 ? Math.round((aiCapable.length / active.length) * 100) : 0;
+  return { all: active, priorities, stdwork, requests, ideas, biziq, aiCapable, aiPct };
 }
 
 function _populateExecBar(suffix) {
@@ -4786,26 +4827,31 @@ function _populateExecBar(suffix) {
     prioEl.querySelector('.exec-metric-value').textContent = b.priorities.length;
     prioEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.priorities.length > 0 ? ' bad' : ' neutral');
   }
-  const actEl = document.getElementById('execActive' + s);
-  if (actEl) {
-    actEl.querySelector('.exec-metric-value').textContent = b.managed.length;
-    actEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.managed.length > 0 ? ' good' : ' neutral');
+  const swEl = document.getElementById('execStdWork' + s);
+  if (swEl) {
+    swEl.querySelector('.exec-metric-value').textContent = b.stdwork.length;
+    swEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.stdwork.length > 0 ? ' good' : ' neutral');
+  }
+  const reqEl = document.getElementById('execRequests' + s);
+  if (reqEl) {
+    reqEl.querySelector('.exec-metric-value').textContent = b.requests.length;
+    reqEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (b.requests.length > 0 ? ' warn' : ' neutral');
   }
   const ideaEl = document.getElementById('execIdeas' + s);
   if (ideaEl) {
     ideaEl.querySelector('.exec-metric-value').textContent = b.ideas.length;
-    ideaEl.querySelector('.exec-metric-value').className = 'exec-metric-value warn';
+    ideaEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
+  }
+  const biqEl = document.getElementById('execBizIQ' + s);
+  if (biqEl) {
+    biqEl.querySelector('.exec-metric-value').textContent = b.biziq.length;
+    biqEl.querySelector('.exec-metric-value').className = 'exec-metric-value ai-accent';
   }
 
-  // AI Capable KPI
-  const aiProjects = b.all.filter(p => {
-    const v = (p['AI Potential?'] || '').toString().toLowerCase();
-    return v === 'yes' || v === 'true' || v === '1';
-  });
-  const aiEl = document.getElementById('execAI' + s);
-  if (aiEl) {
-    aiEl.querySelector('.exec-metric-value').textContent = aiProjects.length;
-    aiEl.querySelector('.exec-metric-value').className = 'exec-metric-value' + (aiProjects.length > 0 ? ' ai-accent' : ' neutral');
+  // Secondary AI % KPI
+  const aiPctEl = document.getElementById('execAIPct' + (s === 'Admin' ? 'Admin' : ''));
+  if (aiPctEl) {
+    aiPctEl.textContent = b.aiPct + '%';
   }
 }
 
@@ -4829,12 +4875,10 @@ function showKpiTooltip(event, type) {
   let list, title;
   if (type === 'total') { list = b.all; title = 'All Active Projects'; }
   else if (type === 'priority') { list = b.priorities; title = 'Priorities'; }
-  else if (type === 'active') { list = b.managed; title = 'Actively Managed'; }
-  else if (type === 'idea') { list = b.ideas; title = 'Ideas'; }
-  else if (type === 'ai') {
-    list = b.all.filter(p => { const v = (p['AI Potential?']||'').toString().toLowerCase(); return v === 'yes' || v === 'true' || v === '1'; });
-    title = 'AI Capable';
-  }
+  else if (type === 'stdwork') { list = b.stdwork; title = 'Standard Work'; }
+  else if (type === 'requests') { list = b.requests; title = 'Requests'; }
+  else if (type === 'ideas') { list = b.ideas; title = 'Ideas'; }
+  else if (type === 'biziq') { list = b.biziq; title = 'BizIQ'; }
   else { list = []; title = ''; }
 
   header.textContent = title + ' (' + list.length + ')';
