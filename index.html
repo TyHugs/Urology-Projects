@@ -1535,6 +1535,13 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .mtg-tooltip-note { font-size: 0.62rem; color: var(--text-3); font-style: italic; margin-top: 0.15rem; }
 .meetings-day.away-day { background: rgba(176,72,64,0.06); }
 .meetings-day.away-day .meetings-day-num { color: var(--p-crit); font-weight: 600; }
+.mtg-upcoming-list { padding: 0.5rem 0.75rem 0.6rem; border-top: 1px solid var(--border); }
+.mtg-up-title { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-3); margin-bottom: 0.35rem; }
+.mtg-up-item { display: flex; align-items: center; gap: 0.4rem; padding: 0.22rem 0; cursor: default; font-size: 0.72rem; }
+.mtg-up-item:hover { background: rgba(0,0,0,0.02); border-radius: 4px; }
+.mtg-up-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.mtg-up-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); font-weight: 500; }
+.mtg-up-date { font-size: 0.64rem; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
 .mtg-tooltip-empty { padding: 0.75rem; text-align: center; font-size: 0.74rem; color: var(--text-3); }
 
 .meetings-evt {
@@ -2105,6 +2112,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div id="meetingsBody" class="meetings-body section-collapse-body">
       <div id="mtgGrid" class="meetings-grid"></div>
+      <div id="mtgUpcoming" class="mtg-upcoming-list"></div>
     </div>
     <!-- Tableau-style tooltip popover -->
     <div class="mtg-tooltip" id="mtgTooltip">
@@ -3190,6 +3198,87 @@ function renderMeetingsCalendar() {
   }
 
   grid.innerHTML = html;
+
+  // === Compact Upcoming Meetings List ===
+  var upEl = document.getElementById('mtgUpcoming');
+  if (!upEl) return;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var horizon = new Date(today); horizon.setDate(horizon.getDate() + 60);
+  var upcoming = [];
+  var seenWeekly = {};
+
+  KEY_MEETINGS.forEach(function(m) {
+    if (m.recurring === 'weekly') {
+      // Show only next occurrence
+      if (seenWeekly[m.title]) return;
+      var dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+      var targetDay = dayNames.indexOf((m.day||'').toLowerCase());
+      if (targetDay < 0) return;
+      var next = new Date(today);
+      var diff = (targetDay - today.getDay() + 7) % 7;
+      if (diff === 0) diff = 7; // skip today, show next week
+      next.setDate(next.getDate() + diff);
+      if (next <= horizon) {
+        seenWeekly[m.title] = true;
+        upcoming.push({ title: m.title, date: new Date(next), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+      }
+    } else if (m.recurring === 'monthly') {
+      // Next occurrence of nth weekday
+      var dayNames2 = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+      var targetDay2 = dayNames2.indexOf((m.day||'').toLowerCase());
+      var wom = m.weekOfMonth || 1;
+      for (var mo = 0; mo < 3; mo++) {
+        var check = new Date(today.getFullYear(), today.getMonth() + mo, 1);
+        var count = 0;
+        for (var dd = 1; dd <= 31; dd++) {
+          var test = new Date(check.getFullYear(), check.getMonth(), dd);
+          if (test.getMonth() !== check.getMonth()) break;
+          if (test.getDay() === targetDay2) {
+            count++;
+            if (count === wom && test > today && test <= horizon) {
+              upcoming.push({ title: m.title, date: new Date(test), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+              mo = 99; break;
+            }
+          }
+        }
+      }
+    } else if (m.recurring === 'once') {
+      if (m.startDate && m.endDate) {
+        var s = new Date(m.startDate + 'T00:00:00');
+        if (s > today && s <= horizon) {
+          upcoming.push({ title: m.title, date: s, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+        }
+      } else if (m.date) {
+        var d2 = new Date(m.date + 'T00:00:00');
+        if (d2 > today && d2 <= horizon) {
+          upcoming.push({ title: m.title, date: d2, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+        }
+      }
+    }
+  });
+
+  upcoming.sort(function(a,b) { return a.date - b.date; });
+  var show = upcoming.slice(0, 6);
+
+  if (show.length === 0) { upEl.innerHTML = ''; return; }
+
+  var typeColors = { leadership: 'var(--gold)', clinical: '#4A90D9', away: 'var(--p-crit)', meeting: 'var(--text-3)' };
+  var upHtml = '<div class="mtg-up-title">Upcoming</div>';
+  show.forEach(function(m) {
+    var dateStr = m.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    var dotColor = typeColors[m.type] || 'var(--text-3)';
+    var tipParts = [m.title];
+    if (m.time) tipParts.push(m.time);
+    if (m.type) tipParts.push(m.type.charAt(0).toUpperCase() + m.type.slice(1));
+    if (m.note) tipParts.push(m.note);
+    var tip = tipParts.join(' · ');
+    upHtml += '<div class="mtg-up-item" title="' + tip.replace(/"/g,'&quot;') + '">' +
+      '<span class="mtg-up-dot" style="background:' + dotColor + '"></span>' +
+      '<span class="mtg-up-name">' + m.title + '</span>' +
+      '<span class="mtg-up-date">' + dateStr + '</span>' +
+      '</div>';
+  });
+  upEl.innerHTML = upHtml;
 }
 
 // ===== MEETINGS TOOLTIP =====
