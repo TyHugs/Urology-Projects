@@ -1600,6 +1600,102 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.78rem;
 }
 
+/* ===== OPERATIONAL TRACKER ===== */
+.ops-tracker-header { margin-bottom: 1.2rem; }
+.ops-tracker-title {
+  font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.ops-tracker-title svg { color: var(--gold); }
+.ops-tracker-subtitle { font-size: 0.75rem; color: var(--text-3); margin-top: 0.15rem; margin-left: 2rem; }
+
+.ops-section { margin-bottom: 1rem; }
+.ops-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+.ops-section-title {
+  font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 400;
+  color: var(--text); display: flex; align-items: center; gap: 0.45rem;
+}
+.ops-section-count {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.66rem; font-weight: 700; color: var(--gold);
+  background: var(--gold-badge); border: 1px solid var(--gold-ring);
+  padding: 0.08rem 0.4rem; border-radius: var(--r-full);
+}
+
+.ops-alert-bar {
+  display: flex; gap: 0.5rem; margin-bottom: 0.65rem; flex-wrap: wrap;
+}
+.ops-alert-chip {
+  font-size: 0.68rem; font-weight: 600; padding: 0.25rem 0.65rem;
+  border-radius: var(--r-full); display: flex; align-items: center; gap: 0.3rem;
+}
+.ops-alert-chip.alert-urgent { background: var(--p-crit-bg); color: var(--p-crit); border: 1px solid rgba(176,72,64,0.2); }
+.ops-alert-chip.alert-warn { background: rgba(196,155,65,0.1); color: #9A7B30; border: 1px solid rgba(196,155,65,0.2); }
+.ops-alert-chip.alert-upcoming { background: rgba(74,144,217,0.08); color: #4A90D9; border: 1px solid rgba(74,144,217,0.15); }
+.ops-alert-chip.alert-ok { background: var(--s-done-bg); color: var(--s-done); border: 1px solid rgba(56,122,92,0.18); }
+
+.ops-table-wrap {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  box-shadow: var(--sh-sm); overflow: hidden;
+}
+.ops-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.ops-table thead th {
+  text-align: left; font-size: 0.64rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-3); padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border); background: var(--bg-stripe);
+}
+.ops-table tbody td {
+  padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.ops-table tbody tr:last-child td { border-bottom: none; }
+.ops-table tbody tr:hover { background: var(--bg-hover); }
+.ops-table tbody tr.prof-overdue { background: rgba(176,72,64,0.04); }
+.ops-table tbody tr.prof-urgent { background: rgba(196,155,65,0.04); }
+
+.prof-name { font-weight: 600; color: var(--text); }
+.prof-holder { color: var(--text-2); }
+.prof-renewal-date { white-space: nowrap; }
+
+.prof-status-badge {
+  font-size: 0.64rem; font-weight: 700; padding: 0.15rem 0.5rem;
+  border-radius: var(--r-full); white-space: nowrap; display: inline-block;
+}
+.prof-status-badge.overdue { background: var(--p-crit-bg); color: var(--p-crit); }
+.prof-status-badge.urgent { background: rgba(196,155,65,0.12); color: #9A7B30; }
+.prof-status-badge.upcoming { background: rgba(74,144,217,0.08); color: #4A90D9; }
+.prof-status-badge.ok { background: var(--s-done-bg); color: var(--s-done); }
+
+.prof-timeline {
+  display: flex; align-items: center; gap: 0.4rem; min-width: 120px;
+}
+.prof-timeline-bar {
+  flex: 1; height: 6px; background: var(--border); border-radius: 3px;
+  overflow: hidden; position: relative;
+}
+.prof-timeline-fill {
+  height: 100%; border-radius: 3px; transition: width 0.4s ease;
+}
+.prof-timeline-label { font-size: 0.62rem; color: var(--text-3); white-space: nowrap; }
+
+.prof-actions { display: flex; gap: 0.25rem; }
+.prof-action-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  padding: 0.2rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
+  opacity: 0.5;
+}
+.ops-table tbody tr:hover .prof-action-btn { opacity: 1; }
+.prof-action-btn:hover { color: var(--gold); background: var(--gold-badge); }
+.prof-action-btn.delete-btn:hover { color: var(--p-crit); background: var(--p-crit-bg); }
+
+.ops-empty {
+  text-align: center; padding: 1.5rem; color: var(--text-3); font-size: 0.82rem;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 500;
+}
+
 /* ===== CALENDAR ===== */
 .calendar-view { display: none; }
 .calendar-view.active { display: block; }
@@ -2338,32 +2434,86 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 
 <!-- ===== CALENDAR VIEW ===== -->
 <div class="app calendar-view" id="calendarView">
-  <div class="cal-header" style="margin-top:1.25rem">
-    <div class="cal-nav">
-      <button class="cal-nav-btn" onclick="calNav(-1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <span class="cal-month-label" id="calMonthLabel"></span>
-      <button class="cal-nav-btn" onclick="calNav(1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <button class="cal-today-btn" onclick="calToday()">Today</button>
+
+  <!-- ===== OPERATIONAL TRACKER HEADER ===== -->
+  <div class="ops-tracker-header" style="margin-top:1.25rem">
+    <div class="ops-tracker-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Operational Tracker
     </div>
-    <button class="btn btn-primary" onclick="openCalModal()">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add Event
-    </button>
+    <div class="ops-tracker-subtitle">Renewals, recurring obligations &amp; key dates</div>
   </div>
-  <div id="calGrid" class="cal-grid"></div>
-  <div class="cal-legend">
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-prog)"></span> Payment</span>
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--gold)"></span> Professorship</span>
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-rev)"></span> PSA Renewal</span>
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-plan)"></span> Recurring</span>
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--p-crit)"></span> Deadline</span>
-    <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-done)"></span> Meeting</span>
+
+  <!-- ===== PROFESSORSHIPS ===== -->
+  <div class="ops-section" id="professorshipsSection">
+    <div class="ops-section-header">
+      <div class="ops-section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+        Endowed Professorships
+        <span class="ops-section-count" id="profCount">0</span>
+      </div>
+      <button class="btn btn-primary" onclick="openProfModal()" style="font-size:0.72rem;padding:0.3rem 0.7rem">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Professorship
+      </button>
+    </div>
+
+    <!-- Alert summary bar -->
+    <div class="ops-alert-bar" id="profAlertBar"></div>
+
+    <!-- Professorships table -->
+    <div class="ops-table-wrap">
+      <table class="ops-table" id="profTable">
+        <thead>
+          <tr>
+            <th style="width:28%">Professorship</th>
+            <th style="width:18%">Current Holder</th>
+            <th style="width:13%">Renewal Date</th>
+            <th style="width:10%">Status</th>
+            <th style="width:21%">Timeline</th>
+            <th style="width:10%"></th>
+          </tr>
+        </thead>
+        <tbody id="profTableBody"></tbody>
+      </table>
+      <div class="ops-empty" id="profEmpty" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+        No professorships tracked yet. Add one to begin tracking renewals.
+      </div>
+    </div>
   </div>
-  <div id="calDayDetail"></div>
+
+  <!-- ===== CALENDAR (preserved) ===== -->
+  <div class="ops-section" style="margin-top:1.5rem">
+    <div class="ops-section-header">
+      <div class="ops-section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events Calendar
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <div class="cal-nav" style="margin:0">
+          <button class="cal-nav-btn" onclick="calNav(-1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="cal-month-label" id="calMonthLabel" style="font-size:0.82rem"></span>
+          <button class="cal-nav-btn" onclick="calNav(1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          <button class="cal-today-btn" onclick="calToday()">Today</button>
+        </div>
+        <button class="btn btn-primary" onclick="openCalModal()" style="font-size:0.72rem;padding:0.3rem 0.7rem">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Event
+        </button>
+      </div>
+    </div>
+    <div id="calGrid" class="cal-grid"></div>
+    <div class="cal-legend">
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-prog)"></span> Payment</span>
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--gold)"></span> Professorship</span>
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-rev)"></span> PSA Renewal</span>
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-plan)"></span> Recurring</span>
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--p-crit)"></span> Deadline</span>
+      <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-done)"></span> Meeting</span>
+    </div>
+    <div id="calDayDetail"></div>
+  </div>
 </div>
 
 <!-- ===== BASE SCHEDULE VIEW ===== -->
@@ -2408,6 +2558,51 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closeCalModal()">Cancel</button>
       <button class="btn btn-primary" id="calSaveBtn" onclick="saveCalEvent()">Add Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFESSORSHIP ADD/EDIT MODAL -->
+<div class="modal-overlay" id="profModalOverlay" onclick="closeProfModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2 id="profModalTitle">Add Professorship</h2>
+    <div class="modal-field">
+      <label>Professorship Name</label>
+      <input type="text" id="profName" placeholder="e.g., George F. and Sandy G. Valassis Professorship"/>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Current Holder</label>
+        <input type="text" id="profHolder" placeholder="e.g., Dr. Jane Smith"/>
+      </div>
+      <div class="modal-field">
+        <label>Renewal Date</label>
+        <input type="date" id="profRenewalDate"/>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Term Length</label>
+        <select id="profTerm">
+          <option value="5">5 Years</option>
+          <option value="3">3 Years</option>
+          <option value="7">7 Years</option>
+          <option value="10">10 Years</option>
+          <option value="0">Indefinite</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Funding Source</label>
+        <input type="text" id="profFunding" placeholder="e.g., Endowment, Dean's Office"/>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <textarea id="profNotes" rows="2" placeholder="Special conditions, requirements, etc."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeProfModal()">Cancel</button>
+      <button class="btn btn-primary" id="profSaveBtn" onclick="saveProfessorship()">Add Professorship</button>
     </div>
   </div>
 </div>
@@ -3395,11 +3590,202 @@ function setPage(page) {
   document.getElementById('chairView').style.display = page === 'chair' ? '' : 'none';
   document.getElementById('adminView').style.display = page === 'admin' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
-  if (page === 'calendar') renderCalendar();
+  if (page === 'calendar') { renderProfessorships(); renderCalendar(); }
   if (page === 'admin') { renderTable(); setView(currentView); }
 }
 
 // ===== CALENDAR =====
+// ===== PROFESSORSHIPS TRACKER =====
+const PROF_STORAGE_KEY = 'uro_professorships';
+let _profEditIdx = null;
+
+// Sample placeholder data
+const DEFAULT_PROFESSORSHIPS = [
+  { name: 'George F. and Sandy G. Valassis Professorship of Urology', holder: 'TBD', renewalDate: '2027-06-30', term: 5, funding: 'Endowment', notes: '' },
+  { name: 'Jack Lapides Professorship in Urology', holder: 'TBD', renewalDate: '2028-01-15', term: 5, funding: 'Endowment', notes: '' },
+  { name: 'Nesbit Professorship of Urology', holder: 'TBD', renewalDate: '2026-09-01', term: 5, funding: 'Endowment', notes: '' },
+  { name: 'Dorothy and Sol Gruner Professorship in Urology Research', holder: 'TBD', renewalDate: '2027-03-15', term: 5, funding: 'Endowment', notes: '' },
+  { name: 'F. Brantley Scott M.D. Professorship in Urology', holder: 'TBD', renewalDate: '2026-12-01', term: 5, funding: 'Endowment', notes: '' },
+];
+
+function getProfessorships() {
+  try {
+    const stored = localStorage.getItem(PROF_STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch {}
+  // First time — seed with defaults
+  localStorage.setItem(PROF_STORAGE_KEY, JSON.stringify(DEFAULT_PROFESSORSHIPS));
+  return [...DEFAULT_PROFESSORSHIPS];
+}
+
+function saveProfessorships(profs) {
+  localStorage.setItem(PROF_STORAGE_KEY, JSON.stringify(profs));
+}
+
+function getProfRenewalStatus(renewalDateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const renewal = new Date(renewalDateStr + 'T00:00:00');
+  const diffMs = renewal - today;
+  const diffDays = Math.ceil(diffMs / 86400000);
+  const diffMonths = diffDays / 30.44;
+
+  if (diffDays < 0) return { label: 'Overdue', cls: 'overdue', days: diffDays, months: diffMonths, pct: 100, barColor: 'var(--p-crit)' };
+  if (diffMonths <= 3) return { label: '< 3 mo', cls: 'urgent', days: diffDays, months: diffMonths, pct: 85, barColor: '#C49B41' };
+  if (diffMonths <= 6) return { label: '< 6 mo', cls: 'upcoming', days: diffDays, months: diffMonths, pct: 60, barColor: '#4A90D9' };
+  if (diffMonths <= 12) return { label: '< 1 yr', cls: 'upcoming', days: diffDays, months: diffMonths, pct: 35, barColor: '#4A90D9' };
+  return { label: 'On Track', cls: 'ok', days: diffDays, months: diffMonths, pct: 15, barColor: 'var(--s-done)' };
+}
+
+function renderProfessorships() {
+  const profs = getProfessorships();
+  const tbody = document.getElementById('profTableBody');
+  const countEl = document.getElementById('profCount');
+  const alertBar = document.getElementById('profAlertBar');
+  const emptyEl = document.getElementById('profEmpty');
+  const tableWrap = document.querySelector('.ops-table-wrap');
+
+  countEl.textContent = profs.length;
+
+  if (profs.length === 0) {
+    emptyEl.style.display = 'flex';
+    if (tableWrap) tableWrap.querySelector('table').style.display = 'none';
+    alertBar.innerHTML = '';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  if (tableWrap) tableWrap.querySelector('table').style.display = '';
+
+  // Sort by renewal date (soonest first)
+  const sorted = profs.map((p, i) => ({ ...p, _idx: i }))
+    .sort((a, b) => new Date(a.renewalDate) - new Date(b.renewalDate));
+
+  // Build alert summary
+  let overdue = 0, urgent = 0, upcoming = 0, ok = 0;
+  sorted.forEach(p => {
+    const s = getProfRenewalStatus(p.renewalDate);
+    if (s.cls === 'overdue') overdue++;
+    else if (s.cls === 'urgent') urgent++;
+    else if (s.cls === 'upcoming') upcoming++;
+    else ok++;
+  });
+  let alertHtml = '';
+  if (overdue > 0) alertHtml += `<div class="ops-alert-chip alert-urgent"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${overdue} Overdue</div>`;
+  if (urgent > 0) alertHtml += `<div class="ops-alert-chip alert-warn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${urgent} Within 3 months</div>`;
+  if (upcoming > 0) alertHtml += `<div class="ops-alert-chip alert-upcoming">${upcoming} Within 12 months</div>`;
+  if (ok > 0) alertHtml += `<div class="ops-alert-chip alert-ok">${ok} On Track</div>`;
+  alertBar.innerHTML = alertHtml;
+
+  // Build table rows
+  tbody.innerHTML = sorted.map(p => {
+    const s = getProfRenewalStatus(p.renewalDate);
+    const renewalDisplay = new Date(p.renewalDate + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const timeLabel = s.days < 0
+      ? Math.abs(Math.round(s.months)) + ' mo overdue'
+      : s.days <= 90
+        ? s.days + ' days'
+        : Math.round(s.months) + ' mo';
+    const rowCls = s.cls === 'overdue' ? 'prof-overdue' : s.cls === 'urgent' ? 'prof-urgent' : '';
+
+    return `<tr class="${rowCls}">
+      <td>
+        <div class="prof-name">${esc(p.name)}</div>
+        ${p.funding ? `<div style="font-size:0.64rem;color:var(--text-3);margin-top:0.1rem">${esc(p.funding)}${p.term ? ' &middot; ' + p.term + '-year term' : ''}</div>` : ''}
+      </td>
+      <td><span class="prof-holder">${esc(p.holder)}</span></td>
+      <td><span class="prof-renewal-date">${renewalDisplay}</span></td>
+      <td><span class="prof-status-badge ${s.cls}">${s.label}</span></td>
+      <td>
+        <div class="prof-timeline">
+          <div class="prof-timeline-bar"><div class="prof-timeline-fill" style="width:${s.pct}%;background:${s.barColor}"></div></div>
+          <span class="prof-timeline-label">${timeLabel}</span>
+        </div>
+      </td>
+      <td>
+        <div class="prof-actions">
+          <button class="prof-action-btn" onclick="editProfessorship(${p._idx})" title="Edit">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="prof-action-btn delete-btn" onclick="deleteProfessorship(${p._idx})" title="Delete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openProfModal() {
+  _profEditIdx = null;
+  document.getElementById('profModalTitle').textContent = 'Add Professorship';
+  document.getElementById('profSaveBtn').textContent = 'Add Professorship';
+  document.getElementById('profName').value = '';
+  document.getElementById('profHolder').value = '';
+  document.getElementById('profRenewalDate').value = '';
+  document.getElementById('profTerm').value = '5';
+  document.getElementById('profFunding').value = '';
+  document.getElementById('profNotes').value = '';
+  document.getElementById('profModalOverlay').classList.add('active');
+}
+
+function editProfessorship(idx) {
+  const profs = getProfessorships();
+  const p = profs[idx];
+  if (!p) return;
+  _profEditIdx = idx;
+  document.getElementById('profModalTitle').textContent = 'Edit Professorship';
+  document.getElementById('profSaveBtn').textContent = 'Save Changes';
+  document.getElementById('profName').value = p.name || '';
+  document.getElementById('profHolder').value = p.holder || '';
+  document.getElementById('profRenewalDate').value = p.renewalDate || '';
+  document.getElementById('profTerm').value = String(p.term || 5);
+  document.getElementById('profFunding').value = p.funding || '';
+  document.getElementById('profNotes').value = p.notes || '';
+  document.getElementById('profModalOverlay').classList.add('active');
+}
+
+function closeProfModal() {
+  document.getElementById('profModalOverlay').classList.remove('active');
+  _profEditIdx = null;
+}
+
+function saveProfessorship() {
+  const name = document.getElementById('profName').value.trim();
+  const renewalDate = document.getElementById('profRenewalDate').value;
+  if (!name) { showToast('Professorship name is required', 'error'); return; }
+  if (!renewalDate) { showToast('Renewal date is required', 'error'); return; }
+
+  const entry = {
+    name,
+    holder: document.getElementById('profHolder').value.trim(),
+    renewalDate,
+    term: parseInt(document.getElementById('profTerm').value) || 5,
+    funding: document.getElementById('profFunding').value.trim(),
+    notes: document.getElementById('profNotes').value.trim(),
+  };
+
+  const profs = getProfessorships();
+  if (_profEditIdx !== null) {
+    profs[_profEditIdx] = entry;
+    showToast('Professorship updated');
+  } else {
+    profs.push(entry);
+    showToast('Professorship added');
+  }
+  saveProfessorships(profs);
+  closeProfModal();
+  renderProfessorships();
+}
+
+function deleteProfessorship(idx) {
+  const profs = getProfessorships();
+  const name = profs[idx] ? profs[idx].name : 'this professorship';
+  if (!confirm('Delete "' + name + '"?')) return;
+  profs.splice(idx, 1);
+  saveProfessorships(profs);
+  renderProfessorships();
+  showToast('Professorship removed');
+}
+
 let calendarEvents = [];
 let calYear, calMonth;
 let _calEditRow = null;
