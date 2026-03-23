@@ -1532,6 +1532,9 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .mtg-tooltip-info { flex: 1; min-width: 0; }
 .mtg-tooltip-name { font-size: 0.76rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mtg-tooltip-meta { font-size: 0.64rem; color: var(--text-3); }
+.mtg-tooltip-note { font-size: 0.62rem; color: var(--text-3); font-style: italic; margin-top: 0.15rem; }
+.meetings-day.away-day { background: rgba(176,72,64,0.06); }
+.meetings-day.away-day .meetings-day-num { color: var(--p-crit); font-weight: 600; }
 .mtg-tooltip-empty { padding: 0.75rem; text-align: center; font-size: 0.74rem; color: var(--text-3); }
 
 .meetings-evt {
@@ -2101,12 +2104,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="meetings-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
     <div id="meetingsBody" class="meetings-body section-collapse-body">
-      <div class="meetings-left">
-        <div id="mtgGrid" class="meetings-grid"></div>
-      </div>
-      <div class="meetings-right">
-        <div id="mtgUpcoming" class="meetings-upcoming"></div>
-      </div>
+      <div id="mtgGrid" class="meetings-grid"></div>
     </div>
     <!-- Tableau-style tooltip popover -->
     <div class="mtg-tooltip" id="mtgTooltip">
@@ -3051,7 +3049,16 @@ function sortProjects(list) {
 // ===== KEY MEETINGS CALENDAR =====
 let mtgYear, mtgMonth;
 const KEY_MEETINGS = [
-  { title: 'Staff Leadership | Weekly', day: 'monday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' }
+  // Weekly recurring
+  { title: 'CDA Leadership Huddle', day: 'monday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' },
+  { title: 'Chair Leadership Huddle', day: 'thursday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' },
+  // Monthly recurring (3rd Thursday)
+  { title: 'ELT Meeting', day: 'thursday', weekOfMonth: 3, time: '6:30 – 7:00 AM', type: 'leadership', recurring: 'monthly' },
+  // One-time events
+  { title: 'Medical School Budget Meeting', date: '2026-05-11', time: '10:00 AM', type: 'leadership', recurring: 'once' },
+  { title: 'Faculty Meeting', date: '2026-04-07', time: '6:00 – 8:00 PM', type: 'clinical', recurring: 'once' },
+  // Time away (multi-day)
+  { title: 'Tyler Time Away (NCAA Basketball Finals)', startDate: '2026-04-06', endDate: '2026-04-07', time: 'All Day', type: 'away', recurring: 'once', note: 'Back for Faculty Meeting evening of 4/7' }
 ];
 
 (function() {
@@ -3070,36 +3077,61 @@ function mtgNav(dir) {
 
 function getMeetingsForMonth(year, month) {
   const meetings = [];
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const daysInMonth = lastDay.getDate();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
   const dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  const pad = n => String(n).padStart(2,'0');
+  const mStr = year + '-' + pad(month+1);
 
   KEY_MEETINGS.forEach(function(mtg) {
     if (mtg.recurring === 'weekly') {
       const targetDow = dayNames.indexOf(mtg.day.toLowerCase());
       if (targetDow < 0) return;
       for (let d = 1; d <= daysInMonth; d++) {
-        const dt = new Date(year, month, d);
-        if (dt.getDay() === targetDow) {
-          meetings.push({
-            title: mtg.title,
-            date: year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0'),
-            time: mtg.time,
-            type: mtg.type,
-            dayNum: d
-          });
+        if (new Date(year, month, d).getDay() === targetDow) {
+          meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+        }
+      }
+    } else if (mtg.recurring === 'monthly') {
+      // Nth weekday of month (e.g. 3rd Thursday)
+      const targetDow = dayNames.indexOf(mtg.day.toLowerCase());
+      if (targetDow < 0) return;
+      let count = 0;
+      for (let d = 1; d <= daysInMonth; d++) {
+        if (new Date(year, month, d).getDay() === targetDow) {
+          count++;
+          if (count === mtg.weekOfMonth) {
+            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+            break;
+          }
+        }
+      }
+    } else if (mtg.recurring === 'once') {
+      // One-time or multi-day events
+      if (mtg.startDate && mtg.endDate) {
+        // Multi-day range
+        const s = new Date(mtg.startDate + 'T12:00:00');
+        const e = new Date(mtg.endDate + 'T12:00:00');
+        for (let dt = new Date(s); dt <= e; dt.setDate(dt.getDate() + 1)) {
+          if (dt.getFullYear() === year && dt.getMonth() === month) {
+            const d = dt.getDate();
+            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+          }
+        }
+      } else if (mtg.date) {
+        const parts = mtg.date.split('-');
+        if (parseInt(parts[0]) === year && parseInt(parts[1]) === month + 1) {
+          const d = parseInt(parts[2]);
+          meetings.push({ title: mtg.title, date: mtg.date, time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
         }
       }
     }
   });
 
-  return meetings.sort(function(a,b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  return meetings.sort(function(a,b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time||'').localeCompare(b.time||''); });
 }
 
 function renderMeetingsCalendar() {
   const grid = document.getElementById('mtgGrid');
-  const upcoming = document.getElementById('mtgUpcoming');
   const label = document.getElementById('mtgMonthLabel');
   if (!grid || !label) return;
 
@@ -3136,13 +3168,14 @@ function renderMeetingsCalendar() {
     if (dayMtgs.length > 0) {
       dotsHtml = '<div class="meetings-day-dots">';
       dayMtgs.forEach(function(m) {
-        var dotColor = m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
+        var dotColor = m.type === 'away' ? 'var(--p-crit)' : m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
         dotsHtml += '<div class="meetings-day-dot" style="background:' + dotColor + '"></div>';
       });
       dotsHtml += '</div>';
     }
 
-    html += '<div class="meetings-day' + (isToday ? ' today' : '') + (dayMtgs.length > 0 ? ' has-meetings' : '') + '" ' +
+    var hasAway = dayMtgs.some(function(m) { return m.type === 'away'; });
+    html += '<div class="meetings-day' + (isToday ? ' today' : '') + (dayMtgs.length > 0 ? ' has-meetings' : '') + (hasAway ? ' away-day' : '') + '" ' +
       (dayMtgs.length > 0 ? 'onclick="openMtgTooltip(event,' + d + ')" ' : '') +
       '>' +
       '<div class="meetings-day-num">' + d + '</div>' +
@@ -3157,40 +3190,6 @@ function renderMeetingsCalendar() {
   }
 
   grid.innerHTML = html;
-
-  // Upcoming meetings list (next 4 from today)
-  var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  var allUpcoming = [];
-
-  // Get meetings for this month and next month
-  var thisMonthMtgs = getMeetingsForMonth(mtgYear, mtgMonth);
-  allUpcoming = allUpcoming.concat(thisMonthMtgs);
-
-  var nextM = mtgMonth + 1, nextY = mtgYear;
-  if (nextM > 11) { nextM = 0; nextY++; }
-  allUpcoming = allUpcoming.concat(getMeetingsForMonth(nextY, nextM));
-
-  // Filter to upcoming only
-  allUpcoming = allUpcoming.filter(function(m) { return m.date >= todayStr; }).slice(0, 4);
-
-  if (allUpcoming.length > 0) {
-    var upHtml = '<div class="meetings-upcoming-title">Upcoming</div>';
-    allUpcoming.forEach(function(m) {
-      var dt = new Date(m.date + 'T12:00:00');
-      var dayLabel = dt.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
-      var dotColor = m.type === 'leadership' ? 'var(--s-plan)' : 'var(--s-done)';
-      upHtml += '<div class="meetings-upcoming-item">' +
-        '<div class="meetings-upcoming-dot" style="background:' + dotColor + '"></div>' +
-        '<div class="meetings-upcoming-info">' +
-          '<div class="meetings-upcoming-name">' + esc(m.title) + '</div>' +
-          '<div class="meetings-upcoming-meta">' + dayLabel + ' &middot; ' + m.time + '</div>' +
-        '</div>' +
-        '</div>';
-    });
-    upcoming.innerHTML = upHtml;
-  } else {
-    upcoming.innerHTML = '<div class="meetings-empty">No upcoming meetings this month</div>';
-  }
 }
 
 // ===== MEETINGS TOOLTIP =====
@@ -3214,13 +3213,14 @@ function openMtgTooltip(event, dayNum) {
   } else {
     var html = '';
     dayMtgs.forEach(function(m) {
-      var typeColor = m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
-      var typeLabel = m.type ? m.type.charAt(0).toUpperCase() + m.type.slice(1) : 'Meeting';
+      var typeColor = m.type === 'away' ? 'var(--p-crit)' : m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
+      var typeLabel = m.type === 'away' ? 'Time Away' : m.type ? m.type.charAt(0).toUpperCase() + m.type.slice(1) : 'Meeting';
       html += '<div class="mtg-tooltip-item">' +
         '<div class="mtg-tooltip-dot" style="background:' + typeColor + '"></div>' +
         '<div class="mtg-tooltip-info">' +
           '<div class="mtg-tooltip-name">' + esc(m.title) + '</div>' +
           '<div class="mtg-tooltip-meta">' + m.time + ' &middot; ' + typeLabel + '</div>' +
+          (m.note ? '<div class="mtg-tooltip-note">' + esc(m.note) + '</div>' : '') +
         '</div>' +
       '</div>';
     });
