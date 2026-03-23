@@ -1600,6 +1600,159 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.78rem;
 }
 
+/* ===== KNOWLEDGE BASE ===== */
+.kb-view { display: none; }
+.kb-view.active { display: block; }
+.kb-hero {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin: 1.25rem 0 1rem; gap: 1rem;
+}
+.kb-hero-title {
+  font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.kb-hero-sub { font-size: 0.75rem; color: var(--text-3); margin-top: 0.2rem; margin-left: 2rem; }
+
+.kb-toolbar {
+  display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+.kb-search-wrap {
+  position: relative; flex: 1; min-width: 200px; max-width: 360px;
+}
+.kb-search-icon {
+  position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%);
+  color: var(--text-3); pointer-events: none;
+}
+.kb-search {
+  width: 100%; padding: 0.45rem 0.65rem 0.45rem 2rem;
+  border: 1px solid var(--border-strong); border-radius: var(--r);
+  font-size: 0.78rem; background: var(--bg-card); color: var(--text);
+  transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
+}
+.kb-search:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-badge); }
+.kb-filters { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.kb-filter-btn {
+  font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+  border-radius: var(--r-full); border: 1px solid var(--border-strong);
+  background: var(--bg-card); color: var(--text-2); cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+.kb-filter-btn:hover { border-color: var(--gold-ring); color: var(--gold); }
+.kb-filter-btn.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+.kb-stats {
+  display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;
+}
+.kb-stat {
+  font-size: 0.64rem; font-weight: 600; color: var(--text-3);
+  padding: 0.2rem 0.55rem; background: var(--bg-stripe); border-radius: var(--r-full);
+}
+.kb-stat strong { color: var(--text); }
+
+.kb-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.75rem;
+}
+.kb-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0; box-shadow: var(--sh-sm); transition: all var(--t) var(--ease);
+  cursor: pointer; overflow: hidden; display: flex; flex-direction: column;
+}
+.kb-card:hover { box-shadow: var(--sh-md); transform: translateY(-2px); border-color: var(--gold-ring); }
+.kb-card-accent {
+  height: 4px; width: 100%;
+}
+.kb-card-accent.cat-Policy { background: var(--navy); }
+.kb-card-accent.cat-Template { background: var(--gold); }
+.kb-card-accent.cat-Process { background: #4A90D9; }
+.kb-card-accent.cat-Reference { background: #7C6FE0; }
+.kb-card-accent.cat-Onboarding { background: var(--s-done); }
+.kb-card-body { padding: 0.85rem 1rem 0.75rem; flex: 1; display: flex; flex-direction: column; }
+.kb-card-top { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem; }
+.kb-card-cat {
+  font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.12rem 0.45rem; border-radius: var(--r-full);
+}
+.kb-card-cat.cat-Policy { background: rgba(28,42,64,0.08); color: var(--navy); }
+.kb-card-cat.cat-Template { background: var(--gold-badge); color: #9A7B30; }
+.kb-card-cat.cat-Process { background: rgba(74,144,217,0.08); color: #4A90D9; }
+.kb-card-cat.cat-Reference { background: rgba(124,111,224,0.08); color: #7C6FE0; }
+.kb-card-cat.cat-Onboarding { background: var(--s-done-bg); color: var(--s-done); }
+.kb-card-title {
+  font-weight: 700; font-size: 0.88rem; color: var(--text); line-height: 1.3;
+  margin-bottom: 0.35rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.kb-card-summary {
+  font-size: 0.74rem; color: var(--text-2); line-height: 1.45; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.kb-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 1rem; border-top: 1px solid var(--border); font-size: 0.64rem; color: var(--text-3);
+}
+.kb-card-tags { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.kb-card-tag {
+  font-size: 0.58rem; padding: 0.1rem 0.35rem; border-radius: var(--r-xs);
+  background: var(--bg-stripe); color: var(--text-3); font-weight: 500;
+}
+.kb-card-date { white-space: nowrap; }
+
+/* KB Read Panel */
+.kb-read-overlay {
+  position: fixed; inset: 0; background: rgba(28,33,39,0.25); backdrop-filter: blur(4px);
+  z-index: 95; display: none; justify-content: flex-end;
+}
+.kb-read-overlay.active { display: flex; }
+.kb-read-panel {
+  width: min(640px, 90vw); height: 100vh; background: var(--bg);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12); overflow-y: auto;
+  padding: 2rem 2.25rem; animation: slideInRight 0.3s ease;
+}
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.kb-read-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+.kb-read-cat {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.15rem 0.55rem; border-radius: var(--r-full);
+}
+.kb-read-close {
+  background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-3);
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm); transition: all var(--t) var(--ease);
+}
+.kb-read-close:hover { background: var(--bg-hover); color: var(--text); }
+.kb-read-title {
+  font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 500;
+  color: var(--text); line-height: 1.3; margin-bottom: 0.5rem;
+}
+.kb-read-meta { font-size: 0.72rem; color: var(--text-3); margin-bottom: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.kb-read-body { font-size: 0.84rem; color: var(--text); line-height: 1.7; }
+.kb-read-body h2 { font-family: 'Fraunces', serif; font-size: 1.08rem; font-weight: 500; color: var(--text); margin: 1.5rem 0 0.5rem; }
+.kb-read-body h3 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin: 1.2rem 0 0.4rem; }
+.kb-read-body p { margin-bottom: 0.75rem; }
+.kb-read-body ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+.kb-read-body li { margin-bottom: 0.3rem; }
+.kb-read-body hr { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+.kb-read-body .kb-email-block {
+  background: var(--bg-stripe); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1rem 1.25rem; margin: 0.75rem 0; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap;
+}
+.kb-read-body strong { font-weight: 700; }
+.kb-read-body em { font-style: italic; color: var(--text-2); }
+.kb-read-actions { margin-top: 2rem; display: flex; gap: 0.5rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+.kb-read-actions .delete-btn { color: var(--p-crit); border-color: rgba(176,72,64,0.2); }
+.kb-read-actions .delete-btn:hover { background: var(--p-crit-bg); }
+
+.kb-empty {
+  text-align: center; padding: 3rem; color: var(--text-3);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+}
+.kb-empty-text { font-size: 0.82rem; max-width: 340px; }
+
+.kb-modal { max-width: 680px; }
+.kb-modal textarea { font-family: 'Plus Jakarta Sans', monospace; font-size: 0.78rem; }
+
 /* ===== OPERATIONAL TRACKER ===== */
 .ops-tracker-header { margin-bottom: 1.2rem; }
 .ops-tracker-title {
@@ -2129,6 +2282,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Recurring Projects
     </button>
+    <button class="page-tab" data-page="kb" onclick="setPage('kb')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Knowledge Base
+    </button>
   </div>
 </div>
 
@@ -2513,6 +2670,123 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--s-done)"></span> Meeting</span>
     </div>
     <div id="calDayDetail"></div>
+  </div>
+</div>
+
+<!-- ===== KNOWLEDGE BASE VIEW ===== -->
+<div class="app kb-view" id="kbView">
+  <div class="kb-hero">
+    <div class="kb-hero-content">
+      <div class="kb-hero-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Department Knowledge Base
+      </div>
+      <div class="kb-hero-sub">Institutional knowledge, policies, templates &amp; operational playbooks for the Urology leadership team</div>
+    </div>
+    <button class="btn btn-primary" onclick="openKbModal()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Entry
+    </button>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="kb-toolbar">
+    <div class="kb-search-wrap">
+      <svg class="kb-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="kb-search" id="kbSearch" placeholder="Search entries..." oninput="renderKb()"/>
+    </div>
+    <div class="kb-filters">
+      <button class="kb-filter-btn active" data-cat="all" onclick="setKbFilter('all')">All</button>
+      <button class="kb-filter-btn" data-cat="Policy" onclick="setKbFilter('Policy')">Policy</button>
+      <button class="kb-filter-btn" data-cat="Template" onclick="setKbFilter('Template')">Templates</button>
+      <button class="kb-filter-btn" data-cat="Process" onclick="setKbFilter('Process')">Processes</button>
+      <button class="kb-filter-btn" data-cat="Reference" onclick="setKbFilter('Reference')">Reference</button>
+      <button class="kb-filter-btn" data-cat="Onboarding" onclick="setKbFilter('Onboarding')">Onboarding</button>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="kb-stats" id="kbStats"></div>
+
+  <!-- Entry Cards -->
+  <div class="kb-grid" id="kbGrid"></div>
+
+  <!-- Empty State -->
+  <div class="kb-empty" id="kbEmpty" style="display:none">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <div class="kb-empty-text">No entries match your search. Try a different keyword or category.</div>
+  </div>
+</div>
+
+<!-- KB ARTICLE READ PANEL -->
+<div class="kb-read-overlay" id="kbReadOverlay" onclick="closeKbRead()">
+  <div class="kb-read-panel" onclick="event.stopPropagation()">
+    <div class="kb-read-header">
+      <div class="kb-read-cat" id="kbReadCat"></div>
+      <button class="kb-read-close" onclick="closeKbRead()">&times;</button>
+    </div>
+    <h1 class="kb-read-title" id="kbReadTitle"></h1>
+    <div class="kb-read-meta" id="kbReadMeta"></div>
+    <div class="kb-read-body" id="kbReadBody"></div>
+    <div class="kb-read-actions">
+      <button class="btn btn-secondary" onclick="editKbFromRead()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit
+      </button>
+      <button class="btn btn-secondary delete-btn" onclick="deleteKbFromRead()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- KB ADD/EDIT MODAL -->
+<div class="modal-overlay" id="kbModalOverlay" onclick="closeKbModal()">
+  <div class="modal kb-modal" onclick="event.stopPropagation()">
+    <h2 id="kbModalTitle">New Knowledge Base Entry</h2>
+    <div class="modal-field">
+      <label>Title</label>
+      <input type="text" id="kbEntryTitle" placeholder="e.g., Annual Fellowship Notification Process"/>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Category</label>
+        <select id="kbEntryCat">
+          <option>Policy</option>
+          <option>Template</option>
+          <option>Process</option>
+          <option>Reference</option>
+          <option>Onboarding</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Tags (comma-separated)</label>
+        <input type="text" id="kbEntryTags" placeholder="e.g., fellowship, annual, email"/>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Summary (1-2 sentences for the card preview)</label>
+      <textarea id="kbEntrySummary" rows="2" placeholder="Brief description visible on the card..."></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Full Content (supports Markdown-like formatting: **bold**, bullet lines starting with - )</label>
+      <textarea id="kbEntryContent" rows="12" placeholder="The full article body. Use **text** for bold, lines starting with - for bullets, lines starting with ## for headings, and --- for horizontal rules."></textarea>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Author</label>
+        <input type="text" id="kbEntryAuthor" placeholder="e.g., Tyler Hughes"/>
+      </div>
+      <div class="modal-field">
+        <label>Last Reviewed</label>
+        <input type="date" id="kbEntryReviewed"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeKbModal()">Cancel</button>
+      <button class="btn btn-primary" id="kbSaveBtn" onclick="saveKbEntry()">Save Entry</button>
+    </div>
   </div>
 </div>
 
@@ -3581,6 +3855,273 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeMtgTooltip();
 });
 
+// ===== KNOWLEDGE BASE =====
+const KB_STORAGE_KEY = 'uro_knowledgebase';
+let _kbEditIdx = null;
+let _kbReadIdx = null;
+let _kbFilter = 'all';
+
+const DEFAULT_KB_ENTRIES = [
+  {
+    title: 'Annual Fellowship Program Email Notification',
+    category: 'Template',
+    tags: ['fellowship', 'annual', 'email', 'recruitment'],
+    summary: 'Each year the department sends a formal notification to urology program directors and faculty across the country regarding our fellowship opportunities. This entry documents the rationale and provides the email template.',
+    content: `## Purpose\n\nThe Department of Urology at the University of Michigan sends an annual fellowship notification email to program directors, division chiefs, and key faculty at peer institutions nationwide. This communication serves several critical functions:\n\n- **Recruitment pipeline**: Ensures top candidates are aware of our open fellowship positions well in advance of application deadlines\n- **Institutional visibility**: Reinforces Michigan's position as a premier destination for subspecialty urology training\n- **Network maintenance**: Keeps our department connected with referring programs and potential collaborators\n- **Compliance**: Meets accreditation expectations for transparent fellowship advertising\n\n## Timing\n\nThe email is sent annually in **early fall (September\u2013October)** to align with the fellowship recruitment cycle. The exact date should be coordinated with the Fellowship Director and Program Coordinator.\n\n## Distribution List\n\nThe email should go to:\n- All AUA-accredited urology program directors\n- Division chiefs of urology at top-50 academic medical centers\n- Known faculty mentors who regularly recommend fellowship candidates\n- Internal faculty for awareness and forwarding\n\n---\n\n## Email Template\n\n:::email\nSubject: University of Michigan \u2013 Urology Fellowship Opportunities [YEAR]\n\nDear Colleagues,\n\nI am writing to inform you of fellowship training opportunities within the Department of Urology at the University of Michigan for the upcoming academic year.\n\nWe are currently accepting applications for the following fellowship programs:\n\n\u2022 Urologic Oncology Fellowship (ACGME-accredited)\n\u2022 Female Pelvic Medicine & Reconstructive Surgery Fellowship\n\u2022 Endourology / Minimally Invasive Surgery Fellowship\n\u2022 Pediatric Urology Fellowship\n\nOur fellows benefit from a high-volume clinical practice, cutting-edge research facilities, and mentorship from nationally recognized faculty. The University of Michigan Health System consistently ranks among the top programs in urology.\n\nApplication materials and deadlines can be found at [LINK]. We encourage interested candidates to apply early.\n\nPlease share this information with any residents or trainees who may be interested in advanced fellowship training at Michigan.\n\nWarm regards,\n\n[Chair Name], MD\nChair, Department of Urology\nUniversity of Michigan\n:::email\n\n---\n\n## Key Contacts\n\n- **Fellowship Coordinator**: [Name] \u2013 responsible for managing applications and scheduling interviews\n- **Fellowship Director**: [Name] \u2013 oversees the program and reviews applications\n- **Department Administrator**: Ganesh Palapattu \u2013 final approval on fellowship slots and funding\n\n## Notes\n\n- Always update fellowship titles and availability before sending\n- Confirm any new fellowship tracks with the Graduate Medical Education office\n- Track response rates year-over-year to measure effectiveness`,
+    author: 'Tyler Hughes',
+    reviewed: '2026-03-22',
+    created: '2026-03-22'
+  },
+  {
+    title: 'Faculty Work Expectation: 43.4 Hours Per Week Standard',
+    category: 'Policy',
+    tags: ['faculty', 'work hours', 'expectations', '43.4', 'productivity', 'FTE'],
+    summary: 'Documents the 43.4 hours per week faculty work expectation used as the baseline for calculating clinical, research, teaching, and administrative effort allocations across the department.',
+    content: `## Overview\n\nThe Department of Urology uses **43.4 hours per week** as the standard work expectation for a 1.0 FTE faculty member. This number is the institutional benchmark and serves as the foundation for all effort allocation, productivity modeling, and workload balancing decisions.\n\n## Origin of the 43.4-Hour Standard\n\nThe 43.4-hour figure is derived from national faculty work surveys and University of Michigan Medical School guidelines. It represents:\n\n- A sustainable full-time work expectation that accounts for the unique demands of academic medicine\n- The baseline used by the Dean\u2019s Office for effort reporting and compensation modeling\n- Alignment with AAMC benchmarks for clinical faculty productivity expectations\n\nThis is **not** a cap on hours worked \u2014 many faculty work well beyond this. Rather, it is the denominator used when calculating what percentage of effort goes to each mission area.\n\n## How It\u2019s Applied\n\n### Effort Allocation\n\nFor a faculty member with a 1.0 FTE appointment, the 43.4 hours are divided across mission areas:\n\n- **Clinical**: Typically 60\u201380% (26\u201335 hours/week) depending on track and rank\n- **Research**: 10\u201330% for faculty with funded research programs\n- **Teaching**: 5\u201315% covering didactics, resident/fellow supervision, and mentorship\n- **Administrative/Service**: 5\u201310% for committee work, leadership roles, and departmental service\n\n### RVU Productivity Targets\n\nWhen modeling expected RVU output, the 43.4-hour week is used to determine:\n\n- Number of available clinic half-days per week\n- Expected surgical block utilization\n- Target wRVU per clinical hour\n\nFor example, a faculty member at 70% clinical effort has approximately **30.4 clinical hours/week** (43.4 \u00d7 0.70), which translates to roughly 6\u20137 half-day clinic/OR sessions.\n\n---\n\n## Important Considerations\n\n- **Part-time faculty**: Pro-rate the 43.4 hours by FTE (e.g., 0.8 FTE = 34.7 hours/week)\n- **Protected time**: Research or leadership buydowns reduce the clinical denominator, not the total hours\n- **New faculty**: During ramp-up (first 6\u201312 months), clinical expectations may be reduced to 50\u201360% while maintaining the 43.4-hour total\n- **Call coverage**: On-call hours are generally **not** included in the 43.4 baseline and should be tracked and compensated separately\n\n## When to Reference This Standard\n\n- Annual faculty performance reviews\n- New hire offer letter negotiations\n- Schedule building and grid optimization\n- Compensation and incentive plan (STIP/BASE+) discussions\n- Responses to faculty concerns about workload equity\n\n## Related Resources\n\n- University of Michigan Medical School Effort Reporting Guidelines\n- Department of Urology Faculty Compensation Plan\n- AAMC Faculty Salary Survey benchmarks`,
+    author: 'Tyler Hughes',
+    reviewed: '2026-03-22',
+    created: '2026-03-22'
+  }
+];
+
+function getKbEntries() {
+  try {
+    const stored = localStorage.getItem(KB_STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch {}
+  localStorage.setItem(KB_STORAGE_KEY, JSON.stringify(DEFAULT_KB_ENTRIES));
+  return [...DEFAULT_KB_ENTRIES];
+}
+
+function saveKbEntries(entries) {
+  localStorage.setItem(KB_STORAGE_KEY, JSON.stringify(entries));
+}
+
+function setKbFilter(cat) {
+  _kbFilter = cat;
+  document.querySelectorAll('.kb-filter-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === cat));
+  renderKb();
+}
+
+function kbFormatContent(raw) {
+  // Simple markdown-like rendering
+  let html = raw
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/:::email\n([\s\S]*?):::email/g, '<div class="kb-email-block">$1</div>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\u2022 /g, '- ');
+
+  // Process bullet lists
+  const lines = html.split('\n');
+  let result = [];
+  let inList = false;
+  for (const line of lines) {
+    if (line.match(/^- (.+)/)) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push('<li>' + line.replace(/^- /, '') + '</li>');
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      if (line.trim() === '') {
+        // skip blank lines between paragraphs that aren't in tags
+      } else if (!line.startsWith('<h') && !line.startsWith('<hr') && !line.startsWith('<div') && !line.startsWith('</div')) {
+        result.push('<p>' + line + '</p>');
+      } else {
+        result.push(line);
+      }
+    }
+  }
+  if (inList) result.push('</ul>');
+  return result.join('\n');
+}
+
+function renderKb() {
+  const entries = getKbEntries();
+  const search = (document.getElementById('kbSearch') || {}).value || '';
+  const searchLower = search.toLowerCase();
+  const grid = document.getElementById('kbGrid');
+  const emptyEl = document.getElementById('kbEmpty');
+  const statsEl = document.getElementById('kbStats');
+
+  // Filter
+  let filtered = entries.map((e, i) => ({ ...e, _idx: i }));
+  if (_kbFilter !== 'all') {
+    filtered = filtered.filter(e => e.category === _kbFilter);
+  }
+  if (searchLower) {
+    filtered = filtered.filter(e =>
+      (e.title || '').toLowerCase().includes(searchLower) ||
+      (e.summary || '').toLowerCase().includes(searchLower) ||
+      (e.content || '').toLowerCase().includes(searchLower) ||
+      (e.tags || []).some(t => t.toLowerCase().includes(searchLower))
+    );
+  }
+
+  // Stats
+  const catCounts = {};
+  entries.forEach(e => { catCounts[e.category] = (catCounts[e.category] || 0) + 1; });
+  statsEl.innerHTML = `<span class="kb-stat"><strong>${entries.length}</strong> entries</span>` +
+    Object.entries(catCounts).map(([cat, count]) =>
+      `<span class="kb-stat">${count} ${cat}</span>`
+    ).join('');
+
+  // Empty state
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    emptyEl.style.display = 'flex';
+    return;
+  }
+  emptyEl.style.display = 'none';
+
+  // Sort: most recently reviewed/created first
+  filtered.sort((a, b) => {
+    const da = new Date(a.reviewed || a.created || '2020-01-01');
+    const db = new Date(b.reviewed || b.created || '2020-01-01');
+    return db - da;
+  });
+
+  grid.innerHTML = filtered.map(e => {
+    const dateStr = e.reviewed
+      ? new Date(e.reviewed + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : '';
+    const tags = (e.tags || []).slice(0, 4);
+    return `<div class="kb-card" onclick="openKbRead(${e._idx})">
+      <div class="kb-card-accent cat-${esc(e.category)}"></div>
+      <div class="kb-card-body">
+        <div class="kb-card-top">
+          <span class="kb-card-cat cat-${esc(e.category)}">${esc(e.category)}</span>
+        </div>
+        <div class="kb-card-title">${esc(e.title)}</div>
+        <div class="kb-card-summary">${esc(e.summary || '')}</div>
+      </div>
+      <div class="kb-card-footer">
+        <div class="kb-card-tags">${tags.map(t => `<span class="kb-card-tag">${esc(t)}</span>`).join('')}</div>
+        <span class="kb-card-date">${dateStr}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openKbRead(idx) {
+  const entries = getKbEntries();
+  const e = entries[idx];
+  if (!e) return;
+  _kbReadIdx = idx;
+
+  const catEl = document.getElementById('kbReadCat');
+  catEl.textContent = e.category;
+  catEl.className = 'kb-read-cat kb-card-cat cat-' + (e.category || '');
+
+  document.getElementById('kbReadTitle').textContent = e.title;
+
+  const metaParts = [];
+  if (e.author) metaParts.push('By ' + e.author);
+  if (e.reviewed) metaParts.push('Reviewed ' + new Date(e.reviewed + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+  if (e.tags && e.tags.length) metaParts.push(e.tags.map(t => '#' + t).join(' '));
+  document.getElementById('kbReadMeta').innerHTML = metaParts.map(p => '<span>' + p + '</span>').join('');
+
+  document.getElementById('kbReadBody').innerHTML = kbFormatContent(e.content || '');
+  document.getElementById('kbReadOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeKbRead() {
+  document.getElementById('kbReadOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  _kbReadIdx = null;
+}
+
+function editKbFromRead() {
+  if (_kbReadIdx === null) return;
+  closeKbRead();
+  editKbEntry(_kbReadIdx);
+}
+
+function deleteKbFromRead() {
+  if (_kbReadIdx === null) return;
+  const idx = _kbReadIdx;
+  closeKbRead();
+  deleteKbEntry(idx);
+}
+
+function openKbModal() {
+  _kbEditIdx = null;
+  document.getElementById('kbModalTitle').textContent = 'New Knowledge Base Entry';
+  document.getElementById('kbSaveBtn').textContent = 'Save Entry';
+  document.getElementById('kbEntryTitle').value = '';
+  document.getElementById('kbEntryCat').value = 'Policy';
+  document.getElementById('kbEntryTags').value = '';
+  document.getElementById('kbEntrySummary').value = '';
+  document.getElementById('kbEntryContent').value = '';
+  document.getElementById('kbEntryAuthor').value = 'Tyler Hughes';
+  document.getElementById('kbEntryReviewed').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('kbModalOverlay').classList.add('active');
+}
+
+function editKbEntry(idx) {
+  const entries = getKbEntries();
+  const e = entries[idx];
+  if (!e) return;
+  _kbEditIdx = idx;
+  document.getElementById('kbModalTitle').textContent = 'Edit Entry';
+  document.getElementById('kbSaveBtn').textContent = 'Save Changes';
+  document.getElementById('kbEntryTitle').value = e.title || '';
+  document.getElementById('kbEntryCat').value = e.category || 'Policy';
+  document.getElementById('kbEntryTags').value = (e.tags || []).join(', ');
+  document.getElementById('kbEntrySummary').value = e.summary || '';
+  document.getElementById('kbEntryContent').value = e.content || '';
+  document.getElementById('kbEntryAuthor').value = e.author || '';
+  document.getElementById('kbEntryReviewed').value = e.reviewed || '';
+  document.getElementById('kbModalOverlay').classList.add('active');
+}
+
+function closeKbModal() {
+  document.getElementById('kbModalOverlay').classList.remove('active');
+  _kbEditIdx = null;
+}
+
+function saveKbEntry() {
+  const title = document.getElementById('kbEntryTitle').value.trim();
+  if (!title) { showToast('Title is required', 'error'); return; }
+
+  const entry = {
+    title,
+    category: document.getElementById('kbEntryCat').value,
+    tags: document.getElementById('kbEntryTags').value.split(',').map(t => t.trim()).filter(Boolean),
+    summary: document.getElementById('kbEntrySummary').value.trim(),
+    content: document.getElementById('kbEntryContent').value,
+    author: document.getElementById('kbEntryAuthor').value.trim(),
+    reviewed: document.getElementById('kbEntryReviewed').value,
+    created: new Date().toISOString().slice(0, 10)
+  };
+
+  const entries = getKbEntries();
+  if (_kbEditIdx !== null) {
+    entry.created = entries[_kbEditIdx].created || entry.created;
+    entries[_kbEditIdx] = entry;
+    showToast('Entry updated');
+  } else {
+    entries.push(entry);
+    showToast('Entry added to Knowledge Base');
+  }
+  saveKbEntries(entries);
+  closeKbModal();
+  renderKb();
+}
+
+function deleteKbEntry(idx) {
+  const entries = getKbEntries();
+  const name = entries[idx] ? entries[idx].title : 'this entry';
+  if (!confirm('Delete "' + name + '"?')) return;
+  entries.splice(idx, 1);
+  saveKbEntries(entries);
+  renderKb();
+  showToast('Entry removed');
+}
+
 // ===== PAGE TABS =====
 let activePage = 'chair';
 
@@ -3590,8 +4131,10 @@ function setPage(page) {
   document.getElementById('chairView').style.display = page === 'chair' ? '' : 'none';
   document.getElementById('adminView').style.display = page === 'admin' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
+  document.getElementById('kbView').classList.toggle('active', page === 'kb');
   if (page === 'calendar') { renderProfessorships(); renderCalendar(); }
   if (page === 'admin') { renderTable(); setView(currentView); }
+  if (page === 'kb') { renderKb(); }
 }
 
 // ===== CALENDAR =====
