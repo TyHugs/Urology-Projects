@@ -669,41 +669,60 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   padding: 0.1rem 0.45rem; border-radius: var(--r-full);
 }
 .spotlight-grid {
-  display: flex; flex-direction: column; gap: 0.35rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.55rem;
 }
 .spotlight-card {
   background: var(--bg-card); border: 1px solid var(--border);
-  border-left: 3px solid var(--gold); border-radius: var(--r);
-  padding: 0.55rem 0.75rem; box-shadow: var(--sh-sm);
+  border-radius: var(--r); padding: 0.75rem 0.85rem; box-shadow: var(--sh-sm);
   transition: all var(--t) var(--ease); position: relative;
-  display: flex; align-items: center; gap: 0.5rem;
+  display: flex; flex-direction: column; gap: 0.4rem;
+  border-top: 3px solid var(--gold);
 }
-.spotlight-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); cursor: grab; }
-.spotlight-card.dragging { opacity: 0.35; transform: scale(0.97); box-shadow: none; }
-.spotlight-card.drag-over { border-top: 2.5px solid var(--gold); transform: translateY(2px); }
+.spotlight-card:hover { box-shadow: var(--sh-md); transform: translateY(-2px); cursor: grab; }
+.spotlight-card.dragging { opacity: 0.3; transform: scale(0.96); box-shadow: none; }
+.spotlight-card.drag-over { border-top-color: var(--navy); box-shadow: 0 0 0 2px var(--gold-ring); }
+.spotlight-card-top {
+  display: flex; align-items: center; gap: 0.45rem;
+}
 .spotlight-card-rank {
   width: 20px; height: 20px; border-radius: 50%; background: var(--gold);
-  color: #fff; font-size: 0.62rem; font-weight: 700; display: flex;
+  color: #fff; font-size: 0.6rem; font-weight: 700; display: flex;
   align-items: center; justify-content: center; flex-shrink: 0; line-height: 1;
-}
-.spotlight-card-body {
-  flex: 1; min-width: 0;
 }
 .spotlight-card-name {
   font-weight: 600; font-size: 0.82rem; color: var(--text);
-  line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  cursor: pointer;
+  line-height: 1.3; flex: 1; min-width: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; cursor: pointer;
 }
 .spotlight-card-name:hover { color: var(--navy); }
-.spotlight-card-sub {
-  font-size: 0.7rem; color: var(--text-3); margin-top: 0.1rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+.spotlight-card-meta {
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  font-size: 0.68rem; color: var(--text-3);
 }
-.spotlight-card-sub .spot-overdue { color: var(--p-crit); font-weight: 600; }
+.spotlight-card-meta .spot-owner { font-weight: 500; }
+.spotlight-card-meta .spot-status {
+  font-weight: 600; font-size: 0.62rem; padding: 0.08rem 0.4rem;
+  border-radius: var(--r-full); background: var(--bg-hover); color: var(--text-2);
+}
+.spotlight-card-meta .spot-status.s-prog { background: var(--s-prog-bg); color: var(--s-prog); }
+.spotlight-card-meta .spot-status.s-plan { background: var(--s-plan-bg); color: var(--s-plan); }
+.spotlight-card-meta .spot-status.s-review { background: rgba(108,92,178,0.1); color: #6C5CB2; }
+.spotlight-card-meta .spot-status.s-delayed { background: var(--s-block-bg); color: var(--s-block); }
+.spotlight-card-meta .spot-status.s-hold { background: var(--s-hold-bg); color: var(--s-hold); }
+.spotlight-card-meta .spot-due { white-space: nowrap; }
+.spotlight-card-meta .spot-overdue { color: var(--p-crit); font-weight: 600; }
+.spotlight-card-progress {
+  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.spotlight-card-progress-fill {
+  height: 100%; border-radius: 2px; background: var(--gold); transition: width 0.3s ease;
+}
 .spotlight-card-unpin {
+  position: absolute; top: 0.45rem; right: 0.45rem;
   background: none; border: none; cursor: pointer; color: var(--text-3);
   padding: 0.2rem; border-radius: var(--r-xs); transition: all var(--t) var(--ease);
-  flex-shrink: 0; opacity: 0;
+  opacity: 0;
 }
 .spotlight-card:hover .spotlight-card-unpin { opacity: 1; }
 .spotlight-card-unpin:hover { color: var(--p-crit); background: var(--p-crit-bg); }
@@ -2064,20 +2083,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     <div class="kpi-tooltip-body" id="kpiTooltipBody"></div>
   </div>
 
-  <!-- NEEDS ATTENTION (overdue + stale projects) -->
-  <div class="action-items-section anim a1" id="actionItemsSection">
-    <div class="section-collapse-header" data-collapse-target="actionItemsBody" onclick="toggleSection('actionItemsBody')">
-      <div class="action-items-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        Needs Attention <span class="action-items-count" id="actionItemsCount">0</span>
-      </div>
-      <div class="section-collapse-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-    </div>
-    <div id="actionItemsBody" class="section-collapse-body">
-      <div id="actionItemsGrid" class="action-items-grid"></div>
-    </div>
-  </div>
-
   <!-- KEY PROJECTS SPOTLIGHT -->
   <div class="spotlight anim a1" id="spotlightSection">
     <div class="section-collapse-header" data-collapse-target="spotlightBody" onclick="toggleSection('spotlightBody')">
@@ -2622,20 +2627,35 @@ function renderSpotlight() {
   grid.innerHTML = keyProjects.map((p, idx) => {
     const owner = p['Owner'] || '';
     const due = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-    const today = new Date(); today.setHours(0,0,0,0);
+    const _td = new Date(); _td.setHours(0,0,0,0);
     const dueDate = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
-    const isOverdue = dueDate && dueDate < today && p['Status'] !== 'Complete';
-    const duePart = isOverdue ? `<span class="spot-overdue">Overdue \u2013 ${due}</span>` : due ? `Due ${due}` : '';
-    const sep = owner && duePart ? ' \u00B7 ' : '';
+    const isOverdue = dueDate && dueDate < _td && p['Status'] !== 'Complete';
+    const status = p['Status'] || '';
+    const pct = parseInt(p['% Complete'] || '0', 10) || 0;
+
+    let sCls = '';
+    if (status === 'In Progress') sCls = 's-prog';
+    else if (status === 'Planning') sCls = 's-plan';
+    else if (status === 'In Review') sCls = 's-review';
+    else if (status === 'Delayed') sCls = 's-delayed';
+    else if (status === 'On Hold') sCls = 's-hold';
+
+    const duePart = isOverdue ? `<span class="spot-overdue">Overdue \u2013 ${due}</span>` : due ? `<span class="spot-due">Due ${due}</span>` : '';
 
     return `<div class="spotlight-card" draggable="true" data-spot-id="${esc(p['ID']||'')}"
         ondragstart="spotDragStart(event)" ondragend="spotDragEnd(event)"
-        ondragover="spotDragOver(event)" ondrop="spotDrop(event)" ondragleave="spotDragLeave(event)">
-      <div class="spotlight-card-rank">${idx + 1}</div>
-      <div class="spotlight-card-body" onclick="openDetail('${esc(p['ID'])}')" style="cursor:pointer">
+        ondragover="spotDragOver(event)" ondrop="spotDrop(event)" ondragleave="spotDragLeave(event)"
+        onclick="openDetail('${esc(p['ID'])}')">
+      <div class="spotlight-card-top">
+        <div class="spotlight-card-rank">${idx + 1}</div>
         <div class="spotlight-card-name">${esc(p['Project']||'')}</div>
-        <div class="spotlight-card-sub">${esc(owner)}${sep}${duePart}</div>
       </div>
+      <div class="spotlight-card-meta">
+        ${owner ? `<span class="spot-owner">${esc(owner)}</span>` : ''}
+        ${status ? `<span class="spot-status ${sCls}">${esc(status)}</span>` : ''}
+        ${duePart}
+      </div>
+      ${pct > 0 ? `<div class="spotlight-card-progress"><div class="spotlight-card-progress-fill" style="width:${pct}%"></div></div>` : ''}
       <button class="spotlight-card-unpin" onclick="event.stopPropagation();toggleKeyProject('${esc(p['ID']||'')}')" title="Remove from priorities">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
@@ -2761,7 +2781,7 @@ function toggleSection(sectionId) {
 
 function restoreCollapseStates() {
   // Sections that should be OPEN by default (leader needs to see these immediately)
-  const defaultOpen = ['actionItemsBody', 'spotlightBody'];
+  const defaultOpen = ['spotlightBody'];
   document.querySelectorAll('.section-collapse-body').forEach(body => {
     try {
       const saved = localStorage.getItem('collapse_' + body.id);
@@ -3824,60 +3844,7 @@ async function cycleGoalStatus(row, id, current) {
 
 
 // ===== CHAIR ACTION ITEMS (Stale projects) =====
-function renderActionItems() {
-  var dp = getDomainProjects();
-  var today = new Date(); today.setHours(0,0,0,0);
-  var items = [];
-
-  dp.forEach(function(p) {
-    if (p['Status'] === 'Complete') return;
-    // Overdue > 7 days
-    if (p['Due Date']) {
-      var due = new Date(String(p['Due Date']).slice(0,10));
-      var diffDays = Math.floor((today - due) / 86400000);
-      if (diffDays > 7) {
-        items.push({ project: p, reason: 'Overdue ' + diffDays + ' days', type: 'stale' });
-        return;
-      }
-    }
-    // Stale — not updated in 14+ days
-    if (p['Last Updated'] && (p['Status'] === 'In Progress' || p['Status'] === 'Planning')) {
-      var lastUp = new Date(p['Last Updated']);
-      var staleDays = Math.floor((today - lastUp) / 86400000);
-      if (staleDays >= 14) {
-        items.push({ project: p, reason: 'No update in ' + staleDays + ' days', type: 'stale' });
-      }
-    }
-  });
-
-  var section = document.getElementById('actionItemsSection');
-  var grid = document.getElementById('actionItemsGrid');
-  var countEl = document.getElementById('actionItemsCount');
-
-  countEl.textContent = items.length;
-
-  if (items.length === 0) {
-    grid.innerHTML = '<div class="action-items-empty"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> All clear — no projects need immediate attention</div>';
-    return;
-  }
-
-  // Sort by days overdue/stale
-  items.sort(function(a,b) { return 0; });
-
-  grid.innerHTML = items.map(function(item) {
-    var p = item.project;
-    var cardCls = item.type === 'stale' ? 'action-item-card stale' : 'action-item-card';
-    return '<div class="' + cardCls + '" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
-      '<div class="action-item-name">' + esc(p['Project']||'') + '</div>' +
-      '<div class="action-item-reason">' + item.reason + '</div>' +
-      '<div class="action-item-detail">' +
-        '<span>' + esc(p['Owner']||'Unassigned') + '</span>' +
-        '<span>' + esc(p['Status']||'') + '</span>' +
-        (p['Due Date'] ? '<span>Due ' + new Date(String(p['Due Date']).slice(0,10)).toLocaleDateString('en-US',{month:'short',day:'numeric'}) + '</span>' : '') +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
+function renderActionItems() { /* removed */ }
 
 // ===== DELIVERY METRICS =====
 function renderDeliveryMetrics() {
@@ -4304,33 +4271,7 @@ function renderPredictiveAlerts() {
     }
   });
 
-  // Add to action items if any exist
-  if (alerts.length > 0) {
-    var grid = document.getElementById('actionItemsGrid');
-    var countEl = document.getElementById('actionItemsCount');
-    var current = parseInt(countEl.textContent) || 0;
-
-    // Clear the "All clear" empty state if it's present
-    var emptyState = grid.querySelector('.action-items-empty');
-    if (emptyState) emptyState.remove();
-
-    countEl.textContent = current + alerts.length;
-
-    var alertHtml = alerts.map(function(a) {
-      var p = a.project;
-      return '<div class="action-item-card stale" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
-        '<div class="action-item-name">' + esc(p['Project']||'') + '</div>' +
-        '<div class="action-item-reason" style="color:var(--s-rev)">At risk: ' + a.pctElapsed + '% of time elapsed, ~' + a.pctDone + '% complete</div>' +
-        '<div class="action-item-detail">' +
-          '<span>' + esc(p['Owner']||'Unassigned') + '</span>' +
-          '<span>' + a.daysLeft + ' days left</span>' +
-          '<span>May slip ~' + a.projectedOverage + ' days</span>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-
-    grid.insertAdjacentHTML('beforeend', alertHtml);
-  }
+  // Action items section removed — no-op
 }
 
 
