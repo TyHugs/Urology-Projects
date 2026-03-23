@@ -167,7 +167,7 @@ function doPost(e) {
         if (h === 'ID') return generateId(sheet);
         if (h === 'Status') return payload['Status'] || 'Not Started';
         if (h === 'Priority') return payload['Priority'] || 'Medium';
-        if (h === 'Leadership Status') return payload['Leadership Status'] || 'Idea';
+        if (h === 'Leadership Status') return payload['Leadership Status'] || 'Ideas';
         if (h === 'Last Updated') return new Date().toISOString();
         return payload[h] || '';
       });
@@ -517,13 +517,13 @@ function setupSheet() {
 
   // Data validation for Status
   const statusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Not Started', 'Planning', 'In Progress', 'In Review', 'Complete', 'Delayed'])
+    .requireValueInList(['Not Started', 'Delayed', 'Planning', 'In Progress', 'In Review', 'On Hold', 'Complete'])
     .build();
   sheet.getRange(2, 8, 500, 1).setDataValidation(statusRule);
 
   // Data validation for Leadership Status
   const lsRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Priority', 'Actively Managed', 'Idea'])
+    .requireValueInList(['Priority', 'Standard Work', 'Requests', 'Ideas', 'BizIQ'])
     .build();
   sheet.getRange(2, 9, 500, 1).setDataValidation(lsRule);
 

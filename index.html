@@ -3202,40 +3202,38 @@ function renderMeetingsCalendar() {
   // === Compact Upcoming Meetings List ===
   var upEl = document.getElementById('mtgUpcoming');
   if (!upEl) return;
-  var today = new Date(); today.setHours(0,0,0,0);
-  var horizon = new Date(today); horizon.setDate(horizon.getDate() + 60);
+  var _now = new Date(); _now.setHours(0,0,0,0);
+  var horizon = new Date(_now); horizon.setDate(horizon.getDate() + 60);
   var upcoming = [];
   var seenWeekly = {};
 
   KEY_MEETINGS.forEach(function(m) {
     if (m.recurring === 'weekly') {
-      // Show only next occurrence
       if (seenWeekly[m.title]) return;
       var dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
       var targetDay = dayNames.indexOf((m.day||'').toLowerCase());
       if (targetDay < 0) return;
-      var next = new Date(today);
-      var diff = (targetDay - today.getDay() + 7) % 7;
-      if (diff === 0 && new Date().getHours() >= 18) diff = 7; // past 6pm, show next week
+      var next = new Date(_now);
+      var diff = (targetDay - _now.getDay() + 7) % 7;
+      if (diff === 0 && new Date().getHours() >= 18) diff = 7;
       next.setDate(next.getDate() + diff);
       if (next <= horizon) {
         seenWeekly[m.title] = true;
         upcoming.push({ title: m.title, date: new Date(next), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
       }
     } else if (m.recurring === 'monthly') {
-      // Next occurrence of nth weekday
       var dayNames2 = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
       var targetDay2 = dayNames2.indexOf((m.day||'').toLowerCase());
       var wom = m.weekOfMonth || 1;
       for (var mo = 0; mo < 3; mo++) {
-        var check = new Date(today.getFullYear(), today.getMonth() + mo, 1);
+        var check = new Date(_now.getFullYear(), _now.getMonth() + mo, 1);
         var count = 0;
         for (var dd = 1; dd <= 31; dd++) {
           var test = new Date(check.getFullYear(), check.getMonth(), dd);
           if (test.getMonth() !== check.getMonth()) break;
           if (test.getDay() === targetDay2) {
             count++;
-            if (count === wom && test >= today && test <= horizon) {
+            if (count === wom && test >= _now && test <= horizon) {
               upcoming.push({ title: m.title, date: new Date(test), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
               mo = 99; break;
             }
@@ -3245,12 +3243,12 @@ function renderMeetingsCalendar() {
     } else if (m.recurring === 'once') {
       if (m.startDate && m.endDate) {
         var s = new Date(m.startDate + 'T00:00:00');
-        if (s >= today && s <= horizon) {
+        if (s >= _now && s <= horizon) {
           upcoming.push({ title: m.title, date: s, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
         }
       } else if (m.date) {
         var d2 = new Date(m.date + 'T00:00:00');
-        if (d2 >= today && d2 <= horizon) {
+        if (d2 >= _now && d2 <= horizon) {
           upcoming.push({ title: m.title, date: d2, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
         }
       }
