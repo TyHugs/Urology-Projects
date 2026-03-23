@@ -1600,6 +1600,145 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.78rem;
 }
 
+/* ===== FUTURE IDEAS ===== */
+.ideas-view { display: none; }
+.ideas-view.active { display: block; }
+.ideas-hero {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin: 1.25rem 0 1.2rem; gap: 1rem;
+}
+.ideas-hero-title {
+  font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.ideas-hero-sub { font-size: 0.75rem; color: var(--text-3); margin-top: 0.2rem; margin-left: 2rem; max-width: 480px; }
+.ideas-hero-stats {
+  display: flex; gap: 0.4rem; flex-wrap: wrap;
+}
+.ideas-hero-stat {
+  font-size: 0.64rem; font-weight: 600; padding: 0.22rem 0.55rem;
+  border-radius: var(--r-full); background: var(--bg-stripe); color: var(--text-3);
+}
+.ideas-hero-stat strong { color: var(--text); }
+
+.ideas-filters {
+  display: flex; gap: 0.3rem; margin-bottom: 1rem; flex-wrap: wrap;
+}
+.ideas-filter-btn {
+  font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+  border-radius: var(--r-full); border: 1px solid var(--border-strong);
+  background: var(--bg-card); color: var(--text-2); cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+.ideas-filter-btn:hover { border-color: var(--gold-ring); color: var(--gold); }
+.ideas-filter-btn.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+.ideas-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem;
+}
+.idea-tile {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0; box-shadow: var(--sh-sm); transition: all 0.25s ease;
+  cursor: pointer; overflow: hidden; position: relative;
+}
+.idea-tile:hover { box-shadow: var(--sh-md); transform: translateY(-3px); border-color: var(--gold-ring); }
+.idea-tile-accent { height: 4px; width: 100%; }
+.idea-tile-accent.icat-playbook { background: var(--navy); }
+.idea-tile-accent.icat-financial { background: var(--gold); }
+.idea-tile-accent.icat-people { background: #4A90D9; }
+.idea-tile-accent.icat-compliance { background: #D94A4A; }
+.idea-tile-accent.icat-templates { background: #7C6FE0; }
+.idea-tile-accent.icat-onboarding { background: var(--s-done); }
+
+.idea-tile-body { padding: 1rem 1.1rem 0.85rem; }
+.idea-tile-icon {
+  width: 40px; height: 40px; border-radius: 10px; display: flex;
+  align-items: center; justify-content: center; margin-bottom: 0.65rem;
+  font-size: 1.2rem;
+}
+.idea-tile-icon.icat-playbook { background: rgba(28,42,64,0.07); }
+.idea-tile-icon.icat-financial { background: var(--gold-badge); }
+.idea-tile-icon.icat-people { background: rgba(74,144,217,0.08); }
+.idea-tile-icon.icat-compliance { background: rgba(217,74,74,0.07); }
+.idea-tile-icon.icat-templates { background: rgba(124,111,224,0.07); }
+.idea-tile-icon.icat-onboarding { background: var(--s-done-bg); }
+
+.idea-tile-cat {
+  font-size: 0.56rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 0.3rem; color: var(--text-3);
+}
+.idea-tile-title {
+  font-weight: 700; font-size: 0.88rem; color: var(--text); line-height: 1.3;
+  margin-bottom: 0.35rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.idea-tile-desc {
+  font-size: 0.72rem; color: var(--text-2); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.idea-tile-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 1.1rem; border-top: 1px solid var(--border); font-size: 0.62rem;
+}
+.idea-tile-impact {
+  font-weight: 700; padding: 0.12rem 0.45rem; border-radius: var(--r-full);
+}
+.idea-tile-impact.impact-high { background: rgba(196,155,65,0.1); color: #9A7B30; }
+.idea-tile-impact.impact-med { background: rgba(74,144,217,0.08); color: #4A90D9; }
+.idea-tile-impact.impact-foundational { background: var(--s-done-bg); color: var(--s-done); }
+.idea-tile-effort { color: var(--text-3); }
+
+/* Ideas Detail Panel */
+.ideas-detail-overlay {
+  position: fixed; inset: 0; background: rgba(28,33,39,0.25); backdrop-filter: blur(4px);
+  z-index: 95; display: none; justify-content: flex-end;
+}
+.ideas-detail-overlay.active { display: flex; }
+.ideas-detail-panel {
+  width: min(640px, 90vw); height: 100vh; background: var(--bg);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12); overflow-y: auto;
+  padding: 2rem 2.25rem; animation: slideInRight 0.3s ease;
+}
+.ideas-detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+.ideas-detail-cat {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.15rem 0.55rem; border-radius: var(--r-full); background: var(--bg-stripe); color: var(--text-3);
+}
+.ideas-detail-close {
+  background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-3);
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm); transition: all var(--t) var(--ease);
+}
+.ideas-detail-close:hover { background: var(--bg-hover); color: var(--text); }
+.ideas-detail-action {
+  font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+  border-radius: var(--r-full); border: 1px solid var(--border-strong);
+  background: var(--bg-card); color: var(--text-2); cursor: pointer;
+  display: flex; align-items: center; gap: 0.3rem;
+  transition: all var(--t) var(--ease);
+}
+.ideas-detail-action:hover { border-color: var(--gold); color: var(--gold); }
+.ideas-detail-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.ideas-detail-title {
+  font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 500;
+  color: var(--text); line-height: 1.3; margin-bottom: 0.5rem;
+}
+.ideas-detail-meta { font-size: 0.72rem; color: var(--text-3); margin-bottom: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.ideas-detail-body { font-size: 0.84rem; color: var(--text); line-height: 1.7; }
+.ideas-detail-body h2 { font-family: 'Fraunces', serif; font-size: 1.08rem; font-weight: 500; color: var(--text); margin: 1.5rem 0 0.5rem; }
+.ideas-detail-body h3 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin: 1.2rem 0 0.4rem; }
+.ideas-detail-body p { margin-bottom: 0.75rem; }
+.ideas-detail-body ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+.ideas-detail-body li { margin-bottom: 0.3rem; }
+.ideas-detail-body hr { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+.ideas-detail-body strong { font-weight: 700; }
+.ideas-detail-body em { font-style: italic; color: var(--text-2); }
+.ideas-detail-body .idea-highlight {
+  background: var(--gold-badge); border-left: 3px solid var(--gold);
+  padding: 0.75rem 1rem; border-radius: 0 var(--r) var(--r) 0;
+  margin: 0.75rem 0; font-size: 0.82rem;
+}
+
 /* ===== KNOWLEDGE BASE ===== */
 .kb-view { display: none; }
 .kb-view.active { display: block; }
@@ -2286,6 +2425,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       Knowledge Base
     </button>
+    <button class="page-tab" data-page="ideas" onclick="setPage('ideas')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      Future Ideas
+    </button>
   </div>
 </div>
 
@@ -2787,6 +2930,48 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <button class="btn btn-secondary" onclick="closeKbModal()">Cancel</button>
       <button class="btn btn-primary" id="kbSaveBtn" onclick="saveKbEntry()">Save Entry</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== FUTURE IDEAS VIEW ===== -->
+<div class="app ideas-view" id="ideasView">
+  <div class="ideas-hero">
+    <div class="ideas-hero-content">
+      <div class="ideas-hero-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        Future Ideas
+      </div>
+      <div class="ideas-hero-sub">Strategic innovations and knowledge base entries to build over time. Click any tile to explore the vision.</div>
+    </div>
+    <div class="ideas-hero-stats" id="ideasStats"></div>
+  </div>
+
+  <!-- Category Filters -->
+  <div class="ideas-filters" id="ideasFilters">
+    <button class="ideas-filter-btn active" data-cat="all" onclick="setIdeasFilter('all')">All</button>
+  </div>
+
+  <!-- Ideas Grid -->
+  <div class="ideas-grid" id="ideasGrid"></div>
+</div>
+
+<!-- IDEAS DETAIL PANEL -->
+<div class="ideas-detail-overlay" id="ideasDetailOverlay" onclick="closeIdeaDetail()">
+  <div class="ideas-detail-panel" onclick="event.stopPropagation()">
+    <div class="ideas-detail-header">
+      <span class="ideas-detail-cat" id="ideaDetailCat"></span>
+      <div style="display:flex;gap:0.4rem;align-items:center">
+        <button class="ideas-detail-action" id="ideaPromoteBtn" onclick="promoteIdea()" title="Promote to Knowledge Base">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Move to KB
+        </button>
+        <button class="ideas-detail-close" onclick="closeIdeaDetail()">&times;</button>
+      </div>
+    </div>
+    <div class="ideas-detail-icon" id="ideaDetailIcon"></div>
+    <h1 class="ideas-detail-title" id="ideaDetailTitle"></h1>
+    <div class="ideas-detail-meta" id="ideaDetailMeta"></div>
+    <div class="ideas-detail-body" id="ideaDetailBody"></div>
   </div>
 </div>
 
@@ -4122,6 +4307,305 @@ function deleteKbEntry(idx) {
   showToast('Entry removed');
 }
 
+// ===== FUTURE IDEAS =====
+let _ideasFilter = 'all';
+
+const FUTURE_IDEAS = [
+  {
+    title: 'Faculty Recruitment & Offer Letter Process',
+    category: 'Institutional Playbooks',
+    icon: '\u{1F4CB}',
+    impact: 'high',
+    effort: 'Medium build',
+    description: 'Document the end-to-end faculty recruitment workflow from position approval through signed offer letter.',
+    detail: `## The Vision\n\nA comprehensive playbook that standardizes how the department recruits, evaluates, and extends offers to new faculty \u2014 eliminating the institutional knowledge that currently lives in a few people\u2019s heads.\n\n:::highlight\nEvery new search committee chair should be able to pick up this playbook and run a world-class recruitment process without asking anyone how it works.\n:::\n\n## What It Would Cover\n\n- Position approval workflow (Chair \u2192 Dean\u2019s Office \u2192 Provost)\n- Search committee formation and charge letter template\n- Candidate evaluation rubric and scoring framework\n- Interview day itinerary template (clinical tour, research meetings, faculty dinner)\n- Offer letter components: base salary, incentive plan, start-up package, protected time\n- Negotiation guardrails \u2014 what\u2019s flexible vs. fixed\n- Onboarding handoff checklist once the offer is signed\n\n## Why It Matters\n\n- Ensures equity and consistency across all hires\n- Reduces time-to-fill by eliminating back-and-forth on process questions\n- Protects the department from compliance gaps in the search process\n- New administrators can execute immediately`
+  },
+  {
+    title: 'STIP/BASE+ Compensation Philosophy',
+    category: 'Institutional Playbooks',
+    icon: '\u{1F4B0}',
+    impact: 'high',
+    effort: 'Medium build',
+    description: 'Explain the incentive compensation structure so every faculty member understands how their pay connects to performance.',
+    detail: `## The Vision\n\nA clear, accessible explanation of the department\u2019s compensation philosophy \u2014 how base salary, STIP (Short-Term Incentive Plan), and BASE+ components work together to reward clinical productivity, academic contribution, and citizenship.\n\n:::highlight\nWhen a faculty member asks \u201Chow do I earn more?\u201D the answer should be a link to this entry, not a 45-minute meeting.\n:::\n\n## What It Would Cover\n\n- Base salary structure and how it\u2019s benchmarked (AAMC, MGMA percentiles)\n- STIP mechanics: thresholds, tiers, payout timing, and how wRVUs translate to incentive dollars\n- BASE+ eligibility and calculation methodology\n- Clinical vs. research track compensation differences\n- How the 43.4-hour work week maps to effort allocation and productivity expectations\n- Annual review cycle and compensation adjustment process\n- Examples: \u201CHere\u2019s what hitting 110% of your wRVU target means in real dollars\u201D\n\n## Why It Matters\n\n- Transparency builds trust and reduces compensation grievances\n- Faculty can self-manage toward targets instead of waiting for annual reviews\n- New hires understand the system from day one\n- Reduces the Chair\u2019s time explaining the same framework repeatedly`
+  },
+  {
+    title: 'OR Block Allocation Methodology',
+    category: 'Institutional Playbooks',
+    icon: '\u{1F3E5}',
+    impact: 'high',
+    effort: 'High build',
+    description: 'Define how OR block time is allocated, measured, and rebalanced across surgeons and subspecialties.',
+    detail: `## The Vision\n\nA transparent framework documenting how OR block time is earned, allocated, and potentially reallocated \u2014 one of the most politically sensitive and operationally critical processes in any surgical department.\n\n:::highlight\nOR time is the most valuable resource in the department. The allocation logic should be transparent, data-driven, and understood by every surgeon.\n:::\n\n## What It Would Cover\n\n- Block allocation philosophy: historical volume, growth trajectory, case complexity mix\n- Utilization metrics and minimum thresholds (e.g., 70% utilization to retain block)\n- The quarterly review process for block rebalancing\n- New faculty ramp-up: how blocks are provisionally assigned during the first 12 months\n- Release and reassignment policies (24-hour, 48-hour, 7-day release rules)\n- How add-on cases and urgent cases are handled\n- Perioperative committee governance and escalation path\n\n## Why It Matters\n\n- Prevents perception of favoritism in block assignments\n- Data-backed decisions reduce surgical staff conflict\n- Maximizes OR throughput and revenue\n- New surgeons know exactly what\u2019s expected to earn and keep their time`
+  },
+  {
+    title: 'Call Schedule Construction & Equity',
+    category: 'Institutional Playbooks',
+    icon: '\u{1F4DE}',
+    impact: 'med',
+    effort: 'Medium build',
+    description: 'Document the methodology for building fair, equitable call schedules across all faculty and divisions.',
+    detail: `## The Vision\n\nA transparent guide to how call schedules are built, ensuring equitable distribution of nights, weekends, and holidays across all faculty while accounting for seniority, subspecialty needs, and clinical commitments.\n\n## What It Would Cover\n\n- Call types: primary, backup, subspecialty-specific (trauma, peds, transplant)\n- Equity tracking: how weekend, holiday, and night call is balanced annually\n- Schedule building timeline and approval workflow\n- Swap and coverage policies\n- Compensation for additional call beyond standard expectations\n- How new faculty are ramped into the call rotation\n- Holiday call assignment methodology (rotating, draft system, seniority-based)\n\n## Why It Matters\n\n- Call equity is one of the top sources of faculty dissatisfaction\n- Transparent methodology prevents grievances before they start\n- New schedulers can build fair schedules without tribal knowledge`
+  },
+  {
+    title: 'Department Fund Flow & Revenue Model',
+    category: 'Financial & Budget',
+    icon: '\u{1F4CA}',
+    impact: 'high',
+    effort: 'High build',
+    description: 'Map how clinical revenue flows through the department \u2014 from patient encounter to faculty paycheck \u2014 including the dean\u2019s tax and endowment distributions.',
+    detail: `## The Vision\n\nA clear financial map that shows every leader in the department how money moves \u2014 from a patient encounter generating wRVUs, through billing and collections, past the dean\u2019s tax, into departmental funds, and ultimately into faculty compensation and reinvestment.\n\n:::highlight\nEvery division chief should be able to explain to their faculty how a clinic visit translates to departmental revenue and ultimately their paycheck.\n:::\n\n## What It Would Cover\n\n- Revenue sources: clinical collections, grants/contracts, endowment income, state appropriations\n- The dean\u2019s tax: what percentage, how it\u2019s calculated, what it funds\n- Department margin and reinvestment allocation\n- Faculty compensation pools vs. operational budgets\n- How research funding (direct + indirect) flows through the department\n- Endowed chair and professorship fund mechanics\n- Annual budget cycle: key dates, submission requirements, approval workflow\n\n## Why It Matters\n\n- Financial literacy among clinical leaders drives better decision-making\n- Division chiefs can advocate for resources with data, not emotion\n- Demystifies the \u201Cwhere does our money go\u201D question that breeds resentment`
+  },
+  {
+    title: 'RVU Target Setting & Recalibration',
+    category: 'Financial & Budget',
+    icon: '\u{1F3AF}',
+    impact: 'high',
+    effort: 'Medium build',
+    description: 'Explain how individual wRVU targets are established, what benchmarks are used, and how they\u2019re adjusted over time.',
+    detail: `## The Vision\n\nA reference entry that documents exactly how the department sets wRVU productivity targets for each faculty member, what data sources inform those targets, and the process for annual recalibration.\n\n## What It Would Cover\n\n- Benchmark sources: MGMA, AAMC, UHC, internal historical data\n- How targets account for subspecialty, track, rank, and effort allocation\n- The 43.4-hour baseline and how clinical effort % drives the target\n- New faculty ramp schedules (Year 1: 60%, Year 2: 80%, Year 3: 100%)\n- Mid-year recalibration triggers (scope change, leave, new procedures)\n- How surgical vs. clinic-heavy faculty are compared\n- The relationship between RVU targets and STIP incentive thresholds\n\n## Why It Matters\n\n- Faculty deserve to know exactly how their targets are derived\n- Prevents the \u201Cmy target is unfair\u201D conversation from escalating\n- Creates accountability grounded in transparent methodology`
+  },
+  {
+    title: 'Annual Budget Cycle Timeline',
+    category: 'Financial & Budget',
+    icon: '\u{1F4C5}',
+    impact: 'med',
+    effort: 'Low build',
+    description: 'Month-by-month timeline of the annual budget cycle with key deadlines, deliverables, and responsible parties.',
+    detail: `## The Vision\n\nA calendar-driven reference that ensures no one misses a budget deadline \u2014 from initial planning through final submission and dean\u2019s office approval.\n\n## What It Would Cover\n\n- Monthly milestones from July through June (fiscal year aligned)\n- Key deliverables at each stage: projections, justifications, variance explanations\n- Who is responsible for each component (department admin, division chiefs, finance team)\n- Dean\u2019s office submission deadlines and required formats\n- Capital equipment request process and timeline\n- Position request and justification workflow\n- Year-end close procedures and carryforward rules\n\n## Why It Matters\n\n- Budget deadlines missed = opportunities missed\n- New administrators can immediately plug into the cycle\n- Prevents the annual scramble that wastes leadership bandwidth`
+  },
+  {
+    title: 'Org Chart Logic & Reporting Structure',
+    category: 'People & Governance',
+    icon: '\u{1F3DB}\uFE0F',
+    impact: 'med',
+    effort: 'Medium build',
+    description: 'Document the organizational structure, reporting relationships, and the rationale behind the department\u2019s leadership architecture.',
+    detail: `## The Vision\n\nMore than a static org chart \u2014 a living document that explains *why* the department is structured the way it is, who reports to whom, and how decisions flow through the organization.\n\n## What It Would Cover\n\n- Department leadership structure: Chair, Vice Chairs, Division Chiefs, Program Directors\n- Administrative leadership: CAO, finance, operations, research administration\n- Clinical operations: clinic managers, OR coordinators, nursing leadership\n- Reporting relationships and dotted-line accountabilities\n- Committee structure with charters, membership, and meeting cadence\n- Decision rights matrix: who approves what (hiring, spending, scheduling, policy)\n\n## Why It Matters\n\n- New leaders know exactly who to go to for what\n- Prevents decision bottlenecks caused by unclear authority\n- Makes delegation explicit rather than assumed`
+  },
+  {
+    title: 'Faculty Promotion & Tenure Process',
+    category: 'People & Governance',
+    icon: '\u{1F393}',
+    impact: 'high',
+    effort: 'High build',
+    description: 'Step-by-step guide to the promotion and tenure process with timelines, required materials, and mentoring milestones.',
+    detail: `## The Vision\n\nA comprehensive guide that takes faculty from \u201CI just got hired\u201D through \u201CI just got promoted\u201D \u2014 with clear milestones, required documentation, and mentoring checkpoints along the way.\n\n## What It Would Cover\n\n- Promotion tracks: clinical, research, tenure-track, clinical-scholar\n- Timeline expectations by rank (Assistant \u2192 Associate: 5\u20137 years, Associate \u2192 Full: 5\u201310 years)\n- Annual review milestones that feed into promotion readiness\n- Required documentation: CV format, teaching portfolio, research statement, external letters\n- The departmental review committee process\n- Medical school executive committee review and voting\n- Mentoring program: who mentors, how often, what\u2019s discussed\n- Common pitfalls and how to avoid them\n\n## Why It Matters\n\n- Faculty retention depends on a clear path to advancement\n- Mentors can reference a shared framework instead of improvising\n- Reduces anxiety and misunderstanding about the process`
+  },
+  {
+    title: 'Annual Faculty Review Process',
+    category: 'People & Governance',
+    icon: '\u{1F4DD}',
+    impact: 'med',
+    effort: 'Low build',
+    description: 'Template and process for conducting effective annual faculty performance reviews.',
+    detail: `## The Vision\n\nA standardized annual review process that evaluates every faculty member across clinical, research, teaching, and service dimensions \u2014 with clear documentation that feeds into compensation and promotion decisions.\n\n## What It Would Cover\n\n- Review timeline: self-evaluation due dates, meeting scheduling, summary submission\n- Evaluation dimensions and weight by track (clinical productivity, research output, teaching evaluations, citizenship)\n- Self-evaluation template\n- Chair/division chief evaluation template\n- Goal-setting framework for the coming year\n- How reviews connect to compensation adjustments and promotion readiness\n- Documentation and record-keeping requirements\n\n## Why It Matters\n\n- Consistent reviews create accountability and clarity\n- Documented goals reduce \u201CI didn\u2019t know that was expected\u201D conversations\n- Feeds directly into promotion packets and compensation decisions`
+  },
+  {
+    title: 'Residency & Fellowship Accreditation Tracker',
+    category: 'Compliance & Accreditation',
+    icon: '\u{1F3C6}',
+    impact: 'high',
+    effort: 'Medium build',
+    description: 'Track all ACGME accreditation requirements, milestone reporting deadlines, and site visit preparation checklists.',
+    detail: `## The Vision\n\nA single source of truth for every accreditation requirement, reporting deadline, and compliance milestone for the department\u2019s residency and fellowship programs.\n\n:::highlight\nThe next ACGME site visit should be stress-free because the department has been tracking compliance continuously, not scrambling to assemble documentation.\n:::\n\n## What It Would Cover\n\n- Program-by-program accreditation status and next review dates\n- ACGME milestone reporting: deadlines, who submits, data sources\n- Case log requirements and tracking methodology\n- Duty hour compliance monitoring\n- Faculty-to-resident ratios and teaching documentation requirements\n- Site visit preparation checklist (90-day, 60-day, 30-day)\n- Self-study template and data collection framework\n- Common citations and how to prevent them\n\n## Why It Matters\n\n- Accreditation loss is existential for a training program\n- Continuous compliance is less expensive than crisis preparation\n- Program coordinators can manage proactively with clear requirements`
+  },
+  {
+    title: 'Credentialing & Privileging Renewal Process',
+    category: 'Compliance & Accreditation',
+    icon: '\u{1F510}',
+    impact: 'med',
+    effort: 'Low build',
+    description: 'Document the credentialing renewal cycle for all faculty, including required documentation and lead times.',
+    detail: `## The Vision\n\nA proactive system that ensures no faculty member\u2019s credentials or privileges lapse \u2014 with automated tracking and clear timelines for renewals.\n\n## What It Would Cover\n\n- Credentialing cycle: biennial renewal process and timeline\n- Required documentation by provider type\n- State medical license renewal tracking\n- DEA registration renewals\n- Board certification maintenance and MOC requirements\n- Hospital privilege categories and procedure-specific privileges\n- Temporary privilege process for new hires\n- Escalation path for expiring credentials\n\n## Why It Matters\n\n- A lapsed credential means a surgeon can\u2019t operate \u2014 the financial and patient impact is immediate\n- Proactive tracking prevents emergency renewals\n- Integrates with the professorship renewal tracking already in the dashboard`
+  },
+  {
+    title: 'Standard Communication Templates',
+    category: 'Templates & Communications',
+    icon: '\u{2709}\uFE0F',
+    impact: 'med',
+    effort: 'Medium build',
+    description: 'Library of approved email templates for common departmental communications \u2014 from faculty welcome letters to donor stewardship.',
+    detail: `## The Vision\n\nA curated library of professionally written, leadership-approved templates that anyone in the department can use for standard communications \u2014 ensuring consistent voice, branding, and messaging.\n\n## What It Would Include\n\n- Faculty welcome and onboarding letter\n- Annual state-of-the-department communication\n- Donor stewardship letters for endowed positions\n- Fellowship and residency program announcements\n- Faculty departure and transition announcements\n- Event invitation templates (grand rounds, research symposia, faculty retreats)\n- Patient communication templates for quality improvement initiatives\n- Board and dean\u2019s office reporting templates\n\n## Why It Matters\n\n- Professional, consistent communications reflect leadership quality\n- Eliminates the \u201Cstarting from scratch\u201D problem for every email\n- Ensures sensitive communications (departures, transitions) are handled appropriately`
+  },
+  {
+    title: 'Dean\u2019s Office Reporting Format',
+    category: 'Templates & Communications',
+    icon: '\u{1F4CA}',
+    impact: 'med',
+    effort: 'Low build',
+    description: 'Standardized format for periodic reports to the dean\u2019s office covering clinical, financial, research, and educational metrics.',
+    detail: `## The Vision\n\nA ready-to-fill template for every periodic report the department submits to the dean\u2019s office \u2014 so the data collection and formatting is systematized, not reinvented each cycle.\n\n## What It Would Cover\n\n- Quarterly financial summary format\n- Annual department report structure\n- Research productivity metrics (publications, grants, trial enrollment)\n- Clinical volume and quality metrics dashboard format\n- Education metrics (trainee outcomes, board pass rates, match results)\n- Faculty recruitment and retention summary\n- Strategic initiative updates\n\n## Why It Matters\n\n- The dean\u2019s office has specific expectations \u2014 meeting them consistently builds credibility\n- Reduces the annual report from a 2-week project to a 2-day assembly\n- Historical consistency makes trend analysis possible`
+  },
+  {
+    title: 'New Division Chief Onboarding Guide',
+    category: 'Onboarding Guides',
+    icon: '\u{1F680}',
+    impact: 'high',
+    effort: 'High build',
+    description: 'Comprehensive 30/60/90 day onboarding guide for new division chiefs covering everything from system access to strategic planning.',
+    detail: `## The Vision\n\nA structured onboarding experience that gets a new division chief fully operational within 90 days \u2014 understanding the financial model, meeting key stakeholders, and owning their division\u2019s strategic direction.\n\n:::highlight\nA new division chief should never feel lost. The first 90 days should be choreographed for success.\n:::\n\n## What It Would Cover\n\n### Days 1\u201330: Orientation\n- System access and credentialing\n- Key stakeholder introductions (Chair, CAO, OR Director, clinic managers)\n- Department structure, governance, and committee assignments\n- Financial overview: division budget, fund flow, compensation model\n- Current faculty roster with profiles and productivity data\n\n### Days 31\u201360: Integration\n- Division strategic planning session with the Chair\n- Faculty one-on-ones: goals, concerns, career trajectory\n- OR block and clinic schedule review\n- Quality and safety metrics orientation\n- Research portfolio assessment\n\n### Days 61\u201390: Ownership\n- Present division strategic plan to department leadership\n- Set faculty productivity targets for the year\n- Identify top 3 operational improvements\n- Establish regular meeting cadence with direct reports\n- First quarterly report to the Chair\n\n## Why It Matters\n\n- Reduces time-to-effectiveness from 6+ months to 90 days\n- Signals to the new leader that the department invests in their success\n- Creates accountability from day one`
+  },
+  {
+    title: 'Administrative Staff Onboarding',
+    category: 'Onboarding Guides',
+    icon: '\u{1F465}',
+    impact: 'med',
+    effort: 'Medium build',
+    description: 'Structured onboarding for new administrative team members covering systems, contacts, recurring tasks, and department culture.',
+    detail: `## The Vision\n\nA practical guide that gets new administrators productive within their first two weeks \u2014 knowing the systems, the people, the recurring deadlines, and the unwritten rules of how the department operates.\n\n## What It Would Cover\n\n- System access checklist: MiChart, Wolverine Access, M-Pathways, shared drives, Slack/Teams\n- Key contacts directory with roles and when to reach out\n- Recurring task calendar: what\u2019s due weekly, monthly, quarterly, annually\n- Meeting overview: which meetings to attend, expected preparation, and follow-up responsibilities\n- Department culture guide: communication norms, escalation paths, decision-making style\n- Common acronyms and terminology glossary\n- Where to find answers: Knowledge Base, shared folders, key people\n\n## Why It Matters\n\n- The #1 reason new admins struggle is information overload without structure\n- A curated onboarding experience reflects the department\u2019s operational excellence\n- Reduces the burden on existing staff to repeatedly answer the same onboarding questions`
+  }
+];
+
+function setIdeasFilter(cat) {
+  _ideasFilter = cat;
+  document.querySelectorAll('.ideas-filter-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === cat));
+  renderIdeas();
+}
+
+function renderIdeas() {
+  var grid = document.getElementById('ideasGrid');
+  var statsEl = document.getElementById('ideasStats');
+  var filtersEl = document.getElementById('ideasFilters');
+
+  // Build category list
+  var cats = {};
+  FUTURE_IDEAS.forEach(function(idea) { cats[idea.category] = (cats[idea.category] || 0) + 1; });
+  var filterHtml = '<button class="ideas-filter-btn' + (_ideasFilter === 'all' ? ' active' : '') + '" data-cat="all" onclick="setIdeasFilter(\'all\')">All</button>';
+  Object.keys(cats).forEach(function(cat) {
+    filterHtml += '<button class="ideas-filter-btn' + (_ideasFilter === cat ? ' active' : '') + '" data-cat="' + esc(cat) + '" onclick="setIdeasFilter(\'' + esc(cat) + '\')">' + esc(cat) + '</button>';
+  });
+  filtersEl.innerHTML = filterHtml;
+
+  // Stats
+  statsEl.innerHTML = '<span class="ideas-hero-stat"><strong>' + FUTURE_IDEAS.length + '</strong> ideas</span>' +
+    Object.entries(cats).map(function(e) { return '<span class="ideas-hero-stat">' + e[1] + ' ' + e[0] + '</span>'; }).join('');
+
+  // Filter
+  var filtered = FUTURE_IDEAS.map(function(idea, i) { return Object.assign({}, idea, { _idx: i }); });
+  if (_ideasFilter !== 'all') {
+    filtered = filtered.filter(function(idea) { return idea.category === _ideasFilter; });
+  }
+
+  // Category to CSS class
+  function catClass(cat) {
+    if (cat.includes('Playbook')) return 'icat-playbook';
+    if (cat.includes('Financial') || cat.includes('Budget')) return 'icat-financial';
+    if (cat.includes('People') || cat.includes('Governance')) return 'icat-people';
+    if (cat.includes('Compliance') || cat.includes('Accreditation')) return 'icat-compliance';
+    if (cat.includes('Template') || cat.includes('Communication')) return 'icat-templates';
+    if (cat.includes('Onboarding')) return 'icat-onboarding';
+    return 'icat-playbook';
+  }
+
+  grid.innerHTML = filtered.map(function(idea) {
+    var cc = catClass(idea.category);
+    var impactCls = idea.impact === 'high' ? 'impact-high' : idea.impact === 'foundational' ? 'impact-foundational' : 'impact-med';
+    var impactLabel = idea.impact === 'high' ? 'High Impact' : idea.impact === 'foundational' ? 'Foundational' : 'Medium Impact';
+    return '<div class="idea-tile" onclick="openIdeaDetail(' + idea._idx + ')">' +
+      '<div class="idea-tile-accent ' + cc + '"></div>' +
+      '<div class="idea-tile-body">' +
+        '<div class="idea-tile-icon ' + cc + '">' + idea.icon + '</div>' +
+        '<div class="idea-tile-cat">' + esc(idea.category) + '</div>' +
+        '<div class="idea-tile-title">' + esc(idea.title) + '</div>' +
+        '<div class="idea-tile-desc">' + esc(idea.description) + '</div>' +
+      '</div>' +
+      '<div class="idea-tile-footer">' +
+        '<span class="idea-tile-impact ' + impactCls + '">' + impactLabel + '</span>' +
+        '<span class="idea-tile-effort">' + esc(idea.effort) + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function openIdeaDetail(idx) {
+  var idea = FUTURE_IDEAS[idx];
+  if (!idea) return;
+  window._ideaDetailIdx = idx;
+
+  function catClass(cat) {
+    if (cat.includes('Playbook')) return 'icat-playbook';
+    if (cat.includes('Financial') || cat.includes('Budget')) return 'icat-financial';
+    if (cat.includes('People') || cat.includes('Governance')) return 'icat-people';
+    if (cat.includes('Compliance') || cat.includes('Accreditation')) return 'icat-compliance';
+    if (cat.includes('Template') || cat.includes('Communication')) return 'icat-templates';
+    if (cat.includes('Onboarding')) return 'icat-onboarding';
+    return 'icat-playbook';
+  }
+
+  document.getElementById('ideaDetailCat').textContent = idea.category;
+  document.getElementById('ideaDetailCat').className = 'ideas-detail-cat';
+  document.getElementById('ideaDetailIcon').textContent = idea.icon;
+  document.getElementById('ideaDetailTitle').textContent = idea.title;
+
+  var impactLabel = idea.impact === 'high' ? 'High Impact' : idea.impact === 'foundational' ? 'Foundational' : 'Medium Impact';
+  document.getElementById('ideaDetailMeta').innerHTML =
+    '<span>' + impactLabel + '</span><span>' + esc(idea.effort) + '</span>';
+
+  // Format detail content
+  var html = idea.detail
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/:::highlight\n([\s\S]*?):::/g, '<div class="idea-highlight">$1</div>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\u2022 /g, '- ');
+
+  var lines = html.split('\n');
+  var result = [];
+  var inList = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.match(/^- (.+)/)) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push('<li>' + line.replace(/^- /, '') + '</li>');
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      if (line.trim() === '') { /* skip */ }
+      else if (!line.startsWith('<h') && !line.startsWith('<hr') && !line.startsWith('<div') && !line.startsWith('</div')) {
+        result.push('<p>' + line + '</p>');
+      } else {
+        result.push(line);
+      }
+    }
+  }
+  if (inList) result.push('</ul>');
+
+  document.getElementById('ideaDetailBody').innerHTML = result.join('\n');
+  document.getElementById('ideasDetailOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIdeaDetail() {
+  document.getElementById('ideasDetailOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function promoteIdea() {
+  var idx = window._ideaDetailIdx;
+  if (idx === undefined || idx === null) return;
+  var idea = FUTURE_IDEAS[idx];
+  if (!idea) return;
+
+  // Create a KB entry from this idea
+  var entries = getKbEntries();
+  entries.push({
+    title: idea.title,
+    category: idea.category.includes('Template') ? 'Template' : idea.category.includes('Playbook') ? 'Process' : idea.category.includes('Financial') ? 'Reference' : idea.category.includes('Compliance') ? 'Policy' : idea.category.includes('Onboarding') ? 'Onboarding' : 'Reference',
+    tags: idea.title.toLowerCase().split(/\s+/).filter(function(w) { return w.length > 3; }).slice(0, 5),
+    summary: idea.description,
+    content: idea.detail.replace(/:::highlight\n/g, '**').replace(/:::/g, '**'),
+    author: 'Tyler Hughes',
+    reviewed: new Date().toISOString().slice(0, 10),
+    created: new Date().toISOString().slice(0, 10)
+  });
+  saveKbEntries(entries);
+  closeIdeaDetail();
+  showToast('Promoted to Knowledge Base \u2014 switch to KB tab to edit and finalize');
+}
+
 // ===== PAGE TABS =====
 let activePage = 'chair';
 
@@ -4132,9 +4616,11 @@ function setPage(page) {
   document.getElementById('adminView').style.display = page === 'admin' ? '' : 'none';
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
   document.getElementById('kbView').classList.toggle('active', page === 'kb');
+  document.getElementById('ideasView').classList.toggle('active', page === 'ideas');
   if (page === 'calendar') { renderProfessorships(); renderCalendar(); }
   if (page === 'admin') { renderTable(); setView(currentView); }
   if (page === 'kb') { renderKb(); }
+  if (page === 'ideas') { renderIdeas(); }
 }
 
 // ===== CALENDAR =====
