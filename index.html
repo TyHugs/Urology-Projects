@@ -2112,8 +2112,8 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
     </div>
     <div id="meetingsBody" class="meetings-body section-collapse-body">
       <div id="mtgGrid" class="meetings-grid"></div>
-      <div id="mtgUpcoming" class="mtg-upcoming-list"></div>
     </div>
+    <div id="mtgUpcoming" class="mtg-upcoming-list"></div>
     <!-- Tableau-style tooltip popover -->
     <div class="mtg-tooltip" id="mtgTooltip">
       <div class="mtg-tooltip-header">
@@ -3216,7 +3216,7 @@ function renderMeetingsCalendar() {
       if (targetDay < 0) return;
       var next = new Date(today);
       var diff = (targetDay - today.getDay() + 7) % 7;
-      if (diff === 0) diff = 7; // skip today, show next week
+      if (diff === 0 && new Date().getHours() >= 18) diff = 7; // past 6pm, show next week
       next.setDate(next.getDate() + diff);
       if (next <= horizon) {
         seenWeekly[m.title] = true;
@@ -3235,7 +3235,7 @@ function renderMeetingsCalendar() {
           if (test.getMonth() !== check.getMonth()) break;
           if (test.getDay() === targetDay2) {
             count++;
-            if (count === wom && test > today && test <= horizon) {
+            if (count === wom && test >= today && test <= horizon) {
               upcoming.push({ title: m.title, date: new Date(test), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
               mo = 99; break;
             }
@@ -3245,12 +3245,12 @@ function renderMeetingsCalendar() {
     } else if (m.recurring === 'once') {
       if (m.startDate && m.endDate) {
         var s = new Date(m.startDate + 'T00:00:00');
-        if (s > today && s <= horizon) {
+        if (s >= today && s <= horizon) {
           upcoming.push({ title: m.title, date: s, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
         }
       } else if (m.date) {
         var d2 = new Date(m.date + 'T00:00:00');
-        if (d2 > today && d2 <= horizon) {
+        if (d2 >= today && d2 <= horizon) {
           upcoming.push({ title: m.title, date: d2, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
         }
       }
