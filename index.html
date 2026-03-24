@@ -702,7 +702,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 }
 .spotlight-card-meta .spot-owner { font-weight: 500; }
 .spotlight-card-meta .spot-status {
-  font-weight: 600; font-size: 0.74rem; padding: 0.18rem 0.6rem;
+  font-weight: 600; font-size: 0.85rem; padding: 0.21rem 0.69rem;
   border-radius: var(--r-full); background: var(--bg-hover); color: var(--text-2);
   letter-spacing: 0.01em;
 }
@@ -2513,6 +2513,16 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Requests</div>
       </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execIdeas" onmouseenter="showKpiTooltip(event,'ideas')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Ideas</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execBizIQ" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">BizIQ</div>
+      </div>
     </div>
     <div class="exec-bar-secondary">
       <span class="exec-secondary-label">AI Optimization Potential</span>
@@ -2728,6 +2738,16 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="exec-metric exec-metric-hoverable" id="execRequestsAdmin" onmouseenter="showKpiTooltip(event,'requests')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Requests</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execIdeasAdmin" onmouseenter="showKpiTooltip(event,'ideas')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">Ideas</div>
+      </div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric exec-metric-hoverable" id="execBizIQAdmin" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
+        <div class="exec-metric-value">—</div>
+        <div class="exec-metric-label">BizIQ</div>
       </div>
     </div>
     <div class="exec-bar-secondary">
