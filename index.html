@@ -1600,6 +1600,14 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   text-align: center; padding: 1rem; color: var(--text-3); font-size: 0.78rem;
 }
 
+/* ===== BIZIQ VIEW ===== */
+.biziq-header-bar { margin: 1.25rem 0 0.75rem; }
+.biziq-header-title {
+  font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.biziq-header-sub { font-size: 0.75rem; color: var(--text-3); margin-top: 0.15rem; margin-left: 2rem; }
+
 /* ===== FUTURE IDEAS ===== */
 .ideas-view { display: none; }
 .ideas-view.active { display: block; }
@@ -2429,6 +2437,10 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
       Future Ideas
     </button>
+    <button class="page-tab" data-page="biziq" onclick="setPage('biziq')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      BizIQ
+    </button>
   </div>
 </div>
 
@@ -2461,11 +2473,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="exec-metric exec-metric-hoverable" id="execIdeas" onmouseenter="showKpiTooltip(event,'ideas')" onmouseleave="hideKpiTooltip()">
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Ideas</div>
-      </div>
-      <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execBizIQ" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
-        <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">BizIQ</div>
       </div>
     </div>
     <div class="exec-bar-secondary">
@@ -2618,11 +2625,6 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <div class="exec-metric-value">—</div>
         <div class="exec-metric-label">Ideas</div>
       </div>
-      <div class="exec-metric-divider"></div>
-      <div class="exec-metric exec-metric-hoverable" id="execBizIQAdmin" onmouseenter="showKpiTooltip(event,'biziq')" onmouseleave="hideKpiTooltip()">
-        <div class="exec-metric-value">—</div>
-        <div class="exec-metric-label">BizIQ</div>
-      </div>
     </div>
     <div class="exec-bar-secondary">
       <span class="exec-secondary-label">AI Optimization Potential</span>
@@ -2729,6 +2731,105 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
   <div class="footer">
     <div class="footer-left">Michigan Medicine &middot; Department of Urology</div>
     <div class="footer-right" id="footerSyncAdmin"></div>
+  </div>
+</div>
+
+<!-- ===== BIZIQ VIEW ===== -->
+<div class="app biziq-view" id="biziqView" style="display:none">
+
+  <!-- BizIQ Header -->
+  <div class="biziq-header-bar">
+    <div class="biziq-header-content">
+      <div class="biziq-header-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        BizIQ Overview
+      </div>
+      <div class="biziq-header-sub">Business intelligence initiatives, analytics projects &amp; data-driven workflows</div>
+    </div>
+  </div>
+
+  <!-- BizIQ KPI Bar -->
+  <div class="exec-bar anim a1" id="execBarBizIQ">
+    <div class="exec-bar-inner">
+      <div class="exec-metric" id="biqTotal"><div class="exec-metric-value">—</div><div class="exec-metric-label">BizIQ Projects</div></div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="biqActive"><div class="exec-metric-value">—</div><div class="exec-metric-label">Active</div></div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="biqInProgress"><div class="exec-metric-value">—</div><div class="exec-metric-label">In Progress</div></div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="biqComplete"><div class="exec-metric-value">—</div><div class="exec-metric-label">Complete</div></div>
+      <div class="exec-metric-divider"></div>
+      <div class="exec-metric" id="biqAI"><div class="exec-metric-value">—</div><div class="exec-metric-label">AI Enabled</div></div>
+    </div>
+  </div>
+
+  <!-- BizIQ Toolbar -->
+  <div class="toolbar anim a2">
+    <div class="toolbar-left">
+      <select class="filter-select" id="biqFilterStatus" onchange="renderBizIQ()">
+        <option value="">Status</option>
+        <option>Not Started</option><option>Delayed</option><option>Planning</option><option>In Progress</option>
+        <option>In Review</option><option>On Hold</option><option>Complete</option>
+      </select>
+      <select class="filter-select" id="biqFilterPriority" onchange="renderBizIQ()">
+        <option value="">Priority</option>
+        <option>Critical</option><option>Urgent</option><option>Important</option><option>Medium</option><option>Low</option><option>Non-Urgent</option>
+      </select>
+      <select class="filter-select" id="biqFilterOwner" onchange="renderBizIQ()"><option value="">Owner</option></select>
+      <div class="filter-sep"></div>
+      <button class="btn-icon" onclick="clearBizIQFilters()" title="Clear filters">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="toolbar-right">
+      <div class="view-toggle">
+        <button class="view-toggle-btn" id="biqViewTable" onclick="setBizIQView('table')" title="Table view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+        </button>
+        <button class="view-toggle-btn active" id="biqViewKanban" onclick="setBizIQView('kanban')" title="Board view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="10" rx="1"/><rect x="16" y="4" width="4" height="13" rx="1"/></svg>
+        </button>
+      </div>
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" class="search-input" placeholder="Search BizIQ..." oninput="renderBizIQ()" id="biqSearchInput" />
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Project
+      </button>
+    </div>
+  </div>
+
+  <div class="results-bar anim a3">
+    <div>Showing <span class="count" id="biqResultCount">0</span> BizIQ projects</div>
+  </div>
+
+  <div class="table-container anim a4" id="biqTableContainer">
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th style="width:58px" onclick="biqSortBy('ID')">ID<span class="sort-arrow"></span></th>
+          <th style="width:200px" onclick="biqSortBy('Project')">Project<span class="sort-arrow"></span></th>
+          <th style="width:200px" onclick="biqSortBy('Description')">Description<span class="sort-arrow"></span></th>
+          <th style="width:110px" onclick="biqSortBy('Owner')">Owner<span class="sort-arrow"></span></th>
+          <th style="width:95px" onclick="biqSortBy('Priority')">Priority<span class="sort-arrow"></span></th>
+          <th style="width:108px" onclick="biqSortBy('Status')">Status<span class="sort-arrow"></span></th>
+          <th style="width:95px" onclick="biqSortBy('Start Date')">Start<span class="sort-arrow"></span></th>
+          <th style="width:95px" onclick="biqSortBy('Due Date')">Due<span class="sort-arrow"></span></th>
+          <th style="width:70px" onclick="biqSortBy('% Complete')">Progress<span class="sort-arrow"></span></th>
+          <th style="width:155px" onclick="biqSortBy('Notes')">Notes<span class="sort-arrow"></span></th>
+          <th style="width:42px" title="AI Potential"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg></th>
+        </tr></thead>
+        <tbody id="biqTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="kanban anim a4" id="biqKanbanBoard"></div>
+
+  <div class="footer">
+    <div class="footer-left">Michigan Medicine &middot; Department of Urology &middot; BizIQ</div>
   </div>
 </div>
 
@@ -3145,7 +3246,11 @@ function setDomain(domain) {
 }
 
 function getDomainProjects() {
-  return projects;
+  // Exclude BizIQ from main views — they live on their own tab
+  return projects.filter(function(p) { return (p['Leadership Status'] || '') !== 'BizIQ'; });
+}
+function getBizIQProjects() {
+  return projects.filter(function(p) { return (p['Leadership Status'] || '') === 'BizIQ'; });
 }
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDdeZBBx63c2Iexsd4Mrbt3lZ1bUjMdIJXlXV1QfRxD171i1GCvyaOmgGRsDxJIYk/exec';
 
@@ -4307,6 +4412,152 @@ function deleteKbEntry(idx) {
   showToast('Entry removed');
 }
 
+// ===== BIZIQ TAB =====
+let _biqView = 'kanban';
+let _biqSortCol = 'Priority';
+let _biqSortDir = 1;
+
+function setBizIQView(v) {
+  _biqView = v;
+  document.getElementById('biqViewTable').classList.toggle('active', v === 'table');
+  document.getElementById('biqViewKanban').classList.toggle('active', v === 'kanban');
+  document.getElementById('biqTableContainer').style.display = v === 'table' ? '' : 'none';
+  document.getElementById('biqKanbanBoard').style.display = v === 'kanban' ? '' : 'none';
+  renderBizIQ();
+}
+
+function biqSortBy(col) {
+  if (_biqSortCol === col) _biqSortDir *= -1;
+  else { _biqSortCol = col; _biqSortDir = 1; }
+  renderBizIQ();
+}
+
+function clearBizIQFilters() {
+  document.getElementById('biqFilterStatus').value = '';
+  document.getElementById('biqFilterPriority').value = '';
+  document.getElementById('biqFilterOwner').value = '';
+  document.getElementById('biqSearchInput').value = '';
+  renderBizIQ();
+}
+
+function getFilteredBizIQ() {
+  var s = document.getElementById('biqFilterStatus').value;
+  var pr = document.getElementById('biqFilterPriority').value;
+  var o = document.getElementById('biqFilterOwner').value;
+  var q = (document.getElementById('biqSearchInput').value || '').toLowerCase();
+  return getBizIQProjects().filter(function(p) {
+    if (s && p['Status'] !== s) return false;
+    if (pr && p['Priority'] !== pr) return false;
+    if (o && p['Owner'] !== o) return false;
+    if (q && !Object.values(p).join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function renderBizIQ() {
+  var allBiq = getBizIQProjects();
+  var filtered = getFilteredBizIQ();
+
+  // Sort
+  filtered.sort(function(a, b) {
+    var av = a[_biqSortCol] || '', bv = b[_biqSortCol] || '';
+    if (_biqSortCol === 'Priority') { av = PRIORITY_RANK[av] !== undefined ? PRIORITY_RANK[av] : 99; bv = PRIORITY_RANK[bv] !== undefined ? PRIORITY_RANK[bv] : 99; }
+    else if (_biqSortCol === 'Status') { av = STATUS_RANK[av] !== undefined ? STATUS_RANK[av] : 99; bv = STATUS_RANK[bv] !== undefined ? STATUS_RANK[bv] : 99; }
+    if (av < bv) return -1 * _biqSortDir;
+    if (av > bv) return 1 * _biqSortDir;
+    return 0;
+  });
+
+  // KPIs
+  var active = allBiq.filter(function(p) { return p['Status'] !== 'Complete'; });
+  var inProg = allBiq.filter(function(p) { return p['Status'] === 'In Progress'; });
+  var complete = allBiq.filter(function(p) { return p['Status'] === 'Complete'; });
+  var ai = allBiq.filter(function(p) { var v = (p['AI Potential?'] || '').toString().toLowerCase(); return v === 'yes' || v === 'true' || v === '1'; });
+
+  var el;
+  if (el = document.getElementById('biqTotal')) el.querySelector('.exec-metric-value').textContent = allBiq.length;
+  if (el = document.getElementById('biqActive')) el.querySelector('.exec-metric-value').textContent = active.length;
+  if (el = document.getElementById('biqInProgress')) el.querySelector('.exec-metric-value').textContent = inProg.length;
+  if (el = document.getElementById('biqComplete')) el.querySelector('.exec-metric-value').textContent = complete.length;
+  if (el = document.getElementById('biqAI')) el.querySelector('.exec-metric-value').textContent = ai.length;
+
+  // Populate owner filter
+  var owners = {};
+  allBiq.forEach(function(p) { if (p['Owner']) owners[p['Owner']] = true; });
+  var ownerSel = document.getElementById('biqFilterOwner');
+  var curOwner = ownerSel.value;
+  ownerSel.innerHTML = '<option value="">Owner</option>' + Object.keys(owners).sort().map(function(o) {
+    return '<option' + (o === curOwner ? ' selected' : '') + '>' + esc(o) + '</option>';
+  }).join('');
+
+  document.getElementById('biqResultCount').textContent = filtered.length;
+
+  // Table
+  if (_biqView === 'table') {
+    var tbody = document.getElementById('biqTableBody');
+    var keyIds = getKeyProjectIds();
+    var _today = new Date(); _today.setHours(0,0,0,0);
+    var _soon = new Date(_today); _soon.setDate(_today.getDate() + 3);
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="11"><div class="empty-state"><p>No BizIQ projects match</p><span class="hint">Try adjusting your filters or add a new BizIQ project</span></div></td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(function(p) {
+      var _dv = p['Due Date'] ? new Date(String(p['Due Date']).slice(0,10)) : null;
+      var _done = p['Status'] === 'Complete';
+      var dueCls = _done ? 'date-complete' : (_dv && _dv < _today) ? 'date-overdue' : (_dv && _dv <= _soon) ? 'date-due-soon' : '';
+      var pct = parseInt(p['% Complete'] || '0', 10) || 0;
+      var aiVal = (p['AI Potential?'] || '').toString().toLowerCase();
+      var isAI = aiVal === 'yes' || aiVal === 'true' || aiVal === '1';
+      return '<tr onclick="if(!event.target.closest(\'.editable,.pill-select,.date-input\'))openDetail(\'' + esc(p['ID']||'') + '\')" style="cursor:pointer">' +
+        '<td><span class="cell-id">' + esc(p['ID']||'') + '</span></td>' +
+        '<td><span class="cell-project editable" contenteditable="true" data-row="' + p._row + '" data-col="Project" onblur="onEdit(this)">' + esc(p['Project']||'') + '</span></td>' +
+        '<td><span class="cell-desc editable" contenteditable="true" data-row="' + p._row + '" data-col="Description" onblur="onEdit(this)">' + esc(p['Description']||'') + '</span></td>' +
+        '<td><span class="editable" contenteditable="true" data-row="' + p._row + '" data-col="Owner" onblur="onEdit(this)">' + esc(p['Owner']||'') + '</span></td>' +
+        '<td><select class="pill-select" data-type="priority" data-value="' + esc(p['Priority']||'') + '" data-row="' + p._row + '" data-col="Priority" onchange="onDrop(this)">' + PRIORITY_OPTIONS.map(function(o){return '<option'+(p['Priority']===o?' selected':'')+'>'+o+'</option>';}).join('') + '</select></td>' +
+        '<td><select class="pill-select" data-type="status" data-value="' + esc(p['Status']||'') + '" data-row="' + p._row + '" data-col="Status" onchange="onDrop(this)">' + STATUS_OPTIONS.map(function(o){return '<option'+(p['Status']===o?' selected':'')+'>'+o+'</option>';}).join('') + '</select></td>' +
+        '<td><input type="date" class="date-input" value="' + esc(p['Start Date']?String(p['Start Date']).slice(0,10):'') + '" data-row="' + p._row + '" data-col="Start Date" onchange="onDate(this)"/></td>' +
+        '<td><input type="date" class="date-input' + (dueCls ? ' '+dueCls : '') + '" value="' + esc(p['Due Date']?String(p['Due Date']).slice(0,10):'') + '" data-row="' + p._row + '" data-col="Due Date" onchange="onDate(this)"/></td>' +
+        '<td><div style="display:flex;align-items:center;gap:0.3rem"><div style="flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + pct + '%;background:var(--gold);border-radius:3px"></div></div><span style="font-size:0.62rem;color:var(--text-3)">' + pct + '%</span></div></td>' +
+        '<td><span class="cell-notes editable" contenteditable="true" data-row="' + p._row + '" data-col="Notes" onblur="onEdit(this)">' + esc(p['Notes']||'') + '</span></td>' +
+        '<td style="text-align:center">' + (isAI ? '<span class="ai-badge-table"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 12l-7 0 5.5 4.5L5 22l7-4.5L19 22l-2.5-5.5L22 12l-7 0z"/></svg> AI</span>' : '') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // Kanban
+  if (_biqView === 'kanban') {
+    var board = document.getElementById('biqKanbanBoard');
+    var columns = ['Not Started', 'Planning', 'In Progress', 'In Review', 'Complete'];
+    board.innerHTML = columns.map(function(status) {
+      var colProjects = filtered.filter(function(p) { return p['Status'] === status; });
+      var colColor = status === 'In Progress' ? 'var(--s-prog)' : status === 'Planning' ? 'var(--s-plan)' : status === 'Complete' ? 'var(--s-done)' : status === 'In Review' ? '#6C5CB2' : 'var(--text-3)';
+      return '<div class="kanban-col">' +
+        '<div class="kanban-col-header"><span class="kanban-col-dot" style="background:' + colColor + '"></span><span class="kanban-col-name">' + status + '</span><span class="kanban-col-count">' + colProjects.length + '</span></div>' +
+        '<div class="kanban-col-body">' +
+        (colProjects.length === 0 ? '<div class="kanban-empty">No projects</div>' :
+        colProjects.map(function(p) {
+          var pct = parseInt(p['% Complete'] || '0', 10) || 0;
+          return '<div class="kanban-card" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
+            '<div class="kanban-card-title">' + esc(p['Project']||'') + '</div>' +
+            '<div class="kanban-card-meta">' +
+              (p['Owner'] ? '<span>' + esc(p['Owner']) + '</span>' : '') +
+              (p['Priority'] ? '<span class="pill-inline pill-' + (p['Priority']||'').toLowerCase().replace(/[^a-z]/g,'') + '">' + esc(p['Priority']) + '</span>' : '') +
+            '</div>' +
+            (pct > 0 ? '<div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:0.3rem"><div style="height:100%;width:' + pct + '%;background:var(--gold);border-radius:2px"></div></div>' : '') +
+          '</div>';
+        }).join('')) +
+        '</div></div>';
+    }).join('');
+  }
+
+  // Show/hide based on view
+  document.getElementById('biqTableContainer').style.display = _biqView === 'table' ? '' : 'none';
+  document.getElementById('biqKanbanBoard').style.display = _biqView === 'kanban' ? '' : 'none';
+}
+
 // ===== FUTURE IDEAS =====
 let _ideasFilter = 'all';
 
@@ -4617,10 +4868,12 @@ function setPage(page) {
   document.getElementById('calendarView').classList.toggle('active', page === 'calendar');
   document.getElementById('kbView').classList.toggle('active', page === 'kb');
   document.getElementById('ideasView').classList.toggle('active', page === 'ideas');
+  document.getElementById('biziqView').style.display = page === 'biziq' ? '' : 'none';
   if (page === 'calendar') { renderProfessorships(); renderCalendar(); }
   if (page === 'admin') { renderTable(); setView(currentView); }
   if (page === 'kb') { renderKb(); }
   if (page === 'ideas') { renderIdeas(); }
+  if (page === 'biziq') { renderBizIQ(); }
 }
 
 // ===== CALENDAR =====
@@ -5968,6 +6221,8 @@ async function updateCell(row, col, val) {
     updateStats();
     renderExecBar();
     if (col === 'Leadership Status' || col === 'Status') { renderSpotlight(); renderActionItems(); }
+    if (activePage === 'biziq') renderBizIQ();
+    if (activePage === 'admin') { renderTable(); }
     showToast(`Updated ${col}`);
   } catch(e) { showToast('Update failed','error'); setTimeout(()=>loadProjects(),1500); }
 }
