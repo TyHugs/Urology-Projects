@@ -1650,44 +1650,65 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .ideas-filter-btn:hover { border-color: var(--gold-ring); color: var(--gold); }
 .ideas-filter-btn.active { background: var(--gold); color: #fff; border-color: var(--gold); }
 
-.proj-ideas-section { margin-bottom: 1rem; }
-.proj-ideas-heading {
-  display: flex; align-items: center; gap: 0.4rem;
-  font-size: 0.78rem; font-weight: 700; color: var(--text-2);
-  text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.55rem;
+/* Ideas Toolbar */
+.ideas-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.ideas-toolbar-left { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.ideas-toolbar-right { display: flex; align-items: center; gap: 0.5rem; }
+
+/* Ranked idea rows */
+.ideas-ranked-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.idea-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0.65rem 0.85rem; cursor: pointer;
+  box-shadow: var(--sh-sm); transition: box-shadow 0.15s, transform 0.1s;
 }
-.proj-ideas-count {
-  font-size: 0.62rem; background: var(--gold); color: #fff;
-  padding: 0.1rem 0.4rem; border-radius: var(--r-full); font-weight: 600;
+.idea-row:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.idea-row-rank {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; font-weight: 700; color: #fff;
+  background: var(--text-3);
 }
-.proj-ideas-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.6rem;
+.idea-row-rank.rank-top { background: var(--gold); }
+.idea-row-rank.rank-high { background: #E05A52; }
+.idea-row-accent {
+  width: 4px; height: 32px; border-radius: 2px; flex-shrink: 0;
 }
-.proj-idea-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 0.75rem 0.85rem; cursor: pointer;
-  box-shadow: var(--sh-sm); border-left: 3px solid #7EB8DA;
-  transition: box-shadow 0.2s, transform 0.15s;
+.idea-row-accent.src-project { background: #7EB8DA; }
+.idea-row-accent.src-future { background: var(--gold); }
+.idea-row-body { flex: 1; min-width: 0; }
+.idea-row-title { font-weight: 600; font-size: 0.82rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.idea-row-sub { font-size: 0.7rem; color: var(--text-3); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.idea-row-pills { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; flex-wrap: wrap; }
+.idea-row-pill {
+  font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.55rem;
+  border-radius: var(--r-full); white-space: nowrap;
 }
-.proj-idea-card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
-.proj-idea-card-title { font-weight: 600; font-size: 0.82rem; color: var(--text); margin-bottom: 0.35rem; }
-.proj-idea-card-meta { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; font-size: 0.7rem; color: var(--text-3); }
-.proj-idea-card-meta .pi-owner { font-weight: 500; }
-.proj-idea-card-meta .pi-status {
-  font-weight: 600; font-size: 0.68rem; padding: 0.12rem 0.5rem;
-  border-radius: var(--r-full); background: var(--bg-hover); color: var(--text-2);
-}
-.proj-idea-card-meta .pi-status.s-prog { background: var(--s-prog-bg); color: var(--s-prog); }
-.proj-idea-card-meta .pi-status.s-plan { background: var(--s-plan-bg); color: var(--s-plan); }
-.proj-idea-card-meta .pi-status.s-review { background: rgba(108,92,178,0.1); color: #6C5CB2; }
-.proj-idea-card-meta .pi-status.s-delayed { background: var(--s-block-bg); color: var(--s-block); }
-.proj-idea-card-meta .pi-status.s-hold { background: var(--s-hold-bg); color: var(--s-hold); }
-.proj-idea-card-meta .pi-priority { font-size: 0.62rem; }
-.proj-idea-card-progress { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 0.4rem; }
-.proj-idea-card-progress-fill { height: 100%; background: #7EB8DA; border-radius: 2px; }
-.ideas-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem;
-}
+.idea-row-pill.ip-high { background: rgba(224,90,82,0.1); color: #E05A52; }
+.idea-row-pill.ip-med { background: rgba(232,168,56,0.1); color: #C8922A; }
+.idea-row-pill.ip-found { background: rgba(92,184,122,0.1); color: #3D9960; }
+.idea-row-pill.ip-src-proj { background: rgba(126,184,218,0.1); color: #5A9AB5; }
+.idea-row-pill.ip-src-fut { background: rgba(255,183,77,0.12); color: #B8860B; }
+.idea-row-pill.ip-cat { background: var(--bg-hover); color: var(--text-2); font-weight: 500; }
+.idea-row-pill.ip-status { background: var(--bg-hover); color: var(--text-2); }
+.idea-row-pill.ip-status-prog { background: var(--s-prog-bg); color: var(--s-prog); }
+.idea-row-pill.ip-status-plan { background: var(--s-plan-bg); color: var(--s-plan); }
+.idea-row-pill.ip-status-review { background: rgba(108,92,178,0.1); color: #6C5CB2; }
+.idea-row-pill.ip-status-delayed { background: var(--s-block-bg); color: var(--s-block); }
+.idea-row-pill.ip-status-hold { background: var(--s-hold-bg); color: var(--s-hold); }
+.idea-row-pill.ip-status-concept { background: rgba(126,184,218,0.08); color: #5A9AB5; }
+.idea-row-pill.ip-status-complete { background: rgba(76,175,80,0.1); color: #388E3C; }
+.idea-row-pill.ip-effort { background: rgba(0,0,0,0.04); color: var(--text-3); font-weight: 500; }
+.idea-row-progress { width: 60px; flex-shrink: 0; }
+.idea-row-progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.idea-row-progress-fill { height: 100%; background: #7EB8DA; border-radius: 2px; }
+.idea-row-progress-label { font-size: 0.58rem; color: var(--text-3); text-align: center; margin-top: 0.15rem; }
+.idea-row-chevron { flex-shrink: 0; color: var(--text-3); opacity: 0.4; }
+.idea-row:hover .idea-row-chevron { opacity: 0.8; }
+
+/* keep old grid for detail panel to still render */
+.ideas-grid { display: none; }
 .idea-tile {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
   padding: 0; box-shadow: var(--sh-sm); transition: all 0.25s ease;
@@ -3168,31 +3189,38 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
         Ideas
       </div>
-      <div class="ideas-hero-sub">Active ideas from your project list and strategic innovations to build over time.</div>
+      <div class="ideas-hero-sub">All ideas ranked by priority. Click any row to explore details.</div>
     </div>
     <div class="ideas-hero-stats" id="ideasStats"></div>
   </div>
 
-  <!-- Category Filters -->
-  <div class="ideas-filters" id="ideasFilters">
-    <button class="ideas-filter-btn active" data-cat="all" onclick="setIdeasFilter('all')">All</button>
-  </div>
-
-  <!-- Project Ideas (from sheet) -->
-  <div id="projIdeasSection" class="proj-ideas-section" style="display:none">
-    <div class="proj-ideas-heading">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
-      Active Project Ideas <span class="proj-ideas-count" id="projIdeasCount">0</span>
+  <!-- Toolbar -->
+  <div class="ideas-toolbar">
+    <div class="ideas-toolbar-left">
+      <select class="filter-select" id="ideasSourceFilter" onchange="renderIdeas()">
+        <option value="all">All Sources</option>
+        <option value="project">Active Projects</option>
+        <option value="future">Future Innovation</option>
+      </select>
+      <select class="filter-select" id="ideasCatFilter" onchange="renderIdeas()">
+        <option value="all">All Categories</option>
+      </select>
+      <select class="filter-select" id="ideasImpactFilter" onchange="renderIdeas()">
+        <option value="all">All Impact</option>
+        <option value="high">High Impact</option>
+        <option value="med">Medium Impact</option>
+      </select>
     </div>
-    <div class="proj-ideas-grid" id="projIdeasGrid"></div>
+    <div class="ideas-toolbar-right">
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" class="search-input" placeholder="Search ideas..." oninput="renderIdeas()" id="ideasSearchInput" />
+      </div>
+    </div>
   </div>
 
-  <!-- Future Innovation Tiles -->
-  <div class="proj-ideas-heading" style="margin-top:0.5rem">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2m8.66-15l-1.73 1M4.07 17l-1.73 1m17.32 0l-1.73-1M4.07 7l-1.73-1"/></svg>
-    Future Innovation
-  </div>
-  <div class="ideas-grid" id="ideasGrid"></div>
+  <!-- Unified ranked list -->
+  <div class="ideas-ranked-list" id="ideasRankedList"></div>
 </div>
 
 <!-- IDEAS DETAIL PANEL -->
@@ -4784,7 +4812,6 @@ function renderBizIQ() {
 }
 
 // ===== FUTURE IDEAS =====
-let _ideasFilter = 'all';
 
 const FUTURE_IDEAS = [
   {
@@ -4933,100 +4960,151 @@ const FUTURE_IDEAS = [
   }
 ];
 
-function setIdeasFilter(cat) {
-  _ideasFilter = cat;
-  document.querySelectorAll('.ideas-filter-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === cat));
-  renderIdeas();
-}
-
 function renderIdeas() {
-  var grid = document.getElementById('ideasGrid');
+  var listEl = document.getElementById('ideasRankedList');
   var statsEl = document.getElementById('ideasStats');
-  var filtersEl = document.getElementById('ideasFilters');
+  var srcFilter = document.getElementById('ideasSourceFilter');
+  var catFilter = document.getElementById('ideasCatFilter');
+  var impFilter = document.getElementById('ideasImpactFilter');
+  var searchInput = document.getElementById('ideasSearchInput');
 
-  // === Project Ideas from sheet ===
+  // === Gather all ideas into unified array ===
   var projIdeas = getIdeasProjects();
-  var piSection = document.getElementById('projIdeasSection');
-  var piGrid = document.getElementById('projIdeasGrid');
-  var piCount = document.getElementById('projIdeasCount');
+  var unified = [];
 
-  if (projIdeas.length > 0) {
-    piSection.style.display = '';
-    piCount.textContent = projIdeas.length;
-    function piStatusCls(s) {
-      if (s === 'In Progress') return 's-prog';
-      if (s === 'Planning') return 's-plan';
-      if (s === 'In Review') return 's-review';
-      if (s === 'Delayed') return 's-delayed';
-      if (s === 'On Hold') return 's-hold';
-      return '';
-    }
-    piGrid.innerHTML = projIdeas.map(function(p) {
-      var pct = parseInt(p['% Complete'] || '0', 10) || 0;
-      var st = p['Status'] || 'Not Started';
-      return '<div class="proj-idea-card" onclick="openDetail(\'' + esc(p['ID']||'') + '\')">' +
-        '<div class="proj-idea-card-title">' + esc(p['Project']||'') + '</div>' +
-        '<div class="proj-idea-card-meta">' +
-          (p['Owner'] ? '<span class="pi-owner">' + esc(p['Owner']) + '</span>' : '') +
-          '<span class="pi-status ' + piStatusCls(st) + '">' + esc(st) + '</span>' +
-          (p['Priority'] ? '<span class="pill-inline pill-' + (p['Priority']||'').toLowerCase().replace(/[^a-z]/g,'') + ' pi-priority">' + esc(p['Priority']) + '</span>' : '') +
-        '</div>' +
-        (pct > 0 ? '<div class="proj-idea-card-progress"><div class="proj-idea-card-progress-fill" style="width:' + pct + '%"></div></div>' : '') +
-      '</div>';
-    }).join('');
-  } else {
-    piSection.style.display = 'none';
-  }
-
-  // === Future Innovation Tiles ===
-  // Build category list
-  var cats = {};
-  FUTURE_IDEAS.forEach(function(idea) { cats[idea.category] = (cats[idea.category] || 0) + 1; });
-  var filterHtml = '<button class="ideas-filter-btn' + (_ideasFilter === 'all' ? ' active' : '') + '" data-cat="all" onclick="setIdeasFilter(\'all\')">All</button>';
-  Object.keys(cats).forEach(function(cat) {
-    filterHtml += '<button class="ideas-filter-btn' + (_ideasFilter === cat ? ' active' : '') + '" data-cat="' + esc(cat) + '" onclick="setIdeasFilter(\'' + esc(cat) + '\')">' + esc(cat) + '</button>';
+  // Project ideas from sheet
+  projIdeas.forEach(function(p) {
+    var pri = (p['Priority'] || '').toLowerCase();
+    var impactScore = pri === 'high' ? 3 : pri === 'medium' ? 2 : 1;
+    unified.push({
+      source: 'project',
+      title: p['Project'] || '',
+      description: p['Description'] || p['Project'] || '',
+      impact: pri === 'high' ? 'high' : pri === 'medium' ? 'med' : 'low',
+      impactScore: impactScore,
+      status: p['Status'] || 'Not Started',
+      owner: p['Owner'] || '',
+      pct: parseInt(p['% Complete'] || '0', 10) || 0,
+      category: p['Category'] || '',
+      effort: '',
+      id: p['ID'] || '',
+      _clickFn: 'openDetail(\'' + esc(p['ID'] || '') + '\')'
+    });
   });
-  filtersEl.innerHTML = filterHtml;
 
-  // Stats
-  var totalIdeas = projIdeas.length + FUTURE_IDEAS.length;
-  statsEl.innerHTML = '<span class="ideas-hero-stat"><strong>' + totalIdeas + '</strong> total ideas</span>' +
-    '<span class="ideas-hero-stat"><strong>' + projIdeas.length + '</strong> active</span>' +
-    '<span class="ideas-hero-stat"><strong>' + FUTURE_IDEAS.length + '</strong> future</span>';
+  // Future innovation ideas
+  FUTURE_IDEAS.forEach(function(idea, idx) {
+    var impactScore = idea.impact === 'high' ? 3 : idea.impact === 'foundational' ? 2.5 : 2;
+    unified.push({
+      source: 'future',
+      title: idea.title,
+      description: idea.description,
+      impact: idea.impact === 'high' ? 'high' : 'med',
+      impactScore: impactScore,
+      status: 'Concept',
+      owner: '',
+      pct: 0,
+      category: idea.category,
+      effort: idea.effort || '',
+      icon: idea.icon || '',
+      _futureIdx: idx,
+      _clickFn: 'openIdeaDetail(' + idx + ')'
+    });
+  });
 
-  // Filter
-  var filtered = FUTURE_IDEAS.map(function(idea, i) { return Object.assign({}, idea, { _idx: i }); });
-  if (_ideasFilter !== 'all') {
-    filtered = filtered.filter(function(idea) { return idea.category === _ideasFilter; });
+  // === Populate category filter dynamically ===
+  var catSet = {};
+  unified.forEach(function(u) { if (u.category) catSet[u.category] = true; });
+  var catKeys = Object.keys(catSet).sort();
+  var curCatVal = catFilter.value;
+  var catHtml = '<option value="all">All Categories</option>';
+  catKeys.forEach(function(c) { catHtml += '<option value="' + esc(c) + '">' + esc(c) + '</option>'; });
+  catFilter.innerHTML = catHtml;
+  if (curCatVal && curCatVal !== 'all') catFilter.value = curCatVal;
+
+  // === Apply filters ===
+  var srcVal = srcFilter.value;
+  var catVal = catFilter.value;
+  var impVal = impFilter.value;
+  var searchVal = (searchInput.value || '').toLowerCase().trim();
+
+  var filtered = unified.filter(function(u) {
+    if (srcVal === 'project' && u.source !== 'project') return false;
+    if (srcVal === 'future' && u.source !== 'future') return false;
+    if (catVal !== 'all' && u.category !== catVal) return false;
+    if (impVal === 'high' && u.impact !== 'high') return false;
+    if (impVal === 'med' && u.impact !== 'med') return false;
+    if (searchVal && u.title.toLowerCase().indexOf(searchVal) === -1 && u.description.toLowerCase().indexOf(searchVal) === -1 && u.category.toLowerCase().indexOf(searchVal) === -1) return false;
+    return true;
+  });
+
+  // === Sort: high impact first, then within same impact by source (project first), then alpha ===
+  filtered.sort(function(a, b) {
+    if (b.impactScore !== a.impactScore) return b.impactScore - a.impactScore;
+    if (a.source !== b.source) return a.source === 'project' ? -1 : 1;
+    return a.title.localeCompare(b.title);
+  });
+
+  // === Stats ===
+  var totalAll = unified.length;
+  var projCount = unified.filter(function(u) { return u.source === 'project'; }).length;
+  var futureCount = unified.filter(function(u) { return u.source === 'future'; }).length;
+  var highCount = unified.filter(function(u) { return u.impact === 'high'; }).length;
+  statsEl.innerHTML =
+    '<span class="ideas-hero-stat"><strong>' + totalAll + '</strong> total</span>' +
+    '<span class="ideas-hero-stat"><strong>' + projCount + '</strong> active</span>' +
+    '<span class="ideas-hero-stat"><strong>' + futureCount + '</strong> future</span>' +
+    '<span class="ideas-hero-stat"><strong>' + highCount + '</strong> high impact</span>';
+
+  // === Render ranked rows ===
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-3);">No ideas match the current filters.</div>';
+    return;
   }
 
-  // Category to CSS class
-  function catClass(cat) {
-    if (cat.includes('Playbook')) return 'icat-playbook';
-    if (cat.includes('Financial') || cat.includes('Budget')) return 'icat-financial';
-    if (cat.includes('People') || cat.includes('Governance')) return 'icat-people';
-    if (cat.includes('Compliance') || cat.includes('Accreditation')) return 'icat-compliance';
-    if (cat.includes('Template') || cat.includes('Communication')) return 'icat-templates';
-    if (cat.includes('Onboarding')) return 'icat-onboarding';
-    return 'icat-playbook';
+  function statusCls(s) {
+    var sl = s.toLowerCase();
+    if (sl === 'in progress') return 'ip-status-prog';
+    if (sl === 'planning') return 'ip-status-plan';
+    if (sl === 'in review') return 'ip-status-review';
+    if (sl === 'delayed') return 'ip-status-delayed';
+    if (sl === 'on hold') return 'ip-status-hold';
+    if (sl === 'concept') return 'ip-status-concept';
+    if (sl === 'complete' || sl === 'completed') return 'ip-status-complete';
+    return '';
   }
 
-  grid.innerHTML = filtered.map(function(idea) {
-    var cc = catClass(idea.category);
-    var impactCls = idea.impact === 'high' ? 'impact-high' : idea.impact === 'foundational' ? 'impact-foundational' : 'impact-med';
-    var impactLabel = idea.impact === 'high' ? 'High Impact' : idea.impact === 'foundational' ? 'Foundational' : 'Medium Impact';
-    return '<div class="idea-tile" onclick="openIdeaDetail(' + idea._idx + ')">' +
-      '<div class="idea-tile-accent ' + cc + '"></div>' +
-      '<div class="idea-tile-body">' +
-        '<div class="idea-tile-icon ' + cc + '">' + idea.icon + '</div>' +
-        '<div class="idea-tile-cat">' + esc(idea.category) + '</div>' +
-        '<div class="idea-tile-title">' + esc(idea.title) + '</div>' +
-        '<div class="idea-tile-desc">' + esc(idea.description) + '</div>' +
+  listEl.innerHTML = filtered.map(function(u, i) {
+    var rank = i + 1;
+    var rankCls = rank <= 3 ? 'rank-top' : rank <= 10 ? 'rank-high' : '';
+    var srcCls = u.source === 'project' ? 'src-project' : 'src-future';
+    var impCls = u.impact === 'high' ? 'ip-high' : 'ip-med';
+    var impLabel = u.impact === 'high' ? 'High' : 'Medium';
+    var srcLabel = u.source === 'project' ? 'Active Project' : 'Future Innovation';
+    var srcPillCls = u.source === 'project' ? 'ip-src-proj' : 'ip-src-fut';
+
+    var pills = '';
+    pills += '<span class="idea-row-pill ' + srcPillCls + '">' + srcLabel + '</span>';
+    pills += '<span class="idea-row-pill ' + impCls + '">' + impLabel + ' Impact</span>';
+    if (u.category) pills += '<span class="idea-row-pill ip-cat">' + esc(u.category) + '</span>';
+    if (u.status && u.status !== 'Not Started') pills += '<span class="idea-row-pill ip-status ' + statusCls(u.status) + '">' + esc(u.status) + '</span>';
+    if (u.effort) pills += '<span class="idea-row-pill ip-effort">' + esc(u.effort) + '</span>';
+    if (u.owner) pills += '<span class="idea-row-pill ip-effort">' + esc(u.owner) + '</span>';
+
+    var progressHtml = '';
+    if (u.pct > 0) {
+      progressHtml = '<div class="idea-row-progress"><div class="idea-row-progress-fill" style="width:' + u.pct + '%;background:' + (u.pct >= 75 ? 'var(--green)' : u.pct >= 40 ? 'var(--gold)' : 'var(--accent)') + '"></div></div>';
+    }
+
+    return '<div class="idea-row" onclick="' + u._clickFn + '">' +
+      '<div class="idea-row-rank ' + rankCls + '">' + rank + '</div>' +
+      '<div class="idea-row-accent ' + srcCls + '"></div>' +
+      '<div class="idea-row-body">' +
+        '<div class="idea-row-title">' + esc(u.title) + '</div>' +
+        '<div class="idea-row-pills">' + pills + '</div>' +
       '</div>' +
-      '<div class="idea-tile-footer">' +
-        '<span class="idea-tile-impact ' + impactCls + '">' + impactLabel + '</span>' +
-        '<span class="idea-tile-effort">' + esc(idea.effort) + '</span>' +
-      '</div>' +
+      progressHtml +
+      '<svg class="idea-row-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
     '</div>';
   }).join('');
 }
