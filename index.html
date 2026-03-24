@@ -698,12 +698,13 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .spotlight-card-name:hover { color: var(--navy); }
 .spotlight-card-meta {
   display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-  font-size: 0.68rem; color: var(--text-3);
+  font-size: 0.74rem; color: var(--text-3);
 }
 .spotlight-card-meta .spot-owner { font-weight: 500; }
 .spotlight-card-meta .spot-status {
-  font-weight: 600; font-size: 0.62rem; padding: 0.08rem 0.4rem;
+  font-weight: 600; font-size: 0.74rem; padding: 0.18rem 0.6rem;
   border-radius: var(--r-full); background: var(--bg-hover); color: var(--text-2);
+  letter-spacing: 0.01em;
 }
 .spotlight-card-meta .spot-status.s-prog { background: var(--s-prog-bg); color: var(--s-prog); }
 .spotlight-card-meta .spot-status.s-plan { background: var(--s-plan-bg); color: var(--s-plan); }
@@ -1313,6 +1314,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .exec-metric-value.bad { color: #E05A52; text-shadow: 0 0 16px rgba(224,90,82,0.35); }
 .exec-metric-value.ai-accent { color: #7C6FE0; text-shadow: 0 0 16px rgba(124,111,224,0.35); }
 .exec-metric-value.neutral { color: rgba(255,255,255,0.8); }
+.exec-metric-value.ideas { color: #7EB8DA; text-shadow: 0 0 16px rgba(126,184,218,0.3); }
 .exec-metric-label {
   font-size: 0.64rem; font-weight: 700; color: rgba(255,255,255,0.45);
   text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.4rem;
@@ -1561,6 +1563,13 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
 .mtg-up-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .mtg-up-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); font-weight: 500; }
 .mtg-up-date { font-size: 0.64rem; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
+.mtg-up-del { opacity: 0; width: 16px; height: 16px; border: none; background: none; color: var(--p-crit); cursor: pointer; font-size: 0.85rem; padding: 0; line-height: 1; flex-shrink: 0; border-radius: 50%; transition: opacity 0.15s; }
+.mtg-up-item:hover .mtg-up-del { opacity: 0.7; }
+.mtg-up-del:hover { opacity: 1 !important; background: rgba(224,90,82,0.1); }
+.mtg-add-btn { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gold); background: none; color: var(--gold); font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: 0.35rem; padding: 0; transition: all 0.15s; line-height: 1; }
+.mtg-add-btn:hover { background: var(--gold); color: #fff; }
+.mtg-tooltip-del { border: none; background: none; color: var(--p-crit); cursor: pointer; font-size: 0.7rem; opacity: 0.6; padding: 0.15rem 0.3rem; border-radius: 4px; margin-left: auto; flex-shrink: 0; }
+.mtg-tooltip-del:hover { opacity: 1; background: rgba(224,90,82,0.1); }
 .mtg-tooltip-empty { padding: 0.75rem; text-align: center; font-size: 0.74rem; color: var(--text-3); }
 
 .meetings-evt {
@@ -2515,6 +2524,7 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
         <button onclick="mtgNav(-1)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
         <span class="meetings-month-label" id="mtgMonthLabel"></span>
         <button onclick="mtgNav(1)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button class="mtg-add-btn" onclick="openMtgModal()" title="Add meeting">+</button>
       </div>
       <div class="meetings-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
     </div>
@@ -2531,6 +2541,75 @@ td { padding: 0.55rem 0.8rem; font-size: 0.88rem; vertical-align: middle; }
       <div class="mtg-tooltip-body" id="mtgTooltipBody"></div>
     </div>
   </div>
+<!-- Meeting Add/Edit Modal -->
+<div class="modal-overlay" id="mtgModalOverlay" onclick="closeMtgModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:440px">
+    <h2 id="mtgModalTitle">Add Meeting</h2>
+    <div class="modal-field">
+      <label>Title</label>
+      <input type="text" id="mtgTitle" placeholder="e.g., Faculty Meeting"/>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Recurrence</label>
+        <select id="mtgRecurring" onchange="mtgRecurChange()">
+          <option value="once">One-time</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly (nth weekday)</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Type</label>
+        <select id="mtgType">
+          <option value="leadership">Leadership</option>
+          <option value="clinical">Clinical</option>
+          <option value="away">Time Away</option>
+          <option value="meeting">Other</option>
+        </select>
+      </div>
+    </div>
+    <div id="mtgOnceFields">
+      <div class="modal-row">
+        <div class="modal-field"><label>Date</label><input type="date" id="mtgDate"/></div>
+        <div class="modal-field"><label>End Date <span style="font-weight:400;color:var(--text-3)">(optional, multi-day)</span></label><input type="date" id="mtgEndDate"/></div>
+      </div>
+    </div>
+    <div id="mtgWeeklyFields" style="display:none">
+      <div class="modal-field">
+        <label>Day of Week</label>
+        <select id="mtgDay">
+          <option value="monday">Monday</option><option value="tuesday">Tuesday</option><option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option><option value="friday">Friday</option>
+        </select>
+      </div>
+    </div>
+    <div id="mtgMonthlyFields" style="display:none">
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Day of Week</label>
+          <select id="mtgMonthDay">
+            <option value="monday">Monday</option><option value="tuesday">Tuesday</option><option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option><option value="friday">Friday</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Week of Month</label>
+          <select id="mtgWeekOfMonth">
+            <option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Time</label><input type="text" id="mtgTime" placeholder="e.g., 10:00 AM"/></div>
+      <div class="modal-field"><label>Note <span style="font-weight:400;color:var(--text-3)">(optional)</span></label><input type="text" id="mtgNote" placeholder="e.g., Conference room 201"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeMtgModal()">Cancel</button>
+      <button class="modal-btn save" onclick="saveMeeting()">Save</button>
+    </div>
+  </div>
+</div>
 
 
   <!-- DEPARTMENT GOALS -->
@@ -3835,18 +3914,20 @@ function sortProjects(list) {
 
 // ===== KEY MEETINGS CALENDAR =====
 let mtgYear, mtgMonth;
-const KEY_MEETINGS = [
-  // Weekly recurring
+const DEFAULT_MEETINGS = [
   { title: 'CDA Leadership Huddle', day: 'monday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' },
   { title: 'Chair Leadership Huddle', day: 'thursday', time: '10:00 AM', type: 'leadership', recurring: 'weekly' },
-  // Monthly recurring (3rd Thursday)
-  { title: 'ELT Meeting', day: 'thursday', weekOfMonth: 3, time: '6:30 – 7:00 AM', type: 'leadership', recurring: 'monthly' },
-  // One-time events
+  { title: 'ELT Meeting', day: 'thursday', weekOfMonth: 3, time: '6:30 \u2013 7:00 AM', type: 'leadership', recurring: 'monthly' },
   { title: 'Medical School Budget Meeting', date: '2026-05-11', time: '10:00 AM', type: 'leadership', recurring: 'once' },
-  { title: 'Faculty Meeting', date: '2026-04-07', time: '6:00 – 8:00 PM', type: 'clinical', recurring: 'once' },
-  // Time away (multi-day)
-  { title: 'Tyler Time Away (NCAA Basketball Finals)', startDate: '2026-04-06', endDate: '2026-04-07', time: 'All Day', type: 'away', recurring: 'once', note: 'Back for Faculty Meeting evening of 4/7' }
+  { title: 'Faculty Meeting', date: '2026-04-07', time: '6:00 \u2013 8:00 PM', type: 'clinical', recurring: 'once' }
 ];
+var KEY_MEETINGS = (function() {
+  try { var d = JSON.parse(localStorage.getItem('uro_meetings')); if (Array.isArray(d) && d.length) return d; } catch(e) {}
+  localStorage.setItem('uro_meetings', JSON.stringify(DEFAULT_MEETINGS));
+  return JSON.parse(JSON.stringify(DEFAULT_MEETINGS));
+})();
+function _saveMeetings() { localStorage.setItem('uro_meetings', JSON.stringify(KEY_MEETINGS)); }
+var _mtgEditIdx = null;
 
 (function() {
   const now = new Date();
@@ -3869,17 +3950,16 @@ function getMeetingsForMonth(year, month) {
   const pad = n => String(n).padStart(2,'0');
   const mStr = year + '-' + pad(month+1);
 
-  KEY_MEETINGS.forEach(function(mtg) {
+  KEY_MEETINGS.forEach(function(mtg, _si) {
     if (mtg.recurring === 'weekly') {
       const targetDow = dayNames.indexOf(mtg.day.toLowerCase());
       if (targetDow < 0) return;
       for (let d = 1; d <= daysInMonth; d++) {
         if (new Date(year, month, d).getDay() === targetDow) {
-          meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+          meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '', _srcIdx: _si });
         }
       }
     } else if (mtg.recurring === 'monthly') {
-      // Nth weekday of month (e.g. 3rd Thursday)
       const targetDow = dayNames.indexOf(mtg.day.toLowerCase());
       if (targetDow < 0) return;
       let count = 0;
@@ -3887,7 +3967,7 @@ function getMeetingsForMonth(year, month) {
         if (new Date(year, month, d).getDay() === targetDow) {
           count++;
           if (count === mtg.weekOfMonth) {
-            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '', _srcIdx: _si });
             break;
           }
         }
@@ -3901,14 +3981,14 @@ function getMeetingsForMonth(year, month) {
         for (let dt = new Date(s); dt <= e; dt.setDate(dt.getDate() + 1)) {
           if (dt.getFullYear() === year && dt.getMonth() === month) {
             const d = dt.getDate();
-            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+            meetings.push({ title: mtg.title, date: mStr + '-' + pad(d), time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '', _srcIdx: _si });
           }
         }
       } else if (mtg.date) {
         const parts = mtg.date.split('-');
         if (parseInt(parts[0]) === year && parseInt(parts[1]) === month + 1) {
           const d = parseInt(parts[2]);
-          meetings.push({ title: mtg.title, date: mtg.date, time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '' });
+          meetings.push({ title: mtg.title, date: mtg.date, time: mtg.time, type: mtg.type, dayNum: d, note: mtg.note || '', _srcIdx: _si });
         }
       }
     }
@@ -3986,7 +4066,7 @@ function renderMeetingsCalendar() {
   var upcoming = [];
   var seenWeekly = {};
 
-  KEY_MEETINGS.forEach(function(m) {
+  KEY_MEETINGS.forEach(function(m, _si) {
     if (m.recurring === 'weekly') {
       if (seenWeekly[m.title]) return;
       var dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
@@ -3998,7 +4078,7 @@ function renderMeetingsCalendar() {
       next.setDate(next.getDate() + diff);
       if (next <= horizon) {
         seenWeekly[m.title] = true;
-        upcoming.push({ title: m.title, date: new Date(next), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+        upcoming.push({ title: m.title, date: new Date(next), time: m.time || '', type: m.type || 'leadership', note: m.note || '', _srcIdx: _si });
       }
     } else if (m.recurring === 'monthly') {
       var dayNames2 = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
@@ -4013,7 +4093,7 @@ function renderMeetingsCalendar() {
           if (test.getDay() === targetDay2) {
             count++;
             if (count === wom && test >= _now && test <= horizon) {
-              upcoming.push({ title: m.title, date: new Date(test), time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+              upcoming.push({ title: m.title, date: new Date(test), time: m.time || '', type: m.type || 'leadership', note: m.note || '', _srcIdx: _si });
               mo = 99; break;
             }
           }
@@ -4023,12 +4103,12 @@ function renderMeetingsCalendar() {
       if (m.startDate && m.endDate) {
         var s = new Date(m.startDate + 'T00:00:00');
         if (s >= _now && s <= horizon) {
-          upcoming.push({ title: m.title, date: s, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+          upcoming.push({ title: m.title, date: s, time: m.time || '', type: m.type || 'leadership', note: m.note || '', _srcIdx: _si });
         }
       } else if (m.date) {
         var d2 = new Date(m.date + 'T00:00:00');
         if (d2 >= _now && d2 <= horizon) {
-          upcoming.push({ title: m.title, date: d2, time: m.time || '', type: m.type || 'leadership', note: m.note || '' });
+          upcoming.push({ title: m.title, date: d2, time: m.time || '', type: m.type || 'leadership', note: m.note || '', _srcIdx: _si });
         }
       }
     }
@@ -4053,6 +4133,7 @@ function renderMeetingsCalendar() {
       '<span class="mtg-up-dot" style="background:' + dotColor + '"></span>' +
       '<span class="mtg-up-name">' + m.title + '</span>' +
       '<span class="mtg-up-date">' + dateStr + '</span>' +
+      '<button class="mtg-up-del" onclick="deleteMeeting(' + m._srcIdx + ')" title="Remove">&times;</button>' +
       '</div>';
   });
   upEl.innerHTML = upHtml;
@@ -4081,13 +4162,14 @@ function openMtgTooltip(event, dayNum) {
     dayMtgs.forEach(function(m) {
       var typeColor = m.type === 'away' ? 'var(--p-crit)' : m.type === 'leadership' ? 'var(--s-plan)' : m.type === 'clinical' ? 'var(--s-prog)' : 'var(--s-done)';
       var typeLabel = m.type === 'away' ? 'Time Away' : m.type ? m.type.charAt(0).toUpperCase() + m.type.slice(1) : 'Meeting';
-      html += '<div class="mtg-tooltip-item">' +
+      html += '<div class="mtg-tooltip-item" style="display:flex;align-items:flex-start">' +
         '<div class="mtg-tooltip-dot" style="background:' + typeColor + '"></div>' +
-        '<div class="mtg-tooltip-info">' +
+        '<div class="mtg-tooltip-info" style="flex:1">' +
           '<div class="mtg-tooltip-name">' + esc(m.title) + '</div>' +
           '<div class="mtg-tooltip-meta">' + m.time + ' &middot; ' + typeLabel + '</div>' +
           (m.note ? '<div class="mtg-tooltip-note">' + esc(m.note) + '</div>' : '') +
         '</div>' +
+        '<button class="mtg-tooltip-del" onclick="deleteMeeting(' + m._srcIdx + ')" title="Delete this meeting">&times;</button>' +
       '</div>';
     });
     body.innerHTML = html;
@@ -4144,6 +4226,85 @@ document.addEventListener('click', function(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeMtgTooltip();
 });
+
+// ===== MEETING CRUD =====
+function mtgRecurChange() {
+  var v = document.getElementById('mtgRecurring').value;
+  document.getElementById('mtgOnceFields').style.display = v === 'once' ? '' : 'none';
+  document.getElementById('mtgWeeklyFields').style.display = v === 'weekly' ? '' : 'none';
+  document.getElementById('mtgMonthlyFields').style.display = v === 'monthly' ? '' : 'none';
+}
+
+function openMtgModal(idx) {
+  _mtgEditIdx = typeof idx === 'number' ? idx : null;
+  document.getElementById('mtgModalTitle').textContent = _mtgEditIdx !== null ? 'Edit Meeting' : 'Add Meeting';
+  var m = _mtgEditIdx !== null ? KEY_MEETINGS[_mtgEditIdx] : null;
+  document.getElementById('mtgTitle').value = m ? m.title : '';
+  document.getElementById('mtgRecurring').value = m ? m.recurring : 'once';
+  document.getElementById('mtgType').value = m ? (m.type || 'leadership') : 'leadership';
+  document.getElementById('mtgTime').value = m ? (m.time || '') : '';
+  document.getElementById('mtgNote').value = m ? (m.note || '') : '';
+  document.getElementById('mtgDate').value = m ? (m.date || m.startDate || '') : '';
+  document.getElementById('mtgEndDate').value = m ? (m.endDate || '') : '';
+  document.getElementById('mtgDay').value = m ? (m.day || 'monday') : 'monday';
+  document.getElementById('mtgMonthDay').value = m ? (m.day || 'monday') : 'monday';
+  document.getElementById('mtgWeekOfMonth').value = m ? (m.weekOfMonth || 1) : 1;
+  mtgRecurChange();
+  document.getElementById('mtgModalOverlay').classList.add('active');
+}
+
+function closeMtgModal() {
+  document.getElementById('mtgModalOverlay').classList.remove('active');
+  _mtgEditIdx = null;
+}
+
+function saveMeeting() {
+  var title = document.getElementById('mtgTitle').value.trim();
+  if (!title) { showToast('Please enter a title', 'error'); return; }
+  var recurring = document.getElementById('mtgRecurring').value;
+  var type = document.getElementById('mtgType').value;
+  var time = document.getElementById('mtgTime').value.trim();
+  var note = document.getElementById('mtgNote').value.trim();
+  var obj = { title: title, type: type, time: time, recurring: recurring };
+  if (note) obj.note = note;
+
+  if (recurring === 'weekly') {
+    obj.day = document.getElementById('mtgDay').value;
+  } else if (recurring === 'monthly') {
+    obj.day = document.getElementById('mtgMonthDay').value;
+    obj.weekOfMonth = parseInt(document.getElementById('mtgWeekOfMonth').value);
+  } else {
+    var d = document.getElementById('mtgDate').value;
+    var ed = document.getElementById('mtgEndDate').value;
+    if (!d) { showToast('Please enter a date', 'error'); return; }
+    if (ed && ed > d) {
+      obj.startDate = d; obj.endDate = ed;
+    } else {
+      obj.date = d;
+    }
+  }
+
+  if (_mtgEditIdx !== null) {
+    KEY_MEETINGS[_mtgEditIdx] = obj;
+  } else {
+    KEY_MEETINGS.push(obj);
+  }
+  _saveMeetings();
+  closeMtgModal();
+  renderMeetingsCalendar();
+  showToast(_mtgEditIdx !== null ? 'Meeting updated' : 'Meeting added');
+}
+
+function deleteMeeting(idx) {
+  if (idx < 0 || idx >= KEY_MEETINGS.length) return;
+  var name = KEY_MEETINGS[idx].title;
+  if (!confirm('Delete "' + name + '"?')) return;
+  KEY_MEETINGS.splice(idx, 1);
+  _saveMeetings();
+  closeMtgTooltip();
+  renderMeetingsCalendar();
+  showToast('Meeting deleted');
+}
 
 // ===== KNOWLEDGE BASE =====
 const KB_STORAGE_KEY = 'uro_knowledgebase';
@@ -6538,7 +6699,7 @@ function _populateExecBar(suffix) {
   const ideaEl = document.getElementById('execIdeas' + s);
   if (ideaEl) {
     ideaEl.querySelector('.exec-metric-value').textContent = b.ideas.length;
-    ideaEl.querySelector('.exec-metric-value').className = 'exec-metric-value neutral';
+    ideaEl.querySelector('.exec-metric-value').className = 'exec-metric-value ideas';
   }
   const biqEl = document.getElementById('execBizIQ' + s);
   if (biqEl) {
