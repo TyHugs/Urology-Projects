@@ -6757,21 +6757,21 @@ function getArchivedProjects() {
 
 // Categorize by Leadership Status (values are normalized on load)
 function getLeadershipBuckets() {
-  const active = getActiveProjects();
-  const priorities = active.filter(p => p['Leadership Status'] === 'Priority');
-  const stdwork = active.filter(p => p['Leadership Status'] === 'Standard Work');
-  const requests = active.filter(p => p['Leadership Status'] === 'Requests');
-  const ideas = active.filter(p => {
+  const all = getDomainProjects();
+  const priorities = all.filter(p => p['Leadership Status'] === 'Priority');
+  const stdwork = all.filter(p => p['Leadership Status'] === 'Standard Work');
+  const requests = all.filter(p => p['Leadership Status'] === 'Requests');
+  const ideas = all.filter(p => {
     const ls = p['Leadership Status'] || '';
     return ls === 'Ideas' || ls === '';
   });
-  const biziq = active.filter(p => p['Leadership Status'] === 'BizIQ');
-  const aiCapable = active.filter(p => {
+  const biziq = all.filter(p => p['Leadership Status'] === 'BizIQ');
+  const aiCapable = all.filter(p => {
     const v = (p['AI Potential?'] || '').toString().toLowerCase();
     return v === 'yes' || v === 'true' || v === '1';
   });
-  const aiPct = active.length > 0 ? Math.round((aiCapable.length / active.length) * 100) : 0;
-  return { all: active, priorities, stdwork, requests, ideas, biziq, aiCapable, aiPct };
+  const aiPct = all.length > 0 ? Math.round((aiCapable.length / all.length) * 100) : 0;
+  return { all, priorities, stdwork, requests, ideas, biziq, aiCapable, aiPct };
 }
 
 function _populateExecBar(suffix) {
